@@ -2950,6 +2950,13 @@ async function exportWav(){
   const exportState = createCompositionState(settings.seed, settings.genreKey, settings.tempo, null, settings.varietyIntensity, durSec, settings.voiceEnabled, settings.voiceDensity);
   const chunk = generateChunk(exportState, durSec);
   scheduleEvents(offlineCtx, musicBusInput, chunk.events, 0, genre, chunk.envelope, settings.voiceMix, settings.voiceCharacter);
+  if (document.getElementById('autoGongToggle').checked){
+    triggerGong(offlineCtx, oMasterGain, midiToFreq(exportState.rootMidi - 24), 0.1, 4.5, 0.22);
+  }
+  if (document.getElementById('autoConchToggle').checked){
+    const conchStart = Math.max(0.1, durSec - 5.5);
+    triggerConch(offlineCtx, oMasterGain, midiToFreq(exportState.rootMidi - 12), conchStart, 5, 0.22);
+  }
 
   const rendered = await offlineCtx.startRendering();
   const blob = format==='flac' ? encodeFlacFromBuffer(rendered) : encodeWavFromBuffer(rendered);
@@ -3139,7 +3146,7 @@ const I18N = {
     genreSearchPlaceholder:'Search genres (e.g. "flamenco", "drone", "waltz"…)', genreNoResults:'No genres found.',
     seedLabel:'Seed', randomBtn:'🎲 Randomize', tempoLabel:'Tempo', varietyLabel:'Variety & arc', varietyHint:'Gently varies density and brightness over the piece\'s length — an evolving arc instead of one static loop. 0% keeps the classic constant behavior.',
     voiceHeading:'Human voice', voiceHint:'A procedurally synthesized wordless vocal layer (formant synthesis) — soft syllables like "ah", "oh", "mmm" that change each time, woven over any genre. No recordings, no samples.',
-    voiceDensityLabel:'Presence', voiceMixLabel:'Volume', voiceCharacterLabel:'Character', voice_childFemale:'Child (girl)', voice_childMale:'Child (boy)', voice_teenFemale:'Teen girl', voice_teenMale:'Teen boy', voice_youngFemale:'Young woman', voice_youngMale:'Young man', voice_matureFemale:'Mature woman', voice_matureMale:'Mature man', voice_seniorFemale:'Senior woman', voice_seniorMale:'Senior man', voice_robotic:'Melodious robotic', ritualHeading:'Gong &amp; conch', ritualHint:'Two ceremonial sounds, synthesized procedurally — an inharmonic gong (bell-like partials) and a breathy conch call. Ring them manually anytime, or let them mark the start/end of a session automatically.', ringGongBtn:'🔔 Ring the gong', blowConchBtn:'🐚 Blow the conch', autoGongLabel:'Automatic gong at start', autoConchLabel:'Automatic conch at end',
+    voiceDensityLabel:'Presence', voiceMixLabel:'Volume', voiceCharacterLabel:'Character', voice_childFemale:'Child (girl)', voice_childMale:'Child (boy)', voice_teenFemale:'Teen girl', voice_teenMale:'Teen boy', voice_youngFemale:'Young woman', voice_youngMale:'Young man', voice_matureFemale:'Mature woman', voice_matureMale:'Mature man', voice_seniorFemale:'Senior woman', voice_seniorMale:'Senior man', voice_robotic:'Melodious robotic', ritualHeading:'Gong & conch', ritualHint:'Two ceremonial sounds, synthesized procedurally — an inharmonic gong (bell-like partials) and a breathy conch call. Ring them manually anytime, or let them mark the start/end of a session automatically.', ringGongBtn:'🔔 Ring the gong', blowConchBtn:'🐚 Blow the conch', autoGongLabel:'Automatic gong at start', autoConchLabel:'Automatic conch at end',
     durationLabel:'Duration', continuousOpt:'Continuous loop', regenBtn:'↻ Regenerate',
     entrainHeading:'Beneficial waves',
     entrainHint:'Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.',
@@ -3671,7 +3678,7 @@ const I18N = {
     randomBtn:'🎲 Zufällig',
     tempoLabel:'Tempo', varietyLabel:'Vielfalt & Bogen', varietyHint:'Variiert sanft Dichte und Klangfarbe über die Dauer des Stücks — ein sich entwickelnder Bogen statt einer einzigen statischen Schleife. 0% behält das klassische, konstante Verhalten bei.',
     voiceHeading:'Menschliche Stimme', voiceHint:'Eine prozedural synthetisierte, wortlose Gesangsebene (Formantsynthese) — weiche Silben wie „ah", „oh", „mmm", die sich jedes Mal ändern, über jedes Genre gewoben. Keine Aufnahmen, keine Samples.',
-    voiceDensityLabel:'Präsenz', voiceMixLabel:'Lautstärke', voiceCharacterLabel:'Charakter', voice_childFemale:'Kind (Mädchen)', voice_childMale:'Kind (Junge)', voice_teenFemale:'Teenager (Mädchen)', voice_teenMale:'Teenager (Junge)', voice_youngFemale:'Junge Frau', voice_youngMale:'Junger Mann', voice_matureFemale:'Reife Frau', voice_matureMale:'Reifer Mann', voice_seniorFemale:'Ältere Frau', voice_seniorMale:'Älterer Mann', voice_robotic:'Melodiöse Roboterstimme', ritualHeading:'Gong &amp; Muschelhorn', ritualHint:'Zwei zeremonielle Klänge, prozedural synthetisiert — ein unharmonischer Gong (glockenartige Teiltöne) und ein gehauchter Muschelhorn-Ruf. Läuten Sie sie jederzeit manuell, oder lassen Sie sie automatisch Anfang/Ende einer Sitzung markieren.', ringGongBtn:'🔔 Gong schlagen', blowConchBtn:'🐚 Muschelhorn blasen', autoGongLabel:'Automatischer Gong zu Beginn', autoConchLabel:'Automatisches Muschelhorn am Ende',
+    voiceDensityLabel:'Präsenz', voiceMixLabel:'Lautstärke', voiceCharacterLabel:'Charakter', voice_childFemale:'Kind (Mädchen)', voice_childMale:'Kind (Junge)', voice_teenFemale:'Teenager (Mädchen)', voice_teenMale:'Teenager (Junge)', voice_youngFemale:'Junge Frau', voice_youngMale:'Junger Mann', voice_matureFemale:'Reife Frau', voice_matureMale:'Reifer Mann', voice_seniorFemale:'Ältere Frau', voice_seniorMale:'Älterer Mann', voice_robotic:'Melodiöse Roboterstimme', ritualHeading:'Gong & Muschelhorn', ritualHint:'Zwei zeremonielle Klänge, prozedural synthetisiert — ein unharmonischer Gong (glockenartige Teiltöne) und ein gehauchter Muschelhorn-Ruf. Läuten Sie sie jederzeit manuell, oder lassen Sie sie automatisch Anfang/Ende einer Sitzung markieren.', ringGongBtn:'🔔 Gong schlagen', blowConchBtn:'🐚 Muschelhorn blasen', autoGongLabel:'Automatischer Gong zu Beginn', autoConchLabel:'Automatisches Muschelhorn am Ende',
     durationLabel:'Dauer',
     continuousOpt:'Endlosschleife',
     regenBtn:'↻ Neu generieren',
