@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Borderless Melodies — Original Music Generator</title>
+<style>
+:root{
+  --bg:#0B0E14;
+  --panel:#12161F;
+  --panel-2:#161B26;
+  --border:rgba(255,255,255,0.07);
+  --border-2:rgba(255,255,255,0.12);
+  --text:#EDEAE3;
+  --text-dim:#8B8FA3;
+  --text-dimmer:#585C6B;
+  --wave:#5FD8C4;
+  --wave-soft:rgba(95,216,196,0.14);
+  --ember:#E3B15E;
+  --ember-soft:rgba(227,177,94,0.14);
+  --dusty:#D98C82;
+  --radius:16px;
+  --radius-sm:10px;
+  --serif:'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --mono:'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+  --sans:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(95,216,196,0.06), transparent),
+    radial-gradient(ellipse 700px 400px at 100% 100%, rgba(227,177,94,0.05), transparent),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  min-height:100vh;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+:focus-visible{outline:2px solid var(--wave); outline-offset:2px; border-radius:4px;}
+.app{max-width:1180px;margin:0 auto;padding:28px 20px 90px;}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px;}
+.badge{font-family:var(--mono);font-size:0.7rem;color:var(--text-dimmer);border:1px solid var(--border);padding:5px 11px;border-radius:20px;letter-spacing:0.02em;}
+.lang-toggle{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;}
+.lang-toggle button{padding:6px 10px;font-size:0.74rem;min-height:32px;}
+.lang-toggle button.active{background:var(--wave-soft);border-color:var(--wave);color:var(--wave);}
+
+header{text-align:center;margin:18px 0 34px;}
+header h1{
+  font-family:var(--serif);
+  font-size:clamp(2.1rem,5.4vw,3.3rem);
+  font-weight:600;
+  margin:0 0 10px;
+  letter-spacing:0.01em;
+  background:linear-gradient(120deg, var(--text) 10%, var(--wave) 55%, var(--ember) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+header p.subtitle{color:var(--text-dim);font-size:1.02rem;max-width:600px;margin:0 auto;}
+
+.header-wave{width:220px;height:16px;margin:16px auto 0;opacity:0.5;overflow:hidden;}
+.header-wave svg{width:200%;height:16px;display:block;animation:driftWave 9s linear infinite;}
+@keyframes driftWave{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px 26px;
+  margin-bottom:20px;
+}
+.panel h2{
+  font-family:var(--serif); font-size:1.5rem; font-weight:600;
+  margin:0 0 6px; color:var(--text);
+}
+.panel-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.hint{color:var(--text-dim);font-size:0.86rem;line-height:1.6;margin:0 0 16px;}
+.disclaimer{color:var(--text-dimmer);font-size:0.76rem;line-height:1.65;margin-top:16px;font-style:italic;border-top:1px solid var(--border);padding-top:14px;}
+
+.genre-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;margin-bottom:6px;}
+.genre-search{
+  width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text);
+  border-radius:9px; padding:11px 14px; font-family:inherit; font-size:0.9rem;
+  margin-bottom:16px; min-height:40px;
+}
+.genre-search::placeholder{color:var(--text-dimmer);}
+.genre-search:focus{border-color:var(--wave);}
+.category-header{
+  display:flex; align-items:center; gap:10px; width:100%;
+  background:transparent; border:none; border-bottom:1px solid var(--border);
+  padding:13px 4px; margin:6px 0 12px; cursor:pointer; text-align:left;
+  font-family:var(--serif); font-size:1.1rem; font-weight:600; color:var(--text-dim);
+  transition:color .15s;
+}
+.category-header:first-child{margin-top:0;}
+.category-header:hover{color:var(--text);}
+.category-header.open{color:var(--wave);}
+.category-chevron{display:inline-block; transition:transform .2s; font-size:0.75rem; flex-shrink:0;}
+.category-header.open .category-chevron{transform:rotate(90deg);}
+.category-title{flex:1;}
+.category-count{
+  font-family:var(--mono); font-size:0.72rem; color:var(--text-dimmer);
+  background:var(--panel-2); border:1px solid var(--border); border-radius:12px; padding:2px 9px;
+}
+.btn-small{padding:7px 13px; font-size:0.78rem;}
+.genre-card{
+  background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:15px 16px; text-align:left; cursor:pointer; color:var(--text);
+  transition:border-color .18s, transform .15s, background .18s;
+  font-family:inherit; display:flex; flex-direction:column; gap:6px;
+}
+.genre-card:hover{border-color:rgba(95,216,196,0.4); transform:translateY(-2px);}
+.genre-card.active{border-color:var(--wave); background:var(--wave-soft);}
+.genre-card h3{font-family:var(--serif); font-size:1.14rem; margin:0; font-weight:600;}
+.genre-card p{
+  font-size:0.8rem; color:var(--text-dim); margin:0; line-height:1.5;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.genre-glyph{width:100%; height:22px; color:var(--text-dimmer); display:block;}
+.genre-card.active .genre-glyph{color:var(--wave);}
+
+.columns{display:grid;grid-template-columns:1fr;gap:0;}
+@media (min-width:900px){ .columns{grid-template-columns:1fr 1fr; gap:20px;} }
+
+.field-row{display:flex;align-items:center;gap:12px;margin-bottom:15px;flex-wrap:wrap;}
+.field-row label{min-width:150px;color:var(--text-dim);font-size:0.88rem;}
+.field-row input[type=range]{flex:1;min-width:110px;accent-color:var(--wave);}
+.field-row input[type=number]{
+  background:var(--bg); border:1px solid var(--border); color:var(--text);
+  border-radius:8px; padding:8px 10px; width:100px; font-family:var(--mono);
+}
+.field-row select{
+  background:var(--bg); border:1px solid var(--border); color:var(--text);
+  border-radius:8px; padding:8px 10px; font-family:inherit;
+}
+.readout{min-width:68px;text-align:right;color:var(--wave);font-size:0.85rem;}
+
+button{
+  font-family:inherit; cursor:pointer;
+  background:var(--panel-2); color:var(--text);
+  border:1px solid var(--border); border-radius:9px;
+  padding:10px 16px; font-size:0.88rem; min-height:40px;
+  transition:background .15s, border-color .15s;
+}
+button:hover:not(:disabled){border-color:var(--wave);}
+button:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-accent{background:var(--wave-soft); border-color:var(--wave); color:var(--wave); font-weight:600;}
+.btn-accent:hover:not(:disabled){background:rgba(95,216,196,0.24);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+
+.seg-control{display:inline-flex;border:1px solid var(--border);border-radius:9px;overflow:hidden;}
+.seg-control button{border:none;border-radius:0;background:transparent;border-right:1px solid var(--border);}
+.seg-control button:last-child{border-right:none;}
+.seg-control button.active{background:var(--wave-soft);color:var(--wave);}
+
+.preset-chips{display:flex;flex-wrap:wrap;margin:-3px -3px 14px;}
+.chip{
+  background:var(--panel-2);border:1px solid var(--border);border-radius:20px;
+  padding:8px 14px;font-size:0.76rem;color:var(--text-dim);margin:3px;min-height:34px;display:inline-flex;align-items:center;
+}
+.chip:hover{border-color:var(--ember);color:var(--ember);}
+
+.switch{position:relative;display:inline-block;width:42px;height:23px;}
+.switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;}
+.slider-toggle{position:absolute;inset:0;background:var(--panel-2);border:1px solid var(--border);border-radius:24px;transition:.2s;pointer-events:none;}
+.slider-toggle::before{content:'';position:absolute;width:17px;height:17px;left:2px;top:2px;background:var(--text-dim);border-radius:50%;transition:.2s;}
+.switch input:checked + .slider-toggle{background:var(--wave-soft);border-color:var(--wave);}
+.switch input:checked + .slider-toggle::before{transform:translateX(19px);background:var(--wave);}
+
+canvas#visualizer{width:100%;height:150px;display:block;border-radius:var(--radius-sm);background:var(--panel-2);margin-bottom:16px;}
+.transport{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.volume-control{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.volume-control label{color:var(--text-dim);font-size:0.84rem;}
+.volume-control input{accent-color:var(--wave);width:100px;}
+.status-row{display:flex;justify-content:space-between;color:var(--text-dim);font-size:0.83rem;font-family:var(--mono);}
+
+footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:28px;line-height:1.85;}
+
+.mini-player{
+  display:none; position:fixed; left:0; right:0; bottom:0; z-index:50;
+  background:rgba(18,22,31,0.97); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--border-2);
+  padding:10px 16px; align-items:center; justify-content:space-between; gap:12px;
+}
+.mini-player-genre{font-family:var(--serif); font-size:0.95rem; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;}
+.mini-player-controls{display:flex; gap:8px; flex-shrink:0;}
+.mini-player-controls button{padding:8px 16px; min-width:44px;}
+
+@media (max-width:900px){
+  .mini-player{display:flex;}
+  .app{padding-bottom:82px;}
+}
+
+@media (max-width:600px){
+  .panel{padding:18px 16px;}
+  .field-row label{min-width:100%;}
+  .field-row input[type=range]{width:100%;}
+  .volume-control{margin-left:0;width:100%;}
+  .btn-row{width:100%;}
+  .btn-row button{flex:1; min-width:120px;}
+  header p.subtitle{font-size:0.94rem;}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+}
+@media (min-width:1400px){
+  .app{max-width:1320px;}
+}
+@media (max-height:520px) and (orientation:landscape){
+  canvas#visualizer{height:90px;}
+  .panel{padding:14px 18px;}
+  header{margin:8px 0 16px;}
+  .header-wave{display:none;}
+  .mini-player{padding:6px 16px;}
+  .app{padding-bottom:64px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <span class="badge">v1.0 · offline · CC0</span>
+    <div class="lang-toggle">
+      <button data-lang-btn="en" class="active">EN</button>
+      <button data-lang-btn="ro">RO</button>
+      <button data-lang-btn="fr">FR</button>
+      <button data-lang-btn="it">IT</button>
+      <button data-lang-btn="es">ES</button>
+      <button data-lang-btn="pt">PT</button>
+      <button data-lang-btn="de">DE</button>
+    </div>
+  </div>
+
+  <header>
+    <h1 data-i18n="title">Melodies without borders</h1>
+    <p class="subtitle" data-i18n="subtitle">A fully offline generator of original music — with beneficial-wave layers for positive listening.</p>
+    <div class="header-wave" aria-hidden="true">
+      <svg viewBox="0 0 400 16" preserveAspectRatio="none">
+        <defs><linearGradient id="hwg" x1="0" x2="1"><stop offset="0" stop-color="#5FD8C4"/><stop offset="1" stop-color="#E3B15E"/></linearGradient></defs>
+        <path d="M0,8 Q12.5,0 25,8 T50,8 T75,8 T100,8 T125,8 T150,8 T175,8 T200,8 T225,8 T250,8 T275,8 T300,8 T325,8 T350,8 T375,8 T400,8" fill="none" stroke="url(#hwg)" stroke-width="1.4"/>
+      </svg>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel" id="genrePanel">
+      <div class="panel-header-row">
+        <h2 data-i18n="genreHeading">Choose a genre</h2>
+        <button id="toggleAllCategoriesBtn" class="btn-small" data-i18n="toggleAllBtn">⇕ Expand / collapse all</button>
+      </div>
+      <input type="text" id="genreSearchInput" class="genre-search" data-i18n-placeholder="genreSearchPlaceholder" placeholder="Search genres (e.g. "flamenco", "drone", "waltz"…)">
+      <div class="genre-grid-wrapper" id="genreGrid"></div>
+    </section>
+
+    <div class="columns">
+      <div class="col-left">
+        <section class="panel" id="compositionPanel">
+          <h2 data-i18n="compHeading">Composition</h2>
+          <div class="field-row">
+            <label data-i18n="seedLabel">Seed</label>
+            <input type="number" id="seedInput" value="1" min="0" max="999999">
+            <button id="randomSeedBtn" data-i18n="randomBtn">🎲 Randomize</button>
+          </div>
+          <div class="field-row">
+            <label data-i18n="tempoLabel">Tempo</label>
+            <input type="range" id="tempoSlider" min="40" max="130" value="70">
+            <span class="readout mono" id="tempoReadout">70 BPM</span>
+          </div>
+          <div class="field-row">
+            <label data-i18n="durationLabel">Duration</label>
+            <select id="durationSelect">
+              <option value="120">2 min</option>
+              <option value="300" selected>5 min</option>
+              <option value="600">10 min</option>
+              <option value="1200">20 min</option>
+              <option value="continuous" data-i18n="continuousOpt">Continuous loop</option>
+            </select>
+          </div>
+          <div class="btn-row">
+            <button id="regenerateBtn" class="btn-accent" data-i18n="regenBtn">↻ Regenerate</button>
+          </div>
+        </section>
+
+        <section class="panel" id="entrainmentPanel">
+          <div class="panel-header-row">
+            <h2 data-i18n="entrainHeading">Beneficial waves</h2>
+            <label class="switch"><input type="checkbox" id="entrainToggle" checked><span class="slider-toggle"></span></label>
+          </div>
+          <p class="hint" data-i18n="entrainHint">Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.</p>
+          <div class="field-row">
+            <label data-i18n="modeLabel">Mode</label>
+            <div class="seg-control" id="modeControl">
+              <button data-mode="pure" data-i18n="modePure">Pure tone</button>
+              <button data-mode="binaural" class="active" data-i18n="modeBinaural">Binaural</button>
+              <button data-mode="isochronic" data-i18n="modeIso">Isochronic</button>
+            </div>
+          </div>
+          <div class="field-row">
+            <label data-i18n="carrierLabel">Carrier frequency</label>
+            <input type="range" id="carrierSlider" min="100" max="500" value="210" step="1">
+            <span class="readout mono" id="carrierReadout">210 Hz</span>
+          </div>
+          <div class="preset-chips" id="solfeggioChips"></div>
+          <div class="field-row" id="beatFieldRow">
+            <label data-i18n="beatLabel">Beat frequency</label>
+            <input type="range" id="beatSlider" min="0.5" max="40" value="6" step="0.5">
+            <span class="readout mono" id="beatReadout">6 Hz</span>
+          </div>
+          <div class="preset-chips" id="brainwaveChips"></div>
+          <div class="field-row">
+            <label data-i18n="mixLabel">Mix</label>
+            <input type="range" id="entrainMixSlider" min="0" max="100" value="35">
+            <span class="readout mono" id="entrainMixReadout">35%</span>
+          </div>
+          <p class="disclaimer" data-i18n="disclaimer">Note: these tones are offered purely for relaxation and experiential purposes, not as medical treatment — scientific evidence remains limited. If you have epilepsy, another neurological condition, or are pregnant, consult a doctor before use. Do not listen while driving. Stop if you feel discomfort. The binaural effect requires stereo headphones.</p>
+        </section>
+      </div>
+
+      <div class="col-right">
+        <section class="panel" id="playbackPanel">
+          <canvas id="visualizer" width="800" height="150"></canvas>
+          <div class="transport">
+            <button id="playPauseBtn" class="btn-accent"><span id="playPauseIcon">▶</span> <span id="playPauseLabel" data-i18n="playBtn">Play</span></button>
+            <button id="stopBtn" disabled>⏹ <span data-i18n="stopBtn">Stop</span></button>
+            <div class="volume-control">
+              <label data-i18n="masterVolLabel">Volume</label>
+              <input type="range" id="masterVolSlider" min="0" max="100" value="80">
+            </div>
+          </div>
+          <div class="status-row">
+            <span id="statusText" data-i18n="statusIdle">Ready</span>
+            <span id="timeReadout">—</span>
+          </div>
+        </section>
+
+        <section class="panel" id="exportPanel">
+          <h2 data-i18n="exportHeading">Export</h2>
+          <div class="field-row">
+            <label data-i18n="exportDurLabel">Export length</label>
+            <select id="exportDurationSelect">
+              <option value="60">1 min</option>
+              <option value="180" selected>3 min</option>
+              <option value="300">5 min</option>
+              <option value="600">10 min</option>
+              <option value="900">15 min</option>
+              <option value="1200">20 min</option>
+            </select>
+            <span class="readout mono" id="exportSizeEstimate">~31 MB</span>
+          </div>
+          <div class="btn-row">
+            <button id="exportWavBtn" data-i18n="exportWavBtn">⬇ Export WAV</button>
+            <button id="exportJsonBtn" data-i18n="exportJsonBtn">⬇ Export settings (JSON)</button>
+            <button id="importJsonBtn" data-i18n="importJsonBtn">⬆ Import settings</button>
+            <input type="file" id="importJsonFile" accept="application/json" style="display:none;">
+          </div>
+          <div id="exportProgress" class="hint mono" style="display:none;margin-top:10px;"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p data-i18n="footerLicense">CC0 license · no telemetry · no external dependencies · 100% offline</p>
+    <p data-i18n="footerNote">All music is generated algorithmically, in real time — original, with no samples and no copyrighted material.</p>
+  </footer>
+
+</div>
+
+<div class="mini-player" id="miniPlayer">
+  <span class="mini-player-genre" id="miniPlayerGenre">—</span>
+  <div class="mini-player-controls">
+    <button id="miniPlayPauseBtn" class="btn-accent" aria-label="Play/Pause">▶</button>
+    <button id="miniStopBtn" disabled aria-label="Stop">⏹</button>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ======================================================================
+   1. UTILITARE & GENERATOR PSEUDO-ALEATOR (SEEDED)
+   ====================================================================== */
+function mulberry32(seed){
+  let a = seed >>> 0;
+  return function(){
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function midiToFreq(m){ return 440 * Math.pow(2, (m - 69) / 12); }
+function pitchMidi(rootMidi, octave, interval){ return rootMidi + (octave - 4) * 12 + interval; }
+function clamp(v, lo, hi){ return Math.min(hi, Math.max(lo, v)); }
+
+function pickWeightedIndex(rng, n, boostedIdxs, boost){
+  boost = boost || 2;
+  const weights = new Array(n).fill(1);
+  boostedIdxs.forEach(function(idx){ weights[idx] += boost; });
+  const total = weights.reduce(function(a,b){ return a+b; }, 0);
+  let r = rng() * total;
+  for (let i = 0; i < n; i++){ r -= weights[i]; if (r <= 0) return i; }
+  return n - 1;
+}
+
+/* ======================================================================
+   2. TEORIE MUZICALĂ: GAME, ACORDURI, PROGRESII
+   ====================================================================== */
+const SCALES = {
+  major:            [0,2,4,5,7,9,11],
+  minor:            [0,2,3,5,7,8,10],
+  dorian:           [0,2,3,5,7,9,10],
+  mixolydian:       [0,2,4,5,7,9,10],
+  lydian:           [0,2,4,6,7,9,11],
+  majorPenta:       [0,2,4,7,9],
+  minorPenta:       [0,3,5,7,10],
+  harmonicMinor:    [0,2,3,5,7,8,11],
+  blues:            [0,3,5,6,7,10],
+  phrygianDominant: [0,1,4,5,7,8,10],
+  japaneseIn:       [0,1,5,7,8],
+  wholeTone:        [0,2,4,6,8,10],
+  bhairav:          [0,1,4,5,7,8,11],
+};
+
+const PROGRESSIONS = {
+  popMajor:       [0,4,5,3],
+  jazzy:          [1,4,0,5],
+  ambientModal:   [0,6,5,6],
+  classical:      [0,3,4,0],
+  andalusian:     [6,5,3,0],
+  modalVamp:      [0],
+  circleFifths:   [0,3,6,2,5,1,4,0],
+};
+
+// Extrage tonurile unui acord diatonic construit prin suprapunerea de terțe
+// peste o treaptă a gamei. Funcționează corect pentru game de 5 sau 7 note.
+function diatonicChordTones(scaleIntervals, degree, size){
+  size = size || 3;
+  const n = scaleIntervals.length;
+  const tones = [];
+  const degreeIdxs = [];
+  for (let i = 0; i < size; i++){
+    const idx = degree + i * 2;
+    const wrapped = idx % n;
+    const carry = Math.floor(idx / n);
+    tones.push(scaleIntervals[wrapped] + 12 * carry);
+    degreeIdxs.push(wrapped);
+  }
+  return { tones: tones, degreeIdxs: degreeIdxs };
+}
+
+/* ======================================================================
+   3. CONFIGURAȚII DE GEN — fiecare "gen" e o rețetă completă de sinteză
+   ====================================================================== */
+const GENRES = {
+  ambient: {
+    name:{ro:'Ambient Generativ', en:'Generative Ambient', fr:'Ambiant Génératif', it:'Ambient Generativo', es:'Ambient Generativo', pt:'Ambiente Generativo', de:'Generatives Ambient'},
+    desc:{ro:'Texturi line, evolutive — fundal contemplativ pentru relaxare profundă.', en:'Slow, evolving textures — contemplative background for deep relaxation.', fr:'Textures lentes et évolutives — une toile de fond contemplative pour une relaxation profonde.', it:'Trame lente ed evolutive — uno sfondo contemplativo per un rilassamento profondo.', es:'Texturas lentas y evolutivas — un fondo contemplativo para una relajación profunda.', pt:'Texturas lentas e evolutivas — um fundo contemplativo para um relaxamento profundo.', de:'Langsame, sich entwickelnde Texturen — ein kontemplativer Hintergrund für tiefe Entspannung.'},
+    glyph:{freq:1.0, amp:8, jitter:0, wave:'sine'},
+    scale:'majorPenta', progression:'ambientModal', tempoRange:[50,64],
+    lead:{use:true, density:0.22, octave:5, swing:false, wave:'sine'},
+    pad:{attack:2.6, release:4.2, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, walking:false},
+    filterCutoff:1700, reverbMix:0.55, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  meditation: {
+    name:{ro:'Meditație & New Age', en:'Meditation & New Age', fr:'Méditation & New Age', it:'Meditazione & New Age', es:'Meditación & New Age', pt:'Meditação & New Age', de:'Meditation & New Age'},
+    desc:{ro:'Drone line, tonuri de bol tibetan — pentru meditație și somn.', en:'Slow drones, singing-bowl tones — for meditation and sleep.', fr:'Drones lents, tonalités de bol tibétain — pour la méditation et le sommeil.', it:'Drone lenti, toni di ciotola tibetana — per la meditazione e il sonno.', es:'Drones lentos, tonos de cuenco tibetano — para la meditación y el sueño.', pt:'Drones lentos, tons de tigela tibetana — para meditação e sono.', de:'Langsame Drones, tibetische Klangschalen-Töne — für Meditation und Schlaf.'},
+    glyph:{freq:0.6, amp:6, jitter:0, wave:'sine'},
+    scale:'minorPenta', progression:'ambientModal', tempoRange:[44,54],
+    lead:{use:true, density:0.12, octave:5, swing:false, wave:'sine'},
+    pad:{attack:3.2, release:5.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, walking:false},
+    filterCutoff:1300, reverbMix:0.65, arp:false,
+    texture:'breath', recommendedEntrainment:'delta', category:'atmospheric',
+  },
+  nature: {
+    name:{ro:'Natură & Unde', en:'Nature & Waves', fr:'Nature & Ondes', it:'Natura & Onde', es:'Naturaleza & Ondas', pt:'Natureza & Ondas', de:'Natur & Wellen'},
+    desc:{ro:'Melodii line inspirate din natură, cu textură discretă de vânt.', en:'Gentle nature-inspired melodies with subtle wind texture.', fr:'Mélodies douces inspirées de la nature, avec une texture de vent discrète.', it:'Melodie delicate ispirate alla natura, con una texture di vento discreta.', es:'Melodías suaves inspiradas en la naturaleza, con una textura de viento discreta.', pt:'Melodias suaves inspiradas na natureza, com uma textura de vento discreta.', de:'Sanfte, naturinspirierte Melodien mit dezenter Windtextur.'},
+    glyph:{freq:1.2, amp:9, jitter:4, wave:'sine'},
+    scale:'majorPenta', progression:'ambientModal', tempoRange:[50,60],
+    lead:{use:true, density:0.2, octave:5, swing:false, wave:'sine'},
+    pad:{attack:2.2, release:3.4, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, walking:false},
+    filterCutoff:1600, reverbMix:0.5, arp:false,
+    texture:'wind', recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  focus: {
+    name:{ro:'Focus Binaural', en:'Binaural Focus', fr:'Focus Binaural', it:'Focus Binaurale', es:'Enfoque Binaural', pt:'Foco Binaural', de:'Binauraler Fokus'},
+    desc:{ro:'Pad minimal, aproape fără melodie — teren curat pentru stratul binaural.', en:'Minimal pad, almost no melody — clean canvas for the binaural layer.', fr:'Nappe minimale, presque sans mélodie — un terrain propice à la couche binaurale.', it:'Pad minimale, quasi senza melodia — una tela pulita per lo strato binaurale.', es:'Pad mínimo, casi sin melodía — un lienzo limpio para la capa binaural.', pt:'Pad mínimo, quase sem melodia — uma tela limpa para a camada binaural.', de:'Minimales Pad, fast ohne Melodie — eine saubere Fläche für die binaurale Schicht.'},
+    glyph:{freq:4.0, amp:5, jitter:0, wave:'sine'},
+    scale:'majorPenta', progression:'ambientModal', tempoRange:[54,64],
+    lead:{use:true, density:0.05, octave:5, swing:false, wave:'sine'},
+    pad:{attack:3.4, release:4.4, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, walking:false},
+    filterCutoff:1150, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'beta', category:'atmospheric',
+  },
+  cosmic: {
+    name:{ro:'Ambient Cosmic', en:'Cosmic Ambient', fr:'Ambiant Cosmique', it:'Ambient Cosmico', es:'Ambient Cósmico', pt:'Ambiente Cósmico', de:'Kosmisches Ambient'},
+    desc:{ro:'Gamă întreagă, plutitoare — spații siderale, foarte lent și vaporos.', en:'Whole-tone, floating harmony — vast space, very slow and vaporous.', fr:'Gamme par tons entiers, harmonie flottante — un vaste espace, très lent et vaporeux.', it:'Scala esatonale, armonia fluttuante — spazio vasto, molto lento e vaporoso.', es:'Escala de tonos enteros, armonía flotante — un espacio vasto, muy lento y vaporoso.', pt:'Escala de tons inteiros, harmonia flutuante — um espaço vasto, muito lento e vaporoso.', de:'Ganztonleiter, schwebende Harmonie — ein weiter Raum, sehr langsam und dunstig.'},
+    glyph:{freq:0.4, amp:9, jitter:0, wave:'sine'},
+    scale:'wholeTone', progression:'modalVamp', tempoRange:[38,48], barsPerChord:8,
+    lead:{use:true, density:0.14, octave:6, swing:false, wave:'sine'},
+    pad:{attack:4.0, release:6.0, seventh:false, octave:3, wave:'sine', detune:8},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2000, reverbMix:0.7, arp:false,
+    texture:null, recommendedEntrainment:'delta', category:'atmospheric',
+  },
+  zen: {
+    name:{ro:'Zen Japonez', en:'Japanese Zen', fr:'Zen Japonais', it:'Zen Giapponese', es:'Zen Japonés', pt:'Zen Japonês', de:'Japanisches Zen'},
+    desc:{ro:'Gama „in", pizzicato de koto — grădină de piatră, respirație rară.', en:'Japanese "in" scale, koto-like plucks — a rock garden, sparse breath.', fr:'Gamme japonaise « in », pincements façon koto — un jardin de pierre, un souffle rare.', it:'Scala giapponese "in", pizzicati simili al koto — un giardino di pietre, respiro raro.', es:'Escala japonesa "in", pulsaciones tipo koto — un jardín de piedras, aliento escaso.', pt:'Escala japonesa "in", dedilhados tipo koto — um jardim de pedras, respiração rara.', de:'Japanische „In"-Tonleiter, koto-artige Zupftöne — ein Steingarten, seltener Atem.'},
+    glyph:{freq:0.8, amp:6, jitter:0, wave:'sine'},
+    scale:'japaneseIn', progression:'modalVamp', tempoRange:[46,56], barsPerChord:8,
+    lead:{use:true, density:0.14, octave:5, swing:false, wave:'sine', attack:0.005, release:0.5},
+    pad:{attack:2.5, release:4.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1600, reverbMix:0.55, arp:false,
+    texture:'breath', recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  raga: {
+    name:{ro:'Rāga Meditativă', en:'Meditative Rāga', fr:'Rāga Méditative', it:'Rāga Meditativa', es:'Rāga Meditativa', pt:'Rāga Meditativa', de:'Meditative Rāga'},
+    desc:{ro:'Gamă Bhairav, dronă de tanpură — foarte lent, contemplativ.', en:'Bhairav scale, tanpura-like drone — very slow and contemplative.', fr:'Gamme Bhairav, bourdon façon tampoura — très lent et contemplatif.', it:'Scala Bhairav, bordone simile al tanpura — molto lento e contemplativo.', es:'Escala Bhairav, zumbido tipo tanpura — muy lento y contemplativo.', pt:'Escala Bhairav, zumbido tipo tanpura — muito lento e contemplativo.', de:'Bhairav-Tonleiter, tanpuraartiger Bordun — sehr langsam und kontemplativ.'},
+    glyph:{freq:0.5, amp:7, jitter:2, wave:'sine'},
+    scale:'bhairav', progression:'modalVamp', tempoRange:[42,52], barsPerChord:16,
+    lead:{use:true, density:0.16, octave:5, swing:false, wave:'sine', attack:0.02, release:0.8},
+    pad:{attack:3.5, release:5.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1300, reverbMix:0.6, arp:false,
+    texture:null, recommendedEntrainment:'delta', category:'atmospheric',
+  },
+  nordic: {
+    name:{ro:'Folclor Nordic', en:'Nordic Folk', fr:'Folklore Nordique', it:'Folk Nordico', es:'Folclore Nórdico', pt:'Folclore Nórdico', de:'Nordische Folklore'},
+    desc:{ro:'Minor rece și rarefiat — peisaje scandinave, vânt discret.', en:'Cold, sparse minor tones — Scandinavian landscapes, subtle wind.', fr:'Tonalités mineures froides et clairsemées — paysages scandinaves, vent discret.', it:'Toni minori freddi e radi — paesaggi scandinavi, vento discreto.', es:'Tonos menores fríos y dispersos — paisajes escandinavos, viento discreto.', pt:'Tons menores frios e esparsos — paisagens escandinavas, vento discreto.', de:'Kühle, spärliche Molltöne — skandinavische Landschaften, dezenter Wind.'},
+    glyph:{freq:1.1, amp:8, jitter:1, wave:'sine'},
+    scale:'minor', progression:'ambientModal', tempoRange:[56,68],
+    lead:{use:true, density:0.24, octave:5, swing:false, wave:'sine'},
+    pad:{attack:1.8, release:3.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1500, reverbMix:0.5, arp:false,
+    texture:'wind', recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  ocean: {
+    name:{ro:'Adâncuri Oceanice', en:'Ocean Deep', fr:'Profondeurs Océaniques', it:'Profondità Oceaniche', es:'Profundidades Oceánicas', pt:'Profundezas Oceânicas', de:'Ozeanische Tiefen'},
+    desc:{ro:'Balans lent ca al valurilor, rezonanțe joase — imersiune totală.', en:'A slow wave-like swell, low resonance — total immersion.', fr:'Un balancement lent comme des vagues, résonances graves — immersion totale.', it:'Un\'oscillazione lenta come onde, risonanze basse — immersione totale.', es:'Un vaivén lento como olas, resonancias graves — inmersión total.', pt:'Um balanço lento como ondas, ressonâncias graves — imersão total.', de:'Ein langsames, wellenartiges Schwanken, tiefe Resonanzen — vollständiges Eintauchen.'},
+    glyph:{freq:0.3, amp:10, jitter:2, wave:'sine'},
+    scale:'minorPenta', progression:'modalVamp', tempoRange:[40,48], barsPerChord:8,
+    lead:{use:true, density:0.1, octave:5, swing:false, wave:'sine'},
+    pad:{attack:3.5, release:5.5, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1200, reverbMix:0.6, arp:false,
+    texture:'ocean', recommendedEntrainment:'delta', category:'atmospheric',
+  },
+  aurora: {
+    name:{ro:'Aurora Boreală', en:'Aurora Borealis', fr:'Aurore Boréale', it:'Aurora Boreale', es:'Aurora Boreal', pt:'Aurora Boreal', de:'Aurora Borealis'},
+    desc:{ro:'Gamă lidiană, sclipiri dezacordate — lumini verzi peste zăpadă.', en:'Lydian scale, shimmering detune — green lights over snow.', fr:'Gamme lydienne, scintillements légèrement désaccordés — des lumières vertes sur la neige.', it:'Scala lidia, scintillii leggermente stonati — luci verdi sulla neve.', es:'Escala lidia, destellos ligeramente desafinados — luces verdes sobre la nieve.', pt:'Escala lídia, brilhos ligeiramente desafinados — luzes verdes sobre a neve.', de:'Lydische Tonleiter, leicht verstimmtes Schimmern — grünes Licht über Schnee.'},
+    glyph:{freq:0.6, amp:9, jitter:3, wave:'sine'},
+    scale:'lydian', progression:'ambientModal', tempoRange:[44,54], barsPerChord:6,
+    lead:{use:true, density:0.18, octave:6, swing:false, wave:'sine'},
+    pad:{attack:3.0, release:5.0, seventh:false, octave:4, wave:'sine', detune:9},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2200, reverbMix:0.6, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  desert: {
+    name:{ro:'Deșert Auriu', en:'Golden Desert', fr:'Désert Doré', it:'Deserto Dorato', es:'Desierto Dorado', pt:'Deserto Dourado', de:'Goldene Wüste'},
+    desc:{ro:'Pentatonic cald și rarefiat — dune întinse, căldură domoală.', en:'Warm, sparse pentatonic tones — wide dunes, gentle heat.', fr:'Tons pentatoniques chauds et clairsemés — dunes étendues, chaleur douce.', it:'Toni pentatonici caldi e radi — dune estese, calore dolce.', es:'Tonos pentatónicos cálidos y dispersos — dunas extensas, calor suave.', pt:'Tons pentatônicos quentes e esparsos — dunas extensas, calor suave.', de:'Warme, spärliche pentatonische Töne — weite Dünen, sanfte Hitze.'},
+    glyph:{freq:0.9, amp:7, jitter:2, wave:'sine'},
+    scale:'majorPenta', progression:'ambientModal', tempoRange:[48,58], barsPerChord:4,
+    lead:{use:true, density:0.16, octave:5, swing:false, wave:'sine'},
+    pad:{attack:2.8, release:4.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1500, reverbMix:0.45, arp:false,
+    texture:'wind', recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  ambientpiano: {
+    name:{ro:'Pian Ambiental', en:'Ambient Piano', fr:'Piano Ambiant', it:'Piano Ambientale', es:'Piano Ambient', pt:'Piano Ambiente', de:'Ambient-Klavier'},
+    desc:{ro:'Note rare de pian pierdute în reverb generos — cameră vastă, goală.', en:'Sparse piano notes lost in generous reverb — a vast, empty room.', fr:'Notes de piano éparses, perdues dans une réverbération généreuse — une pièce vaste et vide.', it:'Note di piano rade, perse in un riverbero generoso — una stanza vasta e vuota.', es:'Notas de piano dispersas, perdidas en una reverberación generosa — una habitación vasta y vacía.', pt:'Notas de piano esparsas, perdidas numa reverberação generosa — uma sala vasta e vazia.', de:'Vereinzelte Klaviertöne, verloren in großzügigem Hall — ein weiter, leerer Raum.'},
+    glyph:{freq:0.6, amp:8, jitter:1, wave:'sine'},
+    scale:'major', progression:'modalVamp', tempoRange:[46,56], barsPerChord:8,
+    lead:{use:true, density:0.1, octave:5, swing:false, wave:'triangle', attack:0.02, release:1.5},
+    pad:{attack:2.0, release:4.0, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2200, reverbMix:0.7, arp:false,
+    texture:null, recommendedEntrainment:'delta', category:'atmospheric',
+  },
+  crystalbowls: {
+    name:{ro:'Boluri de Cristal', en:'Crystal Bowls', fr:'Bols de Cristal', it:'Ciotole di Cristallo', es:'Cuencos de Cristal', pt:'Taças de Cristal', de:'Kristallklangschalen'},
+    desc:{ro:'Pentatonic major înalt, sclipiri dezacordate — rezonanță pură, cristalină.', en:'High major-pentatonic tones, shimmering detune — pure, crystalline resonance.', fr:'Tons pentatoniques aigus, scintillement désaccordé — une résonance pure et cristalline.', it:'Toni pentatonici acuti, scintillio stonato — una risonanza pura e cristallina.', es:'Tonos pentatónicos agudos, destello desafinado — una resonancia pura y cristalina.', pt:'Tons pentatônicos agudos, brilho desafinado — uma ressonância pura e cristalina.', de:'Hohe pentatonische Töne, verstimmtes Schimmern — eine reine, kristalline Resonanz.'},
+    glyph:{freq:0.5, amp:9, jitter:0, wave:'sine'},
+    scale:'majorPenta', progression:'modalVamp', tempoRange:[42,50], barsPerChord:12,
+    lead:{use:true, density:0.12, octave:6, swing:false, wave:'sine', attack:0.5, release:2.5, detune:5},
+    pad:{attack:3.5, release:5.5, seventh:false, octave:4, wave:'sine', detune:7},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2400, reverbMix:0.6, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'atmospheric',
+  },
+
+  synthwave: {
+    name:{ro:'Synthwave Calm', en:'Calm Synthwave', fr:'Synthwave Calme', it:'Synthwave Calmo', es:'Synthwave Tranquilo', pt:'Synthwave Calmo', de:'Ruhiger Synthwave'},
+    desc:{ro:'Sintetizoare calde, arpegii hipnotice — nostalgie electronică liniștită.', en:'Warm synths, hypnotic arpeggios — calm electronic nostalgia.', fr:'Synthés chauds, arpèges hypnotiques — une nostalgie électronique paisible.', it:'Synth caldi, arpeggi ipnotici — una nostalgia elettronica tranquilla.', es:'Sintetizadores cálidos, arpegios hipnóticos — una nostalgia electrónica serena.', pt:'Sintetizadores quentes, arpejos hipnóticos — uma nostalgia eletrônica serena.', de:'Warme Synths, hypnotische Arpeggios — eine ruhige elektronische Nostalgie.'},
+    glyph:{freq:3.0, amp:11, jitter:0, wave:'saw'},
+    scale:'mixolydian', progression:'popMajor', tempoRange:[82,96],
+    lead:{use:true, density:0.38, octave:5, swing:false, wave:'sawtooth'},
+    pad:{attack:0.35, release:1.6, seventh:false, octave:4, wave:'sawtooth'},
+    bass:{octave:2, walking:false},
+    filterCutoff:2200, padFilterCutoff:1100, leadFilterCutoff:2400, reverbMix:0.32, arp:true, arpPattern:'updown',
+    texture:null, recommendedEntrainment:'beta', category:'electronic',
+  },
+  kosmische: {
+    name:{ro:'Secvențiator Cosmic', en:'Cosmic Sequencer', fr:'Séquenceur Cosmique', it:'Sequencer Cosmico', es:'Secuenciador Cósmico', pt:'Sequenciador Cósmico', de:'Kosmischer Sequenzer'},
+    desc:{ro:'Arpegii hipnotice în stil Berlin School, armonie foarte lentă.', en:'Berlin-School hypnotic arpeggios over very slow-moving harmony.', fr:'Arpèges hypnotiques façon Berlin School, harmonie très lente.', it:'Arpeggi ipnotici in stile Berlin School, armonia molto lenta.', es:'Arpegios hipnóticos al estilo Berlin School, armonía muy lenta.', pt:'Arpejos hipnóticos ao estilo Berlin School, harmonia muito lenta.', de:'Hypnotische Arpeggios im Berlin-School-Stil, sehr langsame Harmonie.'},
+    glyph:{freq:5.0, amp:6, jitter:0, wave:'saw'},
+    scale:'dorian', progression:'ambientModal', tempoRange:[66,80], barsPerChord:8,
+    lead:{use:true, density:0.06, octave:5, swing:false, wave:'sine'},
+    pad:{attack:2.0, release:3.0, seventh:false, octave:3, wave:'sawtooth', detune:6},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1400, padFilterCutoff:900, leadFilterCutoff:1400, reverbMix:0.4,
+    arp:true, arpPattern:'up', arpStepsPerBar:16,
+    texture:null, recommendedEntrainment:'theta', category:'electronic',
+  },
+  minimalism: {
+    name:{ro:'Minimalism Repetitiv', en:'Repetitive Minimalism', fr:'Minimalisme Répétitif', it:'Minimalismo Ripetitivo', es:'Minimalismo Repetitivo', pt:'Minimalismo Repetitivo', de:'Repetitiver Minimalismus'},
+    desc:{ro:'Celule ritmice care se repetă și se defazează încet — un singur acord.', en:'Repeating rhythmic cells that slowly phase — a single held chord.', fr:'Des cellules rythmiques qui se répètent et se déphasent lentement — un seul accord tenu.', it:'Cellule ritmiche che si ripetono e si sfasano lentamente — un solo accordo tenuto.', es:'Células rítmicas que se repiten y se desfasan lentamente — un solo acorde sostenido.', pt:'Células rítmicas que se repetem e se desfasam lentamente — um único acorde sustentado.', de:'Rhythmische Zellen, die sich wiederholen und langsam verschieben — ein einziger gehaltener Akkord.'},
+    glyph:{freq:6.0, amp:5, jitter:0, wave:'sine'},
+    scale:'major', progression:'modalVamp', tempoRange:[92,108], barsPerChord:16,
+    lead:{use:true, density:0.5, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:0.5, release:1.0, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2400, reverbMix:0.2, arp:true, arpPattern:'up', arpStepsPerBar:16,
+    texture:null, recommendedEntrainment:'alpha', category:'electronic',
+  },
+  deephouse: {
+    name:{ro:'Deep House Liniștit', en:'Chill Deep House', fr:'Deep House Tranquille', it:'Deep House Rilassata', es:'Deep House Relajado', pt:'Deep House Tranquilo', de:'Entspannter Deep House'},
+    desc:{ro:'Puls constant pe fiecare timp, acorduri calde filtrate — groove discret.', en:'Steady four-on-the-floor pulse, warm filtered chords — subtle groove.', fr:'Pulsation constante sur chaque temps, accords chauds filtrés — un groove discret.', it:'Impulso costante su ogni battito, accordi caldi filtrati — un groove discreto.', es:'Pulso constante en cada tiempo, acordes cálidos filtrados — un groove discreto.', pt:'Pulso constante em cada tempo, acordes quentes filtrados — um groove discreto.', de:'Konstanter Puls auf jedem Schlag, warme gefilterte Akkorde — ein dezenter Groove.'},
+    glyph:{freq:3.2, amp:7, jitter:0, wave:'sine'},
+    scale:'dorian', progression:'jazzy', tempoRange:[112,120],
+    lead:{use:true, density:0.28, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:0.3, release:1.0, seventh:true, octave:4, wave:'sawtooth'},
+    bass:{octave:2, pattern:'fourfloor'},
+    filterCutoff:1700, padFilterCutoff:1200, reverbMix:0.25, arp:false,
+    texture:null, recommendedEntrainment:'beta', category:'electronic',
+  },
+  vaporwave: {
+    name:{ro:'Vis Vaporwave', en:'Vaporwave Dream', fr:'Rêve Vaporwave', it:'Sogno Vaporwave', es:'Sueño Vaporwave', pt:'Sonho Vaporwave', de:'Vaporwave-Traum'},
+    desc:{ro:'Acorduri extinse, încetinite, cu reverb generos — nostalgie sintetică.', en:'Slowed-down extended chords with generous reverb — synthetic nostalgia.', fr:'Accords étendus et ralentis avec une réverbération généreuse — une nostalgie synthétique.', it:'Accordi estesi e rallentati con un riverbero generoso — una nostalgia sintetica.', es:'Acordes extendidos y ralentizados con una reverberación generosa — una nostalgia sintética.', pt:'Acordes estendidos e desacelerados com uma reverberação generosa — uma nostalgia sintética.', de:'Erweiterte, verlangsamte Akkorde mit großzügigem Hall — eine synthetische Nostalgie.'},
+    glyph:{freq:1.3, amp:10, jitter:3, wave:'sine'},
+    scale:'major', progression:'jazzy', tempoRange:[60,72],
+    lead:{use:true, density:0.26, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:1.2, release:2.8, seventh:true, octave:4, wave:'sawtooth', detune:7},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1600, padFilterCutoff:1100, reverbMix:0.55, arp:false,
+    texture:'vinyl', recommendedEntrainment:'alpha', category:'electronic',
+  },
+  dub: {
+    name:{ro:'Dub Liniștit', en:'Chill Dub', fr:'Dub Tranquille', it:'Dub Rilassato', es:'Dub Relajado', pt:'Dub Tranquilo', de:'Entspannter Dub'},
+    desc:{ro:'Acorduri scurte pe contratimp și ecou repetat — spațiu și respirație.', en:'Short off-beat chord skanks and repeating echo — space and breath.', fr:'Accords brefs sur le contretemps et écho répété — espace et respiration.', it:'Accordi brevi in levare ed eco ripetuto — spazio e respiro.', es:'Acordes breves a contratiempo y eco repetido — espacio y respiración.', pt:'Acordes breves em contratempo e eco repetido — espaço e respiração.', de:'Kurze Offbeat-Akkorde und wiederholtes Echo — Raum und Atem.'},
+    glyph:{freq:1.4, amp:7, jitter:5, wave:'sine'},
+    scale:'mixolydian', progression:'popMajor', tempoRange:[64,76],
+    lead:{use:true, density:0.18, octave:5, swing:false, wave:'sine'},
+    pad:{attack:0.01, release:0.3, seventh:true, octave:4, wave:'triangle', style:'skank'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1200, reverbMix:0.35, delayMix:0.32, delayTime:0.375, delayFeedback:0.45, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'electronic',
+  },
+  triphop: {
+    name:{ro:'Trip-hop Atmosferic', en:'Atmospheric Trip-hop', fr:'Trip-hop Atmosphérique', it:'Trip-hop Atmosferico', es:'Trip-hop Atmosférico', pt:'Trip-hop Atmosférico', de:'Atmosphärischer Trip-Hop'},
+    desc:{ro:'Minor cu septime, bas rar și mergător — nostalgie urbană, tempo lent.', en:'Minor sevenths, sparse walking bass — urban nostalgia, slow tempo.', fr:'Septièmes mineures, basse errante et clairsemée — nostalgie urbaine, tempo lent.', it:'Settime minori, basso errante e rado — nostalgia urbana, tempo lento.', es:'Séptimas menores, bajo errante y disperso — nostalgia urbana, tempo lento.', pt:'Sétimas menores, baixo errante e esparso — nostalgia urbana, tempo lento.', de:'Moll-Septakkorde, wandernder, spärlicher Bass — urbane Nostalgie, langsames Tempo.'},
+    glyph:{freq:1.3, amp:8, jitter:3, wave:'sine'},
+    scale:'minor', progression:'ambientModal', tempoRange:[66,76],
+    lead:{use:true, density:0.22, octave:5, swing:false, wave:'sine'},
+    pad:{attack:1.2, release:2.2, seventh:true, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:1400, reverbMix:0.5, arp:false,
+    texture:'vinyl', recommendedEntrainment:'alpha', category:'electronic',
+  },
+  psybient: {
+    name:{ro:'Ambient Psihedelic', en:'Psybient', fr:'Psybient', it:'Psybient', es:'Psybient', pt:'Psybient', de:'Psybient'},
+    desc:{ro:'Gamă exotică frigiană, textură organică defazată — călătorie interioară.', en:'Exotic phrygian-dominant scale, phasing organic texture — an inner journey.', fr:'Gamme exotique phrygienne, texture organique en déphasage — un voyage intérieur.', it:'Scala esotica frigia, texture organica sfasata — un viaggio interiore.', es:'Escala exótica frigia, textura orgánica en desfase — un viaje interior.', pt:'Escala exótica frígia, textura orgânica em desfasagem — uma viagem interior.', de:'Exotische phrygische Tonleiter, phasenverschobene organische Textur — eine innere Reise.'},
+    glyph:{freq:2.4, amp:8, jitter:6, wave:'saw'},
+    scale:'phrygianDominant', progression:'modalVamp', tempoRange:[56,68], barsPerChord:8,
+    lead:{use:true, density:0.24, octave:5, swing:false, wave:'sine', detune:10},
+    pad:{attack:2.5, release:4.0, seventh:false, octave:3, wave:'sawtooth', detune:9},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1600, padFilterCutoff:1000, reverbMix:0.55,
+    arp:true, arpPattern:'random', arpStepsPerBar:12,
+    texture:null, recommendedEntrainment:'theta', category:'electronic',
+  },
+  chillstep: {
+    name:{ro:'Chillstep Domol', en:'Gentle Chillstep', fr:'Chillstep Doux', it:'Chillstep Dolce', es:'Chillstep Suave', pt:'Chillstep Suave', de:'Sanfter Chillstep'},
+    desc:{ro:'Pad dezacordat, cadență minoră lentă — electronică pe jumătate de tempo.', en:'Detuned pad, slow minor cadence — half-time electronic warmth.', fr:'Nappe désaccordée, cadence mineure lente — une chaleur électronique à mi-tempo.', it:'Pad stonato, cadenza minore lenta — un calore elettronico a mezzo tempo.', es:'Pad desafinado, cadencia menor lenta — una calidez electrónica a medio tiempo.', pt:'Pad desafinado, cadência menor lenta — um calor eletrônico em meio tempo.', de:'Verstimmtes Pad, langsame Moll-Kadenz — elektronische Wärme im Half-Time-Gefühl.'},
+    glyph:{freq:1.8, amp:9, jitter:2, wave:'sine'},
+    scale:'minor', progression:'popMajor', tempoRange:[68,80],
+    lead:{use:true, density:0.3, octave:5, swing:false, wave:'sine'},
+    pad:{attack:0.8, release:2.0, seventh:false, octave:4, wave:'sawtooth', detune:6},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1500, padFilterCutoff:1000, reverbMix:0.45, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'electronic',
+  },
+
+  celtic: {
+    name:{ro:'Baladă Celtică', en:'Celtic Air', fr:'Air Celtique', it:'Aria Celtica', es:'Aire Celta', pt:'Ária Celta', de:'Keltische Weise'},
+    desc:{ro:'Modul mixolidian, arpegii de harpă — legănare de baladă irlandeză.', en:'Mixolydian mode, harp-like arpeggios — the lilt of an Irish air.', fr:'Mode mixolydien, arpèges façon harpe — le balancement d\'une ballade irlandaise.', it:'Modo misolidio, arpeggi simili all\'arpa — il dondolio di una ballata irlandese.', es:'Modo mixolidio, arpegios tipo arpa — el vaivén de una balada irlandesa.', pt:'Modo mixolídio, arpejos tipo harpa — o embalo de uma balada irlandesa.', de:'Mixolydischer Modus, harfenartige Arpeggios — das Wiegen einer irischen Ballade.'},
+    glyph:{freq:2.6, amp:9, jitter:1, wave:'sine'},
+    scale:'mixolydian', progression:'classical', tempoRange:[86,100], meter:3,
+    lead:{use:true, density:0.45, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.4, release:1.4, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2200, reverbMix:0.35, arp:true, arpPattern:'up', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'alpha', category:'world',
+  },
+  flamenco: {
+    name:{ro:'Flamenco Liniștit', en:'Chill Flamenco', fr:'Flamenco Tranquille', it:'Flamenco Rilassato', es:'Flamenco Relajado', pt:'Flamenco Tranquilo', de:'Entspannter Flamenco'},
+    desc:{ro:'Gamă frigiană dominantă, cadență andaluză — căldură spaniolă domoală.', en:'Phrygian-dominant scale, Andalusian cadence — gentle Spanish warmth.', fr:'Gamme phrygienne dominante, cadence andalouse — une chaleur espagnole apaisée.', it:'Scala frigia dominante, cadenza andalusa — un calore spagnolo pacato.', es:'Escala frigia dominante, cadencia andaluza — una calidez española serena.', pt:'Escala frígia dominante, cadência andaluza — um calor espanhol sereno.', de:'Phrygisch-dominante Tonleiter, andalusische Kadenz — spanische Wärme, ganz ruhig.'},
+    glyph:{freq:2.8, amp:10, jitter:3, wave:'sine'},
+    scale:'phrygianDominant', progression:'andalusian', tempoRange:[84,100],
+    lead:{use:true, density:0.4, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:0.08, release:1.0, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2100, reverbMix:0.3, arp:true, arpPattern:'down', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'beta', category:'world',
+  },
+  gamelan: {
+    name:{ro:'Gamelan Contemplativ', en:'Contemplative Gamelan', fr:'Gamelan Contemplatif', it:'Gamelan Contemplativo', es:'Gamelán Contemplativo', pt:'Gamelão Contemplativo', de:'Kontemplatives Gamelan'},
+    desc:{ro:'Bătăi metalice ușor dezacordate — clopoței indonezieni împletiți.', en:'Slightly detuned metallic beating — interlocking Indonesian bells.', fr:'Battements métalliques légèrement désaccordés — des cloches indonésiennes entrelacées.', it:'Battiti metallici leggermente stonati — campane indonesiane intrecciate.', es:'Latidos metálicos ligeramente desafinados — campanas indonesias entrelazadas.', pt:'Batimentos metálicos ligeiramente desafinados — sinos indonésios entrelaçados.', de:'Leicht verstimmtes metallisches Schweben — ineinandergreifende indonesische Glocken.'},
+    glyph:{freq:3.8, amp:7, jitter:5, wave:'sine'},
+    scale:'majorPenta', progression:'modalVamp', tempoRange:[58,70], barsPerChord:8,
+    lead:{use:true, density:0.3, octave:5, swing:false, wave:'triangle', attack:0.005, release:0.9, detune:12},
+    pad:{attack:1.5, release:2.5, seventh:false, octave:3, wave:'triangle', detune:10},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2400, reverbMix:0.45, arp:true, arpPattern:'random', arpStepsPerBar:12,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  balkan: {
+    name:{ro:'Ritm Balcanic Domol', en:'Gentle Balkan Rhythm', fr:'Rythme Balkanique Doux', it:'Ritmo Balcanico Dolce', es:'Ritmo Balcánico Suave', pt:'Ritmo Balcânico Suave', de:'Sanfter Balkan-Rhythmus'},
+    desc:{ro:'Măsură de 7 timpi, minor armonic — dans neregulat, primitor.', en:'A 7-beat cycle over harmonic minor — an uneven, welcoming dance.', fr:'Mesure à 7 temps, mineur harmonique — une danse inégale et accueillante.', it:'Misura a 7 tempi, minore armonico — una danza irregolare e accogliente.', es:'Compás de 7 tiempos, menor armónico — una danza irregular y acogedora.', pt:'Compasso de 7 tempos, menor harmônico — uma dança irregular e acolhedora.', de:'Ein 7er-Takt über harmonisch Moll — ein unebener, einladender Tanz.'},
+    glyph:{freq:3.5, amp:9, jitter:4, wave:'sine'},
+    scale:'harmonicMinor', progression:'andalusian', tempoRange:[88,104], meter:7,
+    lead:{use:true, density:0.42, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:0.3, release:1.2, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2100, reverbMix:0.3, arp:true, arpPattern:'up', arpStepsPerBar:14,
+    texture:null, recommendedEntrainment:'beta', category:'world',
+  },
+  highland: {
+    name:{ro:'Highland Scoțian', en:'Scottish Highland', fr:'Highlands Écossais', it:'Highland Scozzese', es:'Highland Escocés', pt:'Highland Escocês', de:'Schottisches Hochland'},
+    desc:{ro:'Dronă mixolidiană susținută — ecou de cimpoi peste dealuri verzi.', en:'A sustained mixolydian drone — a bagpipe echo over green hills.', fr:'Bourdon mixolydien soutenu — un écho de cornemuse sur des collines vertes.', it:'Bordone misolidio sostenuto — un\'eco di cornamusa su verdi colline.', es:'Bordón mixolidio sostenido — un eco de gaita sobre verdes colinas.', pt:'Zumbido mixolídio sustentado — um eco de gaita sobre colinas verdes.', de:'Ein anhaltender mixolydischer Bordun — ein Dudelsack-Echo über grünen Hügeln.'},
+    glyph:{freq:1.4, amp:8, jitter:1, wave:'sine'},
+    scale:'mixolydian', progression:'modalVamp', tempoRange:[60,72], barsPerChord:8,
+    lead:{use:true, density:0.28, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:3.0, release:4.5, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1800, reverbMix:0.4, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'world',
+  },
+  hawaiian: {
+    name:{ro:'Hawaiian Solar', en:'Sunlit Hawaiian', fr:'Hawaïen Ensoleillé', it:'Hawaiano Soleggiato', es:'Hawaiano Soleado', pt:'Havaiano Ensolarado', de:'Sonniges Hawaii'},
+    desc:{ro:'Major cald, legănare de chitară — briză de ocean pe insulă.', en:'Warm major tones, a swaying guitar — an island ocean breeze.', fr:'Tons majeurs chauds, guitare qui se balance — une brise océanique sur une île.', it:'Toni maggiori caldi, chitarra ondeggiante — una brezza oceanica sull\'isola.', es:'Tonos mayores cálidos, guitarra que se mece — una brisa oceánica en la isla.', pt:'Tons maiores quentes, guitarra que balança — uma brisa oceânica na ilha.', de:'Warme Durtöne, schwingende Gitarre — eine Ozeanbrise auf der Insel.'},
+    glyph:{freq:2.1, amp:8, jitter:1, wave:'sine'},
+    scale:'major', progression:'popMajor', tempoRange:[84,96],
+    lead:{use:true, density:0.38, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.5, release:1.6, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2000, reverbMix:0.35, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'world',
+  },
+  mongol: {
+    name:{ro:'Nomad Mongol', en:'Mongolian Nomad', fr:'Nomade Mongol', it:'Nomade Mongolo', es:'Nómada Mongol', pt:'Nômade Mongol', de:'Mongolischer Nomade'},
+    desc:{ro:'Dronă joasă cu armonice bătute — stepă întinsă, orizont larg.', en:'A low drone with beating harmonics — vast steppe, wide horizon.', fr:'Bourdon grave aux harmoniques battantes — une steppe immense, un large horizon.', it:'Bordone grave con armoniche pulsanti — una steppa vasta, un ampio orizzonte.', es:'Bordón grave con armónicos pulsantes — una estepa vasta, un amplio horizonte.', pt:'Zumbido grave com harmônicos pulsantes — uma estepe vasta, um amplo horizonte.', de:'Ein tiefer Bordun mit schwebenden Obertönen — weite Steppe, weiter Horizont.'},
+    glyph:{freq:0.5, amp:8, jitter:3, wave:'sine'},
+    scale:'minorPenta', progression:'modalVamp', tempoRange:[50,60], barsPerChord:12,
+    lead:{use:true, density:0.14, octave:5, swing:false, wave:'sine', attack:0.05, release:1.0},
+    pad:{attack:3.5, release:5.0, seventh:false, octave:2, wave:'sine', detune:14},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1300, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  fado: {
+    name:{ro:'Fado Portughez', en:'Portuguese Fado', fr:'Fado Portugais', it:'Fado Portoghese', es:'Fado Portugués', pt:'Fado Português', de:'Portugiesischer Fado'},
+    desc:{ro:'Minor armonic, bas mergător — dor sufletesc, cald și lent.', en:'Harmonic minor, walking bass — soulful longing, warm and slow.', fr:'Mineur harmonique, basse marchante — une nostalgie sincère, chaude et lente.', it:'Minore armonico, basso in cammino — una nostalgia sincera, calda e lenta.', es:'Menor armónico, bajo caminante — una añoranza sincera, cálida y lenta.', pt:'Menor harmônico, baixo caminhante — uma saudade sincera, quente e lenta.', de:'Harmonisch Moll, wandernder Bass — seelenvolle Sehnsucht, warm und langsam.'},
+    glyph:{freq:1.7, amp:9, jitter:3, wave:'sine'},
+    scale:'harmonicMinor', progression:'classical', tempoRange:[66,78],
+    lead:{use:true, density:0.36, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.4, release:1.6, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:1900, reverbMix:0.4, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'world',
+  },
+  andean: {
+    name:{ro:'Serenadă Andină', en:'Andean Serenade', fr:'Sérénade Andine', it:'Serenata Andina', es:'Serenata Andina', pt:'Serenata Andina', de:'Anden-Serenade'},
+    desc:{ro:'Pentatonic minor, suflu de nai — culmi înalte, aer rarefiat.', en:'Minor pentatonic, breathy pan-flute lead — high peaks, thin air.', fr:'Pentatonique mineur, souffle de flûte de pan — de hauts sommets, un air raréfié.', it:'Pentatonico minore, respiro di flauto di pan — vette alte, aria rarefatta.', es:'Pentatónico menor, aliento de flauta de pan — cumbres altas, aire enrarecido.', pt:'Pentatônico menor, sopro de flauta de pã — picos altos, ar rarefeito.', de:'Moll-Pentatonik, hauchige Panflöte — hohe Gipfel, dünne Luft.'},
+    glyph:{freq:1.5, amp:8, jitter:3, wave:'sine'},
+    scale:'minorPenta', progression:'ambientModal', tempoRange:[66,78],
+    lead:{use:true, density:0.28, octave:5, swing:false, wave:'sine', attack:0.03, release:0.7},
+    pad:{attack:1.8, release:2.8, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1700, reverbMix:0.45, arp:false,
+    texture:'wind', recommendedEntrainment:'theta', category:'world',
+  },
+  klezmer: {
+    name:{ro:'Klezmer Blând', en:'Gentle Klezmer', fr:'Klezmer Doux', it:'Klezmer Dolce', es:'Klezmer Suave', pt:'Klezmer Suave', de:'Sanfter Klezmer'},
+    desc:{ro:'Minor armonic expresiv, septime calde — bucurie melancolică, dansantă.', en:'Expressive harmonic minor, warm sevenths — bittersweet, dance-like joy.', fr:'Mineur harmonique expressif, septièmes chaudes — une joie douce-amère et dansante.', it:'Minore armonico espressivo, settime calde — una gioia agrodolce e danzante.', es:'Menor armónico expresivo, séptimas cálidas — una alegría agridulce y bailable.', pt:'Menor harmônico expressivo, sétimas quentes — uma alegria agridoce e dançante.', de:'Ausdrucksstarkes harmonisch Moll, warme Septakkorde — bittersüße, tänzerische Freude.'},
+    glyph:{freq:2.9, amp:9, jitter:4, wave:'sine'},
+    scale:'harmonicMinor', progression:'jazzy', tempoRange:[92,108],
+    lead:{use:true, density:0.48, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.15, release:1.2, seventh:true, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:2100, reverbMix:0.3, arp:false,
+    texture:null, recommendedEntrainment:'beta', category:'world',
+  },
+  nativeflute: {
+    name:{ro:'Fluier Nativ American', en:'Native American Flute', fr:'Flûte Amérindienne', it:'Flauto Nativo Americano', es:'Flauta Nativa Americana', pt:'Flauta Nativa Americana', de:'Indianische Flöte'},
+    desc:{ro:'Pentatonic major, suflu ceremonial — cerc de foc, foarte rarefiat.', en:'Major pentatonic, ceremonial breath — a fire circle, very sparse.', fr:'Pentatonique majeur, souffle cérémoniel — un cercle de feu, très épuré.', it:'Pentatonico maggiore, respiro cerimoniale — un cerchio di fuoco, molto rado.', es:'Pentatónico mayor, aliento ceremonial — un círculo de fuego, muy escaso.', pt:'Pentatônico maior, sopro cerimonial — um círculo de fogo, muito esparso.', de:'Dur-Pentatonik, zeremonieller Atem — ein Lagerfeuerkreis, sehr karg.'},
+    glyph:{freq:0.7, amp:7, jitter:2, wave:'sine'},
+    scale:'majorPenta', progression:'modalVamp', tempoRange:[48,58], barsPerChord:8,
+    lead:{use:true, density:0.16, octave:5, swing:false, wave:'sine', attack:0.08, release:1.0},
+    pad:{attack:2.5, release:4.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1500, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  sufi: {
+    name:{ro:'Sufi Contemplativ', en:'Sufi Contemplative', fr:'Soufi Contemplatif', it:'Sufi Contemplativo', es:'Sufí Contemplativo', pt:'Sufi Contemplativo', de:'Kontemplativer Sufi'},
+    desc:{ro:'Puls repetitiv hipnotic pe gamă exotică — învârtire interioară, transă calmă.', en:'A hypnotic repeating pulse over an exotic scale — inward turning, calm trance.', fr:'Pulsation répétitive et hypnotique sur une gamme exotique — une transe intérieure et calme.', it:'Impulso ripetitivo e ipnotico su una scala esotica — una trance interiore e calma.', es:'Pulso repetitivo e hipnótico sobre una escala exótica — un trance interior y calmo.', pt:'Pulso repetitivo e hipnótico sobre uma escala exótica — um transe interior e calmo.', de:'Ein hypnotisch wiederholter Puls über einer exotischen Tonleiter — innere, ruhige Trance.'},
+    glyph:{freq:4.2, amp:8, jitter:1, wave:'sine'},
+    scale:'phrygianDominant', progression:'modalVamp', tempoRange:[88,100], barsPerChord:4,
+    lead:{use:true, density:0.3, octave:5, swing:false, wave:'sine'},
+    pad:{attack:0.5, release:1.5, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'fourfloor'},
+    filterCutoff:1800, reverbMix:0.4, arp:true, arpPattern:'up', arpStepsPerBar:16,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  kalimba: {
+    name:{ro:'Kalimba Vis', en:'Kalimba Dreams', fr:'Rêves de Kalimba', it:'Sogni di Kalimba', es:'Sueños de Kalimba', pt:'Sonhos de Kalimba', de:'Kalimba-Träume'},
+    desc:{ro:'Pentatonic strălucitor, tipar rapid și împletit — degete pe metal, joacă.', en:'Bright pentatonic, fast interlocking pattern — fingers on metal, playful.', fr:'Pentatonique éclatant, motif rapide et entrelacé — des doigts sur le métal, ludique.', it:'Pentatonico brillante, motivo rapido e intrecciato — dita sul metallo, giocoso.', es:'Pentatónico brillante, patrón rápido y entrelazado — dedos sobre el metal, juguetón.', pt:'Pentatônico brilhante, padrão rápido e entrelaçado — dedos no metal, brincalhão.', de:'Strahlende Pentatonik, schnelles, verwobenes Muster — Finger auf Metall, verspielt.'},
+    glyph:{freq:4.5, amp:7, jitter:4, wave:'sine'},
+    scale:'majorPenta', progression:'modalVamp', tempoRange:[68,80], barsPerChord:6,
+    lead:{use:true, density:0.32, octave:5, swing:false, wave:'triangle', attack:0.005, release:0.6},
+    pad:{attack:1.2, release:2.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2600, reverbMix:0.4, arp:true, arpPattern:'random', arpStepsPerBar:16,
+    texture:null, recommendedEntrainment:'alpha', category:'world',
+  },
+  aboriginal: {
+    name:{ro:'Dronă Aborigenă', en:'Aboriginal Drone', fr:'Bourdon Aborigène', it:'Bordone Aborigeno', es:'Zumbido Aborigen', pt:'Zumbido Aborígene', de:'Aborigine-Bordun'},
+    desc:{ro:'Bordun foarte jos, melodie firavă — pământ vechi, orizont plat.', en:'A very low drone, a faint melody above — ancient earth, flat horizon.', fr:'Un bourdon très grave, une mélodie ténue — une terre ancienne, un horizon plat.', it:'Un bordone molto grave, una melodia flebile — una terra antica, un orizzonte piatto.', es:'Un bordón muy grave, una melodía tenue — una tierra antigua, un horizonte plano.', pt:'Um zumbido muito grave, uma melodia tênue — uma terra antiga, um horizonte plano.', de:'Ein sehr tiefer Bordun, eine zarte Melodie darüber — uralte Erde, flacher Horizont.'},
+    glyph:{freq:0.4, amp:8, jitter:3, wave:'sine'},
+    scale:'minorPenta', progression:'modalVamp', tempoRange:[46,56], barsPerChord:16,
+    lead:{use:true, density:0.12, octave:5, swing:false, wave:'sine'},
+    pad:{attack:3.5, release:5.5, seventh:false, octave:2, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1100, reverbMix:0.45, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  steelpan: {
+    name:{ro:'Steel Pan Caraibean', en:'Caribbean Steelpan', fr:'Steel Pan Caribéen', it:'Steel Pan Caraibico', es:'Steel Pan Caribeño', pt:'Steel Pan Caribenho', de:'Karibisches Steelpan'},
+    desc:{ro:'Pentatonic strălucitor, ropot cald — plajă însorită, legănare ușoară.', en:'Bright pentatonic, warm ringing hits — sunny shore, an easy sway.', fr:'Pentatonique éclatant, frappes chaudes et résonnantes — un rivage ensoleillé, un doux balancement.', it:'Pentatonico brillante, colpi caldi e risonanti — una riva soleggiata, un dolce dondolio.', es:'Pentatónico brillante, golpes cálidos y resonantes — una orilla soleada, un vaivén suave.', pt:'Pentatônico brilhante, batidas quentes e ressonantes — uma praia ensolarada, um balanço suave.', de:'Strahlende Pentatonik, warme, klingende Schläge — sonnige Küste, sanftes Wiegen.'},
+    glyph:{freq:2.8, amp:9, jitter:2, wave:'sine'},
+    scale:'majorPenta', progression:'popMajor', tempoRange:[88,100],
+    lead:{use:true, density:0.36, octave:5, swing:true, wave:'triangle', attack:0.01, release:0.8},
+    pad:{attack:0.2, release:1.2, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2500, reverbMix:0.35, arp:false,
+    texture:null, recommendedEntrainment:'beta', category:'world',
+  },
+
+  classical: {
+    name:{ro:'Clasic Relaxant', en:'Relaxing Classical', fr:'Classique Relaxant', it:'Classico Rilassante', es:'Clásico Relajante', pt:'Clássico Relaxante', de:'Entspannende Klassik'},
+    desc:{ro:'Armonii clasice, arpegii delicate de pian — eleganță senină.', en:'Classical harmony, delicate piano arpeggios — serene elegance.', fr:'Harmonie classique, arpèges délicats de piano — une élégance sereine.', it:'Armonia classica, delicati arpeggi di pianoforte — un\'eleganza serena.', es:'Armonía clásica, delicados arpegios de piano — una elegancia serena.', pt:'Harmonia clássica, delicados arpejos de piano — uma elegância serena.', de:'Klassische Harmonie, zarte Klavierarpeggios — heitere Eleganz.'},
+    glyph:{freq:1.5, amp:9, jitter:0, wave:'sine'},
+    scale:'major', progression:'classical', tempoRange:[58,72],
+    lead:{use:true, density:0.5, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:0.9, release:2.2, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, walking:false},
+    filterCutoff:2600, reverbMix:0.4, arp:true, arpPattern:'up',
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  baroque: {
+    name:{ro:'Reverie Barocă', en:'Baroque Reverie', fr:'Rêverie Baroque', it:'Fantasticheria Barocca', es:'Ensueño Barroco', pt:'Devaneio Barroco', de:'Barocke Träumerei'},
+    desc:{ro:'Clavecin, figurație rapidă, cvinte descrescătoare — contrapunct luminos.', en:'Harpsichord-like plucks, fast figuration, falling fifths — bright counterpoint.', fr:'Clavecin, figuration rapide, quintes descendantes — un contrepoint lumineux.', it:'Clavicembalo, figurazione rapida, quinte discendenti — un contrappunto luminoso.', es:'Clavecín, figuración rápida, quintas descendentes — un contrapunto luminoso.', pt:'Cravo, figuração rápida, quintas descendentes — um contraponto luminoso.', de:'Cembaloartige Klänge, schnelle Figuration, fallende Quinten — heller Kontrapunkt.'},
+    glyph:{freq:3.5, amp:8, jitter:0, wave:'sine'},
+    scale:'harmonicMinor', progression:'circleFifths', tempoRange:[72,88], barsPerChord:1,
+    lead:{use:true, density:0.55, octave:5, swing:false, wave:'triangle', attack:0.005, release:0.3},
+    pad:{attack:0.02, release:0.6, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:3, pattern:'walking'},
+    filterCutoff:2800, reverbMix:0.32, arp:true, arpPattern:'up', arpStepsPerBar:16,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  waltz: {
+    name:{ro:'Vals Onirică', en:'Dreamy Waltz', fr:'Valse Onirique', it:'Valzer Onirico', es:'Vals Onírico', pt:'Valsa Onírica', de:'Verträumter Walzer'},
+    desc:{ro:'Legănare în trei timpi, coarde calde — un vals pe jumătate adormit.', en:'A three-beat lilt over warm strings — a waltz half asleep.', fr:'Un balancement à trois temps sur des cordes chaudes — une valse à moitié endormie.', it:'Un\'oscillazione in tre tempi su corde calde — un valzer mezzo addormentato.', es:'Un vaivén de tres tiempos sobre cuerdas cálidas — un vals medio dormido.', pt:'Um embalo de três tempos sobre cordas quentes — uma valsa meio adormecida.', de:'Ein Dreiertakt-Wiegen über warmen Streichern — ein halb eingeschlafener Walzer.'},
+    glyph:{freq:1.8, amp:9, jitter:0, wave:'sine'},
+    scale:'major', progression:'classical', tempoRange:[84,100], meter:3,
+    lead:{use:true, density:0.42, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:0.5, release:1.6, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2300, reverbMix:0.38, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  impressionism: {
+    name:{ro:'Impresionism Francez', en:'French Impressionism', fr:'Impressionnisme Français', it:'Impressionismo Francese', es:'Impresionismo Francés', pt:'Impressionismo Francês', de:'Französischer Impressionismus'},
+    desc:{ro:'Gamă lidiană, armonie fluidă și extinsă — culori de apă și lumină.', en:'Lydian scale, fluid extended harmony — colors of water and light.', fr:'Gamme lydienne, harmonie fluide et étendue — des couleurs d\'eau et de lumière.', it:'Scala lidia, armonia fluida ed estesa — colori d\'acqua e di luce.', es:'Escala lidia, armonía fluida y extendida — colores de agua y luz.', pt:'Escala lídia, harmonia fluida e estendida — cores de água e luz.', de:'Lydische Tonleiter, fließende, erweiterte Harmonie — Farben aus Wasser und Licht.'},
+    glyph:{freq:1.9, amp:8, jitter:1, wave:'sine'},
+    scale:'lydian', progression:'jazzy', tempoRange:[60,72],
+    lead:{use:true, density:0.4, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:1.0, release:2.4, seventh:true, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2500, reverbMix:0.45, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  stringchamber: {
+    name:{ro:'Cameral pentru Coarde', en:'String Chamber', fr:'Musique de Chambre à Cordes', it:'Musica da Camera per Archi', es:'Cámara de Cuerdas', pt:'Câmara de Cordas', de:'Streicherkammermusik'},
+    desc:{ro:'Minor cald, legato susținut — un cvartet de coarde în surdină.', en:'Warm minor, sustained legato — a muted string quartet.', fr:'Mineur chaud, legato soutenu — un quatuor à cordes en sourdine.', it:'Minore caldo, legato sostenuto — un quartetto d\'archi in sordina.', es:'Menor cálido, legato sostenido — un cuarteto de cuerdas silenciado.', pt:'Menor quente, legato sustentado — um quarteto de cordas em surdina.', de:'Warmes Moll, anhaltendes Legato — ein gedämpftes Streichquartett.'},
+    glyph:{freq:1.6, amp:8, jitter:0, wave:'sine'},
+    scale:'minor', progression:'classical', tempoRange:[62,74],
+    lead:{use:true, density:0.3, octave:5, swing:false, wave:'triangle', attack:0.15, release:1.0},
+    pad:{attack:1.5, release:3.0, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2000, reverbMix:0.48, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  solopiano: {
+    name:{ro:'Pian Solo Contemplativ', en:'Contemplative Solo Piano', fr:'Piano Solo Contemplatif', it:'Piano Solo Contemplativo', es:'Piano Solo Contemplativo', pt:'Piano Solo Contemplativo', de:'Kontemplatives Solo-Klavier'},
+    desc:{ro:'Doar pian, frazare simplă și rară — o cameră liniștită, seara.', en:'Piano alone, simple sparse phrasing — a quiet room at dusk.', fr:'Rien que du piano, un phrasé simple et épars — une pièce silencieuse, le soir.', it:'Solo pianoforte, un fraseggio semplice e rado — una stanza silenziosa, la sera.', es:'Solo piano, un fraseo simple y disperso — una habitación silenciosa, al anochecer.', pt:'Apenas piano, um fraseado simples e esparso — uma sala silenciosa, ao entardecer.', de:'Nur Klavier, ein einfaches, spärliches Phrasieren — ein stiller Raum am Abend.'},
+    glyph:{freq:1.7, amp:9, jitter:1, wave:'sine'},
+    scale:'major', progression:'classical', tempoRange:[56,68],
+    lead:{use:true, density:0.48, octave:5, swing:false, wave:'triangle', attack:0.01, release:0.9},
+    pad:{attack:0.05, release:1.8, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2700, reverbMix:0.42, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  gregorian: {
+    name:{ro:'Cânt Gregorian', en:'Gregorian Chant', fr:'Chant Grégorien', it:'Canto Gregoriano', es:'Canto Gregoriano', pt:'Canto Gregoriano', de:'Gregorianischer Choral'},
+    desc:{ro:'Modul doric, voci susținute ca de cor — o navă de piatră, tăcere.', en:'Dorian mode, sustained choir-like voices — a stone nave, silence.', fr:'Mode dorien, voix soutenues façon chœur — une nef de pierre, le silence.', it:'Modo dorico, voci sostenute come un coro — una navata di pietra, il silenzio.', es:'Modo dórico, voces sostenidas como un coro — una nave de piedra, el silencio.', pt:'Modo dórico, vozes sustentadas como um coro — uma nave de pedra, o silêncio.', de:'Dorischer Modus, gehaltene, chorartige Stimmen — ein steinernes Kirchenschiff, Stille.'},
+    glyph:{freq:0.35, amp:7, jitter:0, wave:'sine'},
+    scale:'dorian', progression:'modalVamp', tempoRange:[36,46], barsPerChord:16,
+    lead:{use:true, density:0.1, octave:5, swing:false, wave:'sine', attack:1.5, release:2.5},
+    pad:{attack:4.0, release:6.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1400, reverbMix:0.65, arp:false,
+    texture:null, recommendedEntrainment:'delta', category:'classical',
+  },
+  harpsolo: {
+    name:{ro:'Harpă Solo Senină', en:'Serene Solo Harp', fr:'Harpe Solo Sereine', it:'Arpa Solo Serena', es:'Arpa Solo Serena', pt:'Harpa Solo Serena', de:'Heitere Solo-Harfe'},
+    desc:{ro:'Pentatonic major, arpegii clare — un singur instrument, lumină caldă.', en:'Major pentatonic, clear arpeggios — a single instrument, warm light.', fr:'Pentatonique majeur, arpèges clairs — un seul instrument, une lumière chaude.', it:'Pentatonico maggiore, arpeggi limpidi — un solo strumento, una luce calda.', es:'Pentatónico mayor, arpegios claros — un solo instrumento, una luz cálida.', pt:'Pentatônico maior, arpejos claros — um único instrumento, uma luz quente.', de:'Dur-Pentatonik, klare Arpeggios — ein einzelnes Instrument, warmes Licht.'},
+    glyph:{freq:2.4, amp:8, jitter:0, wave:'sine'},
+    scale:'majorPenta', progression:'ambientModal', tempoRange:[58,70], barsPerChord:4,
+    lead:{use:true, density:0.35, octave:5, swing:false, wave:'sine', attack:0.01, release:0.8},
+    pad:{attack:1.0, release:2.0, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2400, reverbMix:0.5, arp:true, arpPattern:'up', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  renaissance: {
+    name:{ro:'Lăută Renascentistă', en:'Renaissance Lute', fr:'Luth Renaissance', it:'Liuto Rinascimentale', es:'Laúd Renacentista', pt:'Alaúde Renascentista', de:'Renaissance-Laute'},
+    desc:{ro:'Modul doric, contrapunct simplu — o curte veche, lumină difuză.', en:'Dorian mode, simple counterpoint — an old courtyard, diffuse light.', fr:'Mode dorien, contrepoint simple — une ancienne cour, une lumière diffuse.', it:'Modo dorico, contrappunto semplice — un\'antica corte, una luce diffusa.', es:'Modo dórico, contrapunto simple — un antiguo patio, una luz difusa.', pt:'Modo dórico, contraponto simples — um antigo pátio, uma luz difusa.', de:'Dorischer Modus, einfacher Kontrapunkt — ein alter Hof, diffuses Licht.'},
+    glyph:{freq:2.0, amp:8, jitter:0, wave:'sine'},
+    scale:'dorian', progression:'classical', tempoRange:[66,78],
+    lead:{use:true, density:0.4, octave:5, swing:false, wave:'triangle', attack:0.01, release:0.7},
+    pad:{attack:0.3, release:1.2, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2300, reverbMix:0.4, arp:true, arpPattern:'updown', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  cinematic: {
+    name:{ro:'Cinematic Contemplativ', en:'Contemplative Cinematic', fr:'Cinématique Contemplatif', it:'Cinematico Contemplativo', es:'Cinemático Contemplativo', pt:'Cinemático Contemplativo', de:'Kontemplatives Kino'},
+    desc:{ro:'Minor armonic, cvinte descrescătoare, coarde dezacordate ușor — orizont larg.', en:'Harmonic minor, falling fifths, gently detuned strings — a wide horizon.', fr:'Mineur harmonique, quintes descendantes, cordes légèrement désaccordées — un vaste horizon.', it:'Minore armonico, quinte discendenti, archi leggermente stonati — un vasto orizzonte.', es:'Menor armónico, quintas descendentes, cuerdas ligeramente desafinadas — un amplio horizonte.', pt:'Menor harmônico, quintas descendentes, cordas ligeiramente desafinadas — um amplo horizonte.', de:'Harmonisch Moll, fallende Quinten, leicht verstimmte Streicher — ein weiter Horizont.'},
+    glyph:{freq:1.2, amp:9, jitter:1, wave:'sine'},
+    scale:'harmonicMinor', progression:'circleFifths', tempoRange:[54,64], barsPerChord:2,
+    lead:{use:true, density:0.2, octave:5, swing:false, wave:'sine'},
+    pad:{attack:2.0, release:3.5, seventh:false, octave:3, wave:'sine', detune:6},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2000, reverbMix:0.55, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+
+  lofi: {
+    name:{ro:'Lo-fi Chill', en:'Lo-fi Chill', fr:'Lo-fi Chill', it:'Lo-fi Chill', es:'Lo-fi Chill', pt:'Lo-fi Chill', de:'Lo-fi Chill'},
+    desc:{ro:'Acorduri calde, ritm relaxat, textură discretă de vinil — pentru studiu sau odihnă.', en:'Warm chords, laid-back groove, gentle vinyl warmth — for study or rest.', fr:'Accords chauds, rythme décontracté, texture vinyle discrète — pour étudier ou se reposer.', it:'Accordi caldi, ritmo rilassato, texture vinile discreta — per studiare o riposare.', es:'Acordes cálidos, ritmo relajado, textura de vinilo discreta — para estudiar o descansar.', pt:'Acordes quentes, ritmo relaxado, textura de vinil discreta — para estudar ou descansar.', de:'Warme Akkorde, entspannter Groove, dezente Vinyl-Textur — zum Lernen oder Ausruhen.'},
+    glyph:{freq:2.0, amp:10, jitter:3, wave:'sine'},
+    scale:'dorian', progression:'jazzy', tempoRange:[72,86],
+    lead:{use:true, density:0.42, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.06, release:1.3, seventh:true, octave:4, wave:'triangle'},
+    bass:{octave:2, walking:false},
+    filterCutoff:1500, padFilterCutoff:750, leadFilterCutoff:1500, reverbMix:0.22, arp:false,
+    texture:'vinyl', recommendedEntrainment:'alpha', category:'groove',
+  },
+  jazz: {
+    name:{ro:'Jazz Liniștit', en:'Soft Jazz', fr:'Jazz Tranquille', it:'Jazz Rilassato', es:'Jazz Suave', pt:'Jazz Suave', de:'Sanfter Jazz'},
+    desc:{ro:'Acorduri de septimă, bas mergător discret — swing cald de seară.', en:'Seventh chords, gentle walking bass — warm evening swing.', fr:'Accords de septième, basse marchante discrète — un swing chaud de soirée.', it:'Accordi di settima, basso cammino discreto — uno swing caldo serale.', es:'Acordes de séptima, bajo caminante discreto — un swing cálido de noche.', pt:'Acordes de sétima, baixo caminhante discreto — um swing quente de noite.', de:'Septakkorde, dezenter Walking Bass — warmer, abendlicher Swing.'},
+    glyph:{freq:2.2, amp:9, jitter:2, wave:'sine'},
+    scale:'dorian', progression:'jazzy', tempoRange:[76,92],
+    lead:{use:true, density:0.5, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.12, release:1.6, seventh:true, octave:4, wave:'sine'},
+    bass:{octave:2, walking:true},
+    filterCutoff:2000, padFilterCutoff:1400, leadFilterCutoff:2000, reverbMix:0.3, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'groove',
+  },
+  bossa: {
+    name:{ro:'Bossa Nova Solar', en:'Sunlit Bossa Nova', fr:'Bossa Nova Ensoleillée', it:'Bossa Nova Soleggiata', es:'Bossa Nova Soleada', pt:'Bossa Nova Ensolarada', de:'Sonnige Bossa Nova'},
+    desc:{ro:'Armonie majoră cu septime, bas sincopat — plajă braziliană domoală.', en:'Major seventh harmony, syncopated bass — an easy Brazilian shore.', fr:'Harmonie majeure avec septièmes, basse syncopée — un doux rivage brésilien.', it:'Armonia maggiore con settime, basso sincopato — una dolce riva brasiliana.', es:'Armonía mayor con séptimas, bajo sincopado — una suave orilla brasileña.', pt:'Harmonia maior com sétimas, baixo sincopado — uma suave costa brasileira.', de:'Dur-Harmonie mit Septakkorden, synkopierter Bass — eine sanfte brasilianische Küste.'},
+    glyph:{freq:2.3, amp:8, jitter:2, wave:'sine'},
+    scale:'major', progression:'jazzy', tempoRange:[92,110],
+    lead:{use:true, density:0.4, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.05, release:1.2, seventh:true, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'bossa'},
+    filterCutoff:2000, reverbMix:0.28, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'groove',
+  },
+  blues: {
+    name:{ro:'Blues Cald', en:'Warm Blues Balm', fr:'Blues Chaud', it:'Blues Caldo', es:'Blues Cálido', pt:'Blues Quente', de:'Warmer Blues'},
+    desc:{ro:'Gamă blues, bas mergător — catharsis sufletesc, lent și cald.', en:'Blues scale, walking bass — soulful catharsis, slow and warm.', fr:'Gamme blues, basse marchante — une catharsis de l\'âme, lente et chaude.', it:'Scala blues, basso cammino — una catarsi dell\'anima, lenta e calda.', es:'Escala de blues, bajo caminante — una catarsis del alma, lenta y cálida.', pt:'Escala de blues, baixo caminhante — uma catarse da alma, lenta e quente.', de:'Blues-Tonleiter, Walking Bass — seelische Katharsis, langsam und warm.'},
+    glyph:{freq:2.0, amp:10, jitter:4, wave:'sine'},
+    scale:'blues', progression:'classical', tempoRange:[70,84],
+    lead:{use:true, density:0.4, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.15, release:1.3, seventh:true, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:1900, reverbMix:0.3, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'groove',
+  },
+  downtempo: {
+    name:{ro:'Downtempo Nostalgic', en:'Nostalgic Downtempo', fr:'Downtempo Nostalgique', it:'Downtempo Nostalgico', es:'Downtempo Nostálgico', pt:'Downtempo Nostálgico', de:'Nostalgisches Downtempo'},
+    desc:{ro:'Pad cald ușor dezacordat, textură de vinil — electronică melancolic-caldă.', en:'Warm slightly-detuned pad, vinyl texture — melancholic-warm electronica.', fr:'Nappe chaude légèrement désaccordée, texture vinyle — une électronique mélancolique et chaude.', it:'Pad caldo leggermente stonato, texture vinile — un\'elettronica malinconica e calda.', es:'Pad cálido ligeramente desafinado, textura de vinilo — una electrónica melancólica y cálida.', pt:'Pad quente ligeiramente desafinado, textura de vinil — uma eletrônica melancólica e quente.', de:'Warmes, leicht verstimmtes Pad, Vinyl-Textur — melancholisch-warme Elektronik.'},
+    glyph:{freq:1.6, amp:9, jitter:2, wave:'sine'},
+    scale:'mixolydian', progression:'popMajor', tempoRange:[68,80],
+    lead:{use:true, density:0.3, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.6, release:1.8, seventh:true, octave:4, wave:'triangle', detune:5},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1300, padFilterCutoff:1000, reverbMix:0.4, arp:false,
+    texture:'vinyl', recommendedEntrainment:'alpha', category:'groove',
+  },
+  neosoul: {
+    name:{ro:'Neo-Soul Cald', en:'Warm Neo-Soul', fr:'Neo-Soul Chaleureux', it:'Neo-Soul Caldo', es:'Neo-Soul Cálido', pt:'Neo-Soul Quente', de:'Warmer Neo-Soul'},
+    desc:{ro:'Acorduri jazzy dorice, groove relaxat — catifea sufletească.', en:'Jazzy dorian chords, relaxed groove — soulful velvet.', fr:'Accords jazzy doriens, groove détendu — un velours plein d\'âme.', it:'Accordi jazzy dorici, groove rilassato — un velluto pieno d\'anima.', es:'Acordes jazzy dóricos, groove relajado — un terciopelo lleno de alma.', pt:'Acordes jazzy dóricos, groove relaxado — um veludo cheio de alma.', de:'Jazzige dorische Akkorde, entspannter Groove — seelenvoller Samt.'},
+    glyph:{freq:2.1, amp:9, jitter:2, wave:'sine'},
+    scale:'dorian', progression:'jazzy', tempoRange:[78,90],
+    lead:{use:true, density:0.4, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.2, release:1.4, seventh:true, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1800, reverbMix:0.3, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'groove',
+  },
+  oddjazz: {
+    name:{ro:'Jazz Impar', en:'Odd-Meter Jazz', fr:'Jazz à Mesure Impaire', it:'Jazz in Metro Dispari', es:'Jazz en Compás Impar', pt:'Jazz em Compasso Ímpar', de:'Jazz im Ungeraden Takt'},
+    desc:{ro:'Măsură de 5 timpi, dorian sofisticat — swing rafinat, ușor asimetric.', en:'A 5-beat cycle, sophisticated dorian — refined swing, subtly asymmetric.', fr:'Un cycle à 5 temps, dorien sophistiqué — un swing raffiné, subtilement asymétrique.', it:'Un ciclo a 5 tempi, dorico sofisticato — uno swing raffinato, sottilmente asimmetrico.', es:'Un ciclo de 5 tiempos, dórico sofisticado — un swing refinado, sutilmente asimétrico.', pt:'Um ciclo de 5 tempos, dórico sofisticado — um swing refinado, sutilmente assimétrico.', de:'Ein 5er-Zyklus, raffiniert dorisch — ein feiner, subtil asymmetrischer Swing.'},
+    glyph:{freq:2.6, amp:8, jitter:3, wave:'sine'},
+    scale:'dorian', progression:'jazzy', tempoRange:[84,96], meter:5,
+    lead:{use:true, density:0.46, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.15, release:1.3, seventh:true, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:2000, reverbMix:0.3, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'groove',
+  },
+  gospel: {
+    name:{ro:'Gospel Cald', en:'Warm Gospel', fr:'Gospel Chaleureux', it:'Gospel Caldo', es:'Gospel Cálido', pt:'Gospel Quente', de:'Warmer Gospel'},
+    desc:{ro:'Major cu septime, armonie jazzy — bucurie caldă, plină de suflet.', en:'Major sevenths, jazzy harmony — warm, soulful joy.', fr:'Septièmes majeures, harmonie jazzy — une joie chaude et pleine d\'âme.', it:'Settime maggiori, armonia jazzy — una gioia calda e piena d\'anima.', es:'Séptimas mayores, armonía jazzy — una alegría cálida y llena de alma.', pt:'Sétimas maiores, harmonia jazzy — uma alegria quente e cheia de alma.', de:'Dur-Septakkorde, jazzige Harmonie — warme, seelenvolle Freude.'},
+    glyph:{freq:2.5, amp:9, jitter:2, wave:'sine'},
+    scale:'major', progression:'jazzy', tempoRange:[84,98],
+    lead:{use:true, density:0.42, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.2, release:1.3, seventh:true, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2100, reverbMix:0.32, arp:false,
+    texture:null, recommendedEntrainment:'beta', category:'groove',
+  },
+  funk: {
+    name:{ro:'Funk Domol', en:'Gentle Funk', fr:'Funk Doux', it:'Funk Dolce', es:'Funk Suave', pt:'Funk Suave', de:'Sanfter Funk'},
+    desc:{ro:'Mixolidian sincopat, bas jucăuș — groove relaxat, cald.', en:'Syncopated mixolydian, playful bass — a relaxed, warm groove.', fr:'Mixolydien syncopé, basse joueuse — un groove détendu et chaleureux.', it:'Misolidio sincopato, basso giocoso — un groove rilassato e caldo.', es:'Mixolidio sincopado, bajo juguetón — un groove relajado y cálido.', pt:'Mixolídio sincopado, baixo brincalhão — um groove relaxado e quente.', de:'Synkopiert-mixolydisch, verspielter Bass — ein entspannter, warmer Groove.'},
+    glyph:{freq:3.0, amp:8, jitter:3, wave:'sine'},
+    scale:'mixolydian', progression:'popMajor', tempoRange:[92,104],
+    lead:{use:true, density:0.32, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:0.1, release:1.0, seventh:true, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'bossa'},
+    filterCutoff:1900, reverbMix:0.25, arp:false,
+    texture:null, recommendedEntrainment:'beta', category:'groove',
+  },
+  jazzcosmic: {
+    name:{ro:'Jazz Cosmic', en:'Cosmic Jazz', fr:'Jazz Cosmique', it:'Jazz Cosmico', es:'Jazz Cósmico', pt:'Jazz Cósmico', de:'Kosmischer Jazz'},
+    desc:{ro:'Acorduri jazzy rare, reverb generos — spațiu larg, contemplativ.', en:'Sparse jazzy chords, generous reverb — wide, contemplative space.', fr:'Accords jazzy épars, réverbération généreuse — un vaste espace contemplatif.', it:'Accordi jazzy radi, riverbero generoso — uno spazio vasto e contemplativo.', es:'Acordes jazzy dispersos, reverberación generosa — un espacio amplio y contemplativo.', pt:'Acordes jazzy esparsos, reverberação generosa — um espaço amplo e contemplativo.', de:'Spärliche Jazz-Akkorde, großzügiger Hall — ein weiter, kontemplativer Raum.'},
+    glyph:{freq:1.6, amp:8, jitter:3, wave:'sine'},
+    scale:'dorian', progression:'jazzy', tempoRange:[58,68], barsPerChord:4,
+    lead:{use:true, density:0.24, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:1.5, release:2.8, seventh:true, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:1700, reverbMix:0.55, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'groove',
+  },
+};
+
+const CATEGORY_ORDER = ['atmospheric','electronic','world','classical','groove'];
+const CATEGORIES = {
+  atmospheric:{ro:'Ambient & Meditativ', en:'Ambient & Meditative', fr:'Ambiant & Méditatif', it:'Ambient & Meditativo', es:'Ambient & Meditativo', pt:'Ambiente & Meditativo', de:'Ambient & Meditativ'},
+  electronic:{ro:'Electronic', en:'Electronic', fr:'Électronique', it:'Elettronica', es:'Electrónica', pt:'Eletrônica', de:'Elektronisch'},
+  world:{ro:'Lume & Folk', en:'World & Folk', fr:'Monde & Folk', it:'Mondo & Folk', es:'Mundo & Folk', pt:'Mundo & Folk', de:'Welt & Folk'},
+  classical:{ro:'Clasic & Acustic', en:'Classical & Acoustic', fr:'Classique & Acoustique', it:'Classico & Acustico', es:'Clásico & Acústico', pt:'Clássico & Acústico', de:'Klassisch & Akustisch'},
+  groove:{ro:'Groove & Ritm', en:'Groove & Rhythm', fr:'Groove & Rythme', it:'Groove & Ritmo', es:'Groove & Ritmo', pt:'Groove & Ritmo', de:'Groove & Rhythmus'},
+};
+const GENRE_ORDER = Object.keys(GENRES);
+
+const BRAINWAVE_PRESETS = {
+  delta:{hz:2,  label:{ro:'Delta', en:'Delta', fr:'Delta', it:'Delta', es:'Delta', pt:'Delta', de:'Delta'}, desc:{ro:'somn profund · 0.5–4 Hz', en:'deep sleep · 0.5–4 Hz', fr:'sommeil profond · 0,5–4 Hz', it:'sonno profondo · 0,5–4 Hz', es:'sueño profundo · 0,5–4 Hz', pt:'sono profundo · 0,5–4 Hz', de:'Tiefschlaf · 0,5–4 Hz'}},
+  theta:{hz:6,  label:{ro:'Theta', en:'Theta', fr:'Theta', it:'Theta', es:'Theta', pt:'Theta', de:'Theta'}, desc:{ro:'meditație profundă · 4–8 Hz', en:'deep meditation · 4–8 Hz', fr:'méditation profonde · 4–8 Hz', it:'meditazione profonda · 4–8 Hz', es:'meditación profunda · 4–8 Hz', pt:'meditação profunda · 4–8 Hz', de:'tiefe Meditation · 4–8 Hz'}},
+  alpha:{hz:10, label:{ro:'Alpha', en:'Alpha', fr:'Alpha', it:'Alpha', es:'Alpha', pt:'Alpha', de:'Alpha'}, desc:{ro:'relaxare calmă · 8–13 Hz', en:'calm relaxation · 8–13 Hz', fr:'relaxation calme · 8–13 Hz', it:'rilassamento calmo · 8–13 Hz', es:'relajación calmada · 8–13 Hz', pt:'relaxamento calmo · 8–13 Hz', de:'ruhige Entspannung · 8–13 Hz'}},
+  beta:{hz:18,  label:{ro:'Beta', en:'Beta', fr:'Beta', it:'Beta', es:'Beta', pt:'Beta', de:'Beta'},   desc:{ro:'concentrare activă · 13–30 Hz', en:'active focus · 13–30 Hz', fr:'concentration active · 13–30 Hz', it:'concentrazione attiva · 13–30 Hz', es:'concentración activa · 13–30 Hz', pt:'concentração ativa · 13–30 Hz', de:'aktiver Fokus · 13–30 Hz'}},
+  gamma:{hz:40, label:{ro:'Gamma', en:'Gamma', fr:'Gamma', it:'Gamma', es:'Gamma', pt:'Gamma', de:'Gamma'}, desc:{ro:'claritate mentală · 30–100 Hz', en:'mental clarity · 30–100 Hz', fr:'clarté mentale · 30–100 Hz', it:'chiarezza mentale · 30–100 Hz', es:'claridad mental · 30–100 Hz', pt:'clareza mental · 30–100 Hz', de:'geistige Klarheit · 30–100 Hz'}},
+};
+const BRAINWAVE_ORDER = ['delta','theta','alpha','beta','gamma'];
+
+const SOLFEGGIO_PRESETS = [
+  {hz:174, ro:'174 · bază', en:'174 · grounding', fr:'174 · ancrage', it:'174 · radicamento', es:'174 · arraigo', pt:'174 · enraizamento', de:'174 · Erdung'},
+  {hz:285, ro:'285 · regenerare', en:'285 · restoration', fr:'285 · régénération', it:'285 · rigenerazione', es:'285 · regeneración', pt:'285 · regeneração', de:'285 · Regeneration'},
+  {hz:396, ro:'396 · eliberare', en:'396 · release', fr:'396 · libération', it:'396 · liberazione', es:'396 · liberación', pt:'396 · libertação', de:'396 · Loslassen'},
+  {hz:417, ro:'417 · schimbare', en:'417 · change', fr:'417 · changement', it:'417 · cambiamento', es:'417 · cambio', pt:'417 · mudança', de:'417 · Wandel'},
+  {hz:528, ro:'528 · armonie', en:'528 · harmony', fr:'528 · harmonie', it:'528 · armonia', es:'528 · armonía', pt:'528 · harmonia', de:'528 · Harmonie'},
+  {hz:639, ro:'639 · conexiune', en:'639 · connection', fr:'639 · connexion', it:'639 · connessione', es:'639 · conexión', pt:'639 · conexão', de:'639 · Verbindung'},
+  {hz:741, ro:'741 · claritate', en:'741 · clarity', fr:'741 · clarté', it:'741 · chiarezza', es:'741 · claridad', pt:'741 · clareza', de:'741 · Klarheit'},
+  {hz:852, ro:'852 · intuiție', en:'852 · intuition', fr:'852 · intuition', it:'852 · intuizione', es:'852 · intuición', pt:'852 · intuição', de:'852 · Intuition'},
+  {hz:963, ro:'963 · contemplare', en:'963 · contemplation', fr:'963 · contemplation', it:'963 · contemplazione', es:'963 · contemplación', pt:'963 · contemplação', de:'963 · Kontemplation'},
+];
+
+/* ======================================================================
+   4. GENERATOR DE COMPOZIȚIE — transformă un seed + un gen într-o
+      partitură (listă de evenimente cu timp/frecvență/durată)
+   ====================================================================== */
+function createCompositionState(seed, genreKey, tempo, rootMidiOverride){
+  const genre = GENRES[genreKey];
+  const rng = mulberry32(seed);
+  const rootMidi = (rootMidiOverride != null) ? rootMidiOverride : (60 + Math.floor(rng() * 12));
+  return {
+    seed:seed, genreKey:genreKey, genre:genre, rng:rng,
+    rootMidi:rootMidi, tempo:tempo,
+    scaleIntervals: SCALES[genre.scale],
+    progression: PROGRESSIONS[genre.progression],
+    beatDur: 60 / tempo,
+    barsGenerated: 0,
+    elapsedTime: 0,
+  };
+}
+
+function generateChunk(state, durationSec){
+  const genre = state.genre, scaleIntervals = state.scaleIntervals,
+        progression = state.progression, rng = state.rng;
+  const meter = genre.meter || 4;
+  const barsPerChord = genre.barsPerChord || 2;
+  const stepsPerBar = meter * 4;
+  const stepDur = state.beatDur / 4;
+  const barDur = stepsPerBar * stepDur;
+  const barsToGenerate = Math.max(1, Math.ceil(durationSec / barDur));
+  const events = { pad:[], bass:[], lead:[], arp:[] };
+  const startBar = state.barsGenerated;
+  const midBeat = Math.floor(meter/2);
+
+  for (let b = 0; b < barsToGenerate; b++){
+    const bar = startBar + b;
+    const localBarStart = b * barDur;
+    const chordSlot = Math.floor(bar / barsPerChord) % progression.length;
+    const degree = progression[chordSlot];
+    const chordSize = genre.pad.seventh ? 4 : 3;
+    const chord = diatonicChordTones(scaleIntervals, degree, chordSize);
+    const isChordStart = (bar % barsPerChord === 0);
+    const chordDur = barsPerChord * barDur;
+    const padOctave = genre.pad.octave || 4;
+
+    // ---- PAD ----
+    if (genre.pad.style === 'skank'){
+      for (let beat = 0; beat < meter; beat++){
+        const hitTime = localBarStart + beat*state.beatDur + state.beatDur*0.5;
+        chord.tones.forEach(function(tone){
+          events.pad.push({ time:hitTime, freq: midiToFreq(pitchMidi(state.rootMidi, padOctave, tone)), dur: state.beatDur*0.35 });
+        });
+      }
+    } else if (isChordStart){
+      chord.tones.forEach(function(tone){
+        events.pad.push({ time:localBarStart, freq: midiToFreq(pitchMidi(state.rootMidi, padOctave, tone)), dur: chordDur });
+      });
+    }
+
+    // ---- BASS ----
+    const bassPattern = genre.bass.pattern || (genre.bass.walking ? 'walking' : 'sustain');
+    if (bassPattern === 'walking'){
+      events.bass.push({ time:localBarStart, freq: midiToFreq(pitchMidi(state.rootMidi, genre.bass.octave, chord.tones[0])), dur: state.beatDur*0.9 });
+      const fifth = (chord.tones[2] !== undefined) ? chord.tones[2] : chord.tones[0];
+      events.bass.push({ time:localBarStart + midBeat*state.beatDur, freq: midiToFreq(pitchMidi(state.rootMidi, genre.bass.octave, fifth)), dur: state.beatDur*0.9 });
+    } else if (bassPattern === 'fourfloor'){
+      for (let beat = 0; beat < meter; beat++){
+        events.bass.push({ time: localBarStart + beat*state.beatDur, freq: midiToFreq(pitchMidi(state.rootMidi, genre.bass.octave, chord.tones[0])), dur: state.beatDur*0.85 });
+      }
+    } else if (bassPattern === 'bossa'){
+      events.bass.push({ time:localBarStart, freq: midiToFreq(pitchMidi(state.rootMidi, genre.bass.octave, chord.tones[0])), dur: state.beatDur*1.4 });
+      const fifthB = (chord.tones[2] !== undefined) ? chord.tones[2] : chord.tones[0];
+      events.bass.push({ time:localBarStart + 2.5*state.beatDur, freq: midiToFreq(pitchMidi(state.rootMidi, genre.bass.octave, fifthB)), dur: state.beatDur*0.9 });
+    } else if (isChordStart){
+      events.bass.push({ time:localBarStart, freq: midiToFreq(pitchMidi(state.rootMidi, genre.bass.octave, chord.tones[0])), dur: chordDur*0.92 });
+    }
+
+    // ---- LEAD ----
+    if (genre.lead.use){
+      for (let s = 0; s < stepsPerBar; s++){
+        if (rng() < genre.lead.density){
+          const idx = pickWeightedIndex(rng, scaleIntervals.length, chord.degreeIdxs, 2.2);
+          const interval = scaleIntervals[idx];
+          let midiNote = pitchMidi(state.rootMidi, genre.lead.octave, interval);
+          if (rng() < 0.12) midiNote += (rng() < 0.5 ? -12 : 12);
+          const freq = midiToFreq(midiNote);
+          const durOptions = genre.lead.density > 0.4 ? [1,1,2,2,4] : [2,4,4,8];
+          const mult = durOptions[Math.floor(rng()*durOptions.length)];
+          let t = localBarStart + s*stepDur;
+          if (genre.lead.swing && (s % 2 === 1)) t += stepDur*0.18;
+          events.lead.push({ time:t, freq:freq, dur: stepDur*mult*0.88 });
+        }
+      }
+    }
+
+    // ---- ARP ----
+    if (genre.arp){
+      const arpTones = chord.tones.slice();
+      let pattern;
+      if (genre.arpPattern === 'updown') pattern = arpTones.concat(arpTones.slice(1,-1).reverse());
+      else if (genre.arpPattern === 'down') pattern = arpTones.slice().reverse();
+      else if (genre.arpPattern === 'random'){
+        pattern = arpTones.slice();
+        for (let i = pattern.length-1; i > 0; i--){
+          const j = Math.floor(rng()*(i+1));
+          const tmp = pattern[i]; pattern[i] = pattern[j]; pattern[j] = tmp;
+        }
+      } else pattern = arpTones;
+      const arpStepsPerBar = genre.arpStepsPerBar || 8;
+      const arpStepDur = barDur/arpStepsPerBar;
+      for (let a = 0; a < arpStepsPerBar; a++){
+        const tone = pattern[a % pattern.length];
+        const freq = midiToFreq(pitchMidi(state.rootMidi, 5, tone));
+        events.arp.push({ time: localBarStart + a*arpStepDur, freq:freq, dur: arpStepDur*0.85 });
+      }
+    }
+  }
+
+  state.barsGenerated += barsToGenerate;
+  return { events: events, duration: barsToGenerate*barDur };
+}
+
+/* ======================================================================
+   5. SINTEZĂ AUDIO — primitive Web Audio reutilizabile (live + offline)
+   ====================================================================== */
+function triggerNote(ctx, dest, freq, startTime, duration, opts){
+  opts = opts || {};
+  const wave = opts.wave || 'sine';
+  const attack = opts.attack != null ? opts.attack : 0.02;
+  const release = opts.release != null ? opts.release : 0.3;
+  const peakGain = opts.gain != null ? opts.gain : 0.2;
+  const filterCutoff = opts.filterCutoff;
+
+  const osc = ctx.createOscillator();
+  osc.type = wave;
+  osc.frequency.setValueAtTime(freq, startTime);
+  if (opts.detune) osc.detune.setValueAtTime(opts.detune, startTime);
+
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0, startTime);
+  const attackEnd = startTime + Math.min(attack, Math.max(duration*0.5, 0.005));
+  env.gain.linearRampToValueAtTime(peakGain, attackEnd);
+  const releaseStart = Math.max(attackEnd, startTime + duration - release);
+  env.gain.setValueAtTime(peakGain, releaseStart);
+  env.gain.linearRampToValueAtTime(0.0001, startTime + duration);
+
+  if (filterCutoff){
+    const filt = ctx.createBiquadFilter();
+    filt.type = 'lowpass';
+    filt.frequency.setValueAtTime(filterCutoff, startTime);
+    filt.Q.value = 0.7;
+    osc.connect(filt); filt.connect(env);
+  } else {
+    osc.connect(env);
+  }
+  env.connect(dest);
+  osc.start(startTime);
+  osc.stop(startTime + duration + 0.08);
+  return osc;
+}
+
+function createImpulseResponse(ctx, duration, decay){
+  duration = duration || 2.6; decay = decay || 2.5;
+  const rate = ctx.sampleRate;
+  const length = Math.max(1, Math.floor(rate*duration));
+  const impulse = ctx.createBuffer(2, length, rate);
+  for (let ch = 0; ch < 2; ch++){
+    const data = impulse.getChannelData(ch);
+    for (let i = 0; i < length; i++){
+      data[i] = (Math.random()*2-1) * Math.pow(1 - i/length, decay);
+    }
+  }
+  return impulse;
+}
+
+function createNoiseBuffer(ctx, seconds){
+  const bufferSize = Math.max(1, Math.floor(ctx.sampleRate*(seconds||2)));
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = Math.random()*2-1;
+  return buffer;
+}
+
+function createTexture(ctx, type, gainValue){
+  const source = ctx.createBufferSource();
+  source.buffer = createNoiseBuffer(ctx, 2);
+  source.loop = true;
+  const filter = ctx.createBiquadFilter();
+  if (type === 'vinyl'){ filter.type='highpass'; filter.frequency.value=3800; filter.Q.value=0.5; }
+  else if (type === 'wind'){ filter.type='bandpass'; filter.frequency.value=450; filter.Q.value=0.6; }
+  else if (type === 'ocean'){ filter.type='lowpass'; filter.frequency.value=700; filter.Q.value=0.5; }
+  else { filter.type='bandpass'; filter.frequency.value=2200; filter.Q.value=0.4; }
+  const gain = ctx.createGain();
+  gain.gain.value = gainValue;
+  source.connect(filter); filter.connect(gain);
+  source.start();
+  const extraNodes = [];
+  if (type === 'wind'){
+    const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.07;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value=180;
+    lfo.connect(lfoGain); lfoGain.connect(filter.frequency);
+    lfo.start();
+    extraNodes.push(lfo);
+  } else if (type === 'ocean'){
+    const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.09;
+    const lfoGain = ctx.createGain(); lfoGain.gain.value = gainValue*0.55;
+    gain.gain.value = gainValue*0.6;
+    lfo.connect(lfoGain); lfoGain.connect(gain.gain);
+    lfo.start();
+    extraNodes.push(lfo);
+  }
+  return {
+    gain: gain,
+    stop: function(t){
+      try{ source.stop(t); }catch(e){}
+      extraNodes.forEach(function(n){ try{ n.stop(t); }catch(e){} });
+    }
+  };
+}
+
+function createLimiter(ctx){
+  const comp = ctx.createDynamicsCompressor();
+  const now = ctx.currentTime;
+  comp.threshold.setValueAtTime(-8, now);
+  comp.knee.setValueAtTime(14, now);
+  comp.ratio.setValueAtTime(5, now);
+  comp.attack.setValueAtTime(0.004, now);
+  comp.release.setValueAtTime(0.2, now);
+  return comp;
+}
+
+function buildMusicGraph(ctx, dest, genre){
+  const dry = ctx.createGain(); dry.gain.value = 1;
+  const wet = ctx.createGain(); wet.gain.value = genre.reverbMix;
+  const convolver = ctx.createConvolver();
+  convolver.buffer = createImpulseResponse(ctx, 2.8, 2.6);
+  dry.connect(dest);
+  dry.connect(convolver);
+  convolver.connect(wet);
+  wet.connect(dest);
+  if (genre.delayMix){
+    const delay = ctx.createDelay(2.0);
+    delay.delayTime.value = genre.delayTime || 0.375;
+    const feedback = ctx.createGain(); feedback.gain.value = genre.delayFeedback || 0.35;
+    const delayWet = ctx.createGain(); delayWet.gain.value = genre.delayMix;
+    dry.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(delayWet);
+    delayWet.connect(dest);
+  }
+  return dry;
+}
+
+function scheduleEvents(ctx, bus, events, baseTime, genre){
+  const oscList = [];
+  const padCutoff = genre.padFilterCutoff || genre.filterCutoff;
+  const leadCutoff = genre.leadFilterCutoff || genre.filterCutoff;
+  const leadAttack = genre.lead.attack != null ? genre.lead.attack : 0.015;
+  const leadRelease = genre.lead.release != null ? genre.lead.release : 0.22;
+  events.pad.forEach(function(e){
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.pad.wave||'sine', attack:genre.pad.attack, release:genre.pad.release, gain:0.1, filterCutoff:padCutoff }));
+    if (genre.pad.detune){
+      oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.pad.wave||'sine', attack:genre.pad.attack, release:genre.pad.release, gain:0.06, filterCutoff:padCutoff, detune:genre.pad.detune }));
+    }
+  });
+  events.bass.forEach(function(e){
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave:'sine', attack:0.02, release:0.25, gain:0.2, filterCutoff:Math.min(padCutoff,900) }));
+  });
+  events.lead.forEach(function(e){
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.lead.wave||'triangle', attack:leadAttack, release:leadRelease, gain:0.14, filterCutoff:leadCutoff }));
+    if (genre.lead.detune){
+      oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.lead.wave||'triangle', attack:leadAttack, release:leadRelease, gain:0.08, filterCutoff:leadCutoff, detune:genre.lead.detune }));
+    }
+  });
+  events.arp.forEach(function(e){
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave:'triangle', attack:0.008, release:0.12, gain:0.09, filterCutoff:leadCutoff }));
+  });
+  return oscList;
+}
+
+/* ======================================================================
+   6. STRAT DE UNDE BINEFĂCĂTOARE (pur / binaural / izocronic)
+   ====================================================================== */
+function createEntrainmentLayer(ctx, mode, carrierHz, beatHz, gainValue){
+  const bus = { nodes:[], mode:mode, stop:function(t){ this.nodes.forEach(function(n){ try{ n.stop(t); }catch(e){} }); } };
+  const merger = ctx.createChannelMerger(2);
+  const outGain = ctx.createGain();
+  outGain.gain.value = gainValue;
+  merger.connect(outGain);
+  bus.output = outGain;
+
+  if (mode === 'pure'){
+    const osc = ctx.createOscillator(); osc.type='sine'; osc.frequency.value=carrierHz;
+    osc.connect(merger,0,0); osc.connect(merger,0,1);
+    osc.start();
+    bus.nodes.push(osc);
+    bus.updateParams = function(cHz){ osc.frequency.setTargetAtTime(cHz, ctx.currentTime, 0.1); };
+  } else if (mode === 'binaural'){
+    const oscL = ctx.createOscillator(); oscL.type='sine'; oscL.frequency.value = carrierHz - beatHz/2;
+    const oscR = ctx.createOscillator(); oscR.type='sine'; oscR.frequency.value = carrierHz + beatHz/2;
+    oscL.connect(merger,0,0); oscR.connect(merger,0,1);
+    oscL.start(); oscR.start();
+    bus.nodes.push(oscL, oscR);
+    bus.updateParams = function(cHz, bHz){
+      oscL.frequency.setTargetAtTime(cHz - bHz/2, ctx.currentTime, 0.1);
+      oscR.frequency.setTargetAtTime(cHz + bHz/2, ctx.currentTime, 0.1);
+    };
+  } else if (mode === 'isochronic'){
+    const osc = ctx.createOscillator(); osc.type='sine'; osc.frequency.value=carrierHz;
+    const modGain = ctx.createGain(); modGain.gain.value=0.5;
+    const lfo = ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=beatHz;
+    const lfoDepth = ctx.createGain(); lfoDepth.gain.value=0.5;
+    lfo.connect(lfoDepth); lfoDepth.connect(modGain.gain);
+    osc.connect(modGain);
+    modGain.connect(merger,0,0); modGain.connect(merger,0,1);
+    osc.start(); lfo.start();
+    bus.nodes.push(osc, lfo);
+    bus.updateParams = function(cHz, bHz){
+      osc.frequency.setTargetAtTime(cHz, ctx.currentTime, 0.1);
+      lfo.frequency.setTargetAtTime(bHz, ctx.currentTime, 0.1);
+    };
+  }
+  return bus;
+}
+
+/* ======================================================================
+   7. MOTOR DE REDARE LIVE
+   ====================================================================== */
+let audioCtx = null;
+let masterGain = null;
+let limiterNode = null;
+let analyserL = null, analyserR = null;
+let entrainmentLayer = null;
+let textureLayer = null;
+let activeOscillators = [];
+let compState = null;
+let continuousTimer = null;
+let playStartCtxTime = 0;
+let pieceDurationSec = 0;
+let isPlaying = false;
+let isPaused = false;
+let stopTimeoutId = null;
+
+function ensureAudioContext(){
+  if (!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+  return audioCtx;
+}
+
+function getCurrentSettings(){
+  return {
+    seed: parseInt(document.getElementById('seedInput').value,10) || 1,
+    genreKey: state.genreKey,
+    tempo: parseInt(document.getElementById('tempoSlider').value,10),
+    duration: document.getElementById('durationSelect').value,
+    entrainEnabled: document.getElementById('entrainToggle').checked,
+    entrainMode: state.entrainMode,
+    carrierHz: parseFloat(document.getElementById('carrierSlider').value),
+    beatHz: parseFloat(document.getElementById('beatSlider').value),
+    entrainMix: parseInt(document.getElementById('entrainMixSlider').value,10)/100,
+    masterVol: parseInt(document.getElementById('masterVolSlider').value,10)/100,
+  };
+}
+
+function stopAll(){
+  if (continuousTimer){ clearInterval(continuousTimer); continuousTimer=null; }
+  if (stopTimeoutId){ clearTimeout(stopTimeoutId); stopTimeoutId=null; }
+  if (audioCtx){
+    const now = audioCtx.currentTime;
+    if (masterGain){
+      try{
+        masterGain.gain.cancelScheduledValues(now);
+        masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+        masterGain.gain.linearRampToValueAtTime(0.0001, now+0.12);
+      }catch(e){}
+    }
+    activeOscillators.forEach(function(o){ try{ o.stop(now+0.13); }catch(e){} });
+    if (entrainmentLayer){ try{ entrainmentLayer.stop(now+0.13); }catch(e){} }
+    if (textureLayer){ try{ textureLayer.stop(now+0.13); }catch(e){} }
+    const ctxToClose = audioCtx;
+    setTimeout(function(){ try{ ctxToClose.close(); }catch(e){} }, 300);
+  }
+  audioCtx=null; masterGain=null; limiterNode=null; analyserL=null; analyserR=null;
+  entrainmentLayer=null; textureLayer=null; activeOscillators=[];
+  isPlaying=false; isPaused=false;
+  updateTransportUI();
+  document.getElementById('timeReadout').textContent = '—';
+}
+
+function startPlayback(){
+  stopAll();
+  const settings = getCurrentSettings();
+  const ctx = ensureAudioContext();
+
+  masterGain = ctx.createGain();
+  masterGain.gain.value = settings.masterVol;
+  limiterNode = createLimiter(ctx);
+  masterGain.connect(limiterNode);
+  limiterNode.connect(ctx.destination);
+
+  const splitter = ctx.createChannelSplitter(2);
+  limiterNode.connect(splitter);
+  analyserL = ctx.createAnalyser(); analyserL.fftSize = 1024;
+  analyserR = ctx.createAnalyser(); analyserR.fftSize = 1024;
+  splitter.connect(analyserL,0);
+  splitter.connect(analyserR,1);
+
+  const genre = GENRES[settings.genreKey];
+  const musicBusInput = buildMusicGraph(ctx, masterGain, genre);
+
+  if (genre.texture){
+    textureLayer = createTexture(ctx, genre.texture, genre.texture==='vinyl'?0.02:0.035);
+    textureLayer.gain.connect(masterGain);
+  }
+  if (settings.entrainEnabled){
+    entrainmentLayer = createEntrainmentLayer(ctx, settings.entrainMode, settings.carrierHz, settings.beatHz, settings.entrainMix*0.5);
+    entrainmentLayer.output.connect(masterGain);
+  }
+
+  compState = createCompositionState(settings.seed, settings.genreKey, settings.tempo);
+  playStartCtxTime = ctx.currentTime + 0.15;
+
+  function scheduleNextChunk(sec){
+    const chunk = generateChunk(compState, sec);
+    const chunkStartTime = playStartCtxTime + compState.elapsedTime;
+    const oscs = scheduleEvents(ctx, musicBusInput, chunk.events, chunkStartTime, genre);
+    activeOscillators = activeOscillators.concat(oscs);
+    compState.elapsedTime += chunk.duration;
+  }
+
+  if (settings.duration === 'continuous'){
+    pieceDurationSec = Infinity;
+    scheduleNextChunk(240);
+    continuousTimer = setInterval(function(){ if (isPlaying) scheduleNextChunk(240); }, 150000);
+  } else {
+    pieceDurationSec = parseInt(settings.duration,10);
+    scheduleNextChunk(pieceDurationSec);
+    const fadeStart = playStartCtxTime + pieceDurationSec - 2.5;
+    if (fadeStart > ctx.currentTime){
+      masterGain.gain.setValueAtTime(settings.masterVol, fadeStart);
+      masterGain.gain.linearRampToValueAtTime(0.0001, playStartCtxTime + pieceDurationSec);
+    }
+    stopTimeoutId = setTimeout(function(){ if (isPlaying) stopAll(); }, (pieceDurationSec+0.6)*1000);
+  }
+
+  isPlaying = true; isPaused = false;
+  updateTransportUI();
+}
+
+function pausePlayback(){
+  if (audioCtx && isPlaying){
+    audioCtx.suspend();
+    isPlaying=false; isPaused=true;
+    updateTransportUI();
+  }
+}
+function resumePlayback(){
+  if (audioCtx && isPaused){
+    audioCtx.resume();
+    isPlaying=true; isPaused=false;
+    updateTransportUI();
+  }
+}
+
+/* ======================================================================
+   8. EXPORT WAV (randare offline) & EXPORT/IMPORT SETARI JSON
+   ====================================================================== */
+function writeStr(view, offset, str){ for (let i=0;i<str.length;i++) view.setUint8(offset+i, str.charCodeAt(i)); }
+function floatTo16(view, offset, input){
+  for (let i=0;i<input.length;i++, offset+=2){
+    const s = Math.max(-1, Math.min(1, input[i]));
+    view.setInt16(offset, s<0 ? s*0x8000 : s*0x7FFF, true);
+  }
+}
+function interleaveStereo(l,r){
+  const out = new Float32Array(l.length+r.length);
+  let idx=0;
+  for (let i=0;i<l.length;i++){ out[idx++]=l[i]; out[idx++]=r[i]; }
+  return out;
+}
+function encodeWavFromBuffer(audioBuffer){
+  const numCh = audioBuffer.numberOfChannels;
+  const sampleRate = audioBuffer.sampleRate;
+  const interleaved = numCh===2 ? interleaveStereo(audioBuffer.getChannelData(0), audioBuffer.getChannelData(1)) : audioBuffer.getChannelData(0);
+  const dataLength = interleaved.length*2;
+  const buffer = new ArrayBuffer(44+dataLength);
+  const view = new DataView(buffer);
+  writeStr(view,0,'RIFF'); view.setUint32(4,36+dataLength,true); writeStr(view,8,'WAVE');
+  writeStr(view,12,'fmt '); view.setUint32(16,16,true); view.setUint16(20,1,true);
+  view.setUint16(22,numCh,true); view.setUint32(24,sampleRate,true);
+  view.setUint32(28,sampleRate*numCh*2,true); view.setUint16(32,numCh*2,true); view.setUint16(34,16,true);
+  writeStr(view,36,'data'); view.setUint32(40,dataLength,true);
+  floatTo16(view,44,interleaved);
+  return new Blob([view], {type:'audio/wav'});
+}
+
+async function exportWav(){
+  const durSec = parseInt(document.getElementById('exportDurationSelect').value,10);
+  const settings = getCurrentSettings();
+  const sampleRate = 44100;
+  const offlineCtx = new OfflineAudioContext(2, Math.ceil(sampleRate*(durSec+1)), sampleRate);
+  const oMasterGain = offlineCtx.createGain(); oMasterGain.gain.value = settings.masterVol;
+  const oLimiter = createLimiter(offlineCtx);
+  oMasterGain.connect(oLimiter); oLimiter.connect(offlineCtx.destination);
+
+  const genre = GENRES[settings.genreKey];
+  const musicBusInput = buildMusicGraph(offlineCtx, oMasterGain, genre);
+  if (genre.texture){
+    const tex = createTexture(offlineCtx, genre.texture, genre.texture==='vinyl'?0.02:0.035);
+    tex.gain.connect(oMasterGain);
+  }
+  if (settings.entrainEnabled){
+    const ent = createEntrainmentLayer(offlineCtx, settings.entrainMode, settings.carrierHz, settings.beatHz, settings.entrainMix*0.5);
+    ent.output.connect(oMasterGain);
+  }
+  const exportState = createCompositionState(settings.seed, settings.genreKey, settings.tempo);
+  const chunk = generateChunk(exportState, durSec);
+  scheduleEvents(offlineCtx, musicBusInput, chunk.events, 0, genre);
+
+  const rendered = await offlineCtx.startRendering();
+  const blob = encodeWavFromBuffer(rendered);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'melodii-fara-frontiere-'+settings.genreKey+'-seed'+settings.seed+'.wav';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+}
+
+function exportSettingsJson(){
+  const s = getCurrentSettings();
+  const data = { version:'1.0', seed:s.seed, genreKey:s.genreKey, tempo:s.tempo, duration:s.duration,
+    entrainEnabled:s.entrainEnabled, entrainMode:s.entrainMode, carrierHz:s.carrierHz, beatHz:s.beatHz,
+    entrainMix: Math.round(s.entrainMix*100) };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'melodii-fara-frontiere-setari.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+}
+
+function applyImportedSettings(data){
+  if (data.genreKey && GENRES[data.genreKey]) selectGenre(data.genreKey);
+  if (data.seed!=null) document.getElementById('seedInput').value = data.seed;
+  if (data.tempo!=null) document.getElementById('tempoSlider').value = data.tempo;
+  if (data.duration!=null) document.getElementById('durationSelect').value = data.duration;
+  if (data.entrainEnabled!=null) document.getElementById('entrainToggle').checked = data.entrainEnabled;
+  if (data.entrainMode){ state.entrainMode = data.entrainMode; updateModeButtons(); }
+  if (data.carrierHz!=null) document.getElementById('carrierSlider').value = data.carrierHz;
+  if (data.beatHz!=null) document.getElementById('beatSlider').value = data.beatHz;
+  if (data.entrainMix!=null) document.getElementById('entrainMixSlider').value = data.entrainMix;
+  refreshReadouts();
+}
+
+/* ======================================================================
+   9. VIZUALIZATOR — traseu dual (stanga/dreapta) mereu activ
+   ====================================================================== */
+let vizWidth=800, vizHeight=150, vizPhase=0;
+function resizeCanvas(){
+  const canvas = document.getElementById('visualizer');
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  vizWidth = rect.width || 800; vizHeight = rect.height || 150;
+  canvas.width = vizWidth*dpr; canvas.height = vizHeight*dpr;
+  const ctx2d = canvas.getContext('2d');
+  ctx2d.setTransform(dpr,0,0,dpr,0,0);
+}
+function drawIdleWave(ctx2d, phase, color){
+  ctx2d.beginPath();
+  const mid = vizHeight/2;
+  for (let x=0; x<=vizWidth; x+=4){
+    const y = mid + Math.sin(x*0.02 + phase) * (mid*0.28);
+    if (x===0) ctx2d.moveTo(x,y); else ctx2d.lineTo(x,y);
+  }
+  ctx2d.strokeStyle = color; ctx2d.lineWidth=1.5; ctx2d.stroke();
+}
+function drawAnalyserWave(ctx2d, analyser, color, lw){
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+  analyser.getByteTimeDomainData(dataArray);
+  ctx2d.beginPath();
+  const slice = vizWidth/bufferLength;
+  let x=0;
+  for (let i=0;i<bufferLength;i++){
+    const v = dataArray[i]/128.0;
+    const y = (v*vizHeight)/2;
+    if (i===0) ctx2d.moveTo(x,y); else ctx2d.lineTo(x,y);
+    x+=slice;
+  }
+  ctx2d.strokeStyle = color; ctx2d.lineWidth = lw||2; ctx2d.stroke();
+}
+function initVisualizerLoop(){
+  const canvas = document.getElementById('visualizer');
+  const ctx2d = canvas.getContext('2d');
+  function frame(){
+    requestAnimationFrame(frame);
+    ctx2d.clearRect(0,0,vizWidth,vizHeight);
+    if (isPlaying && analyserL && analyserR){
+      drawAnalyserWave(ctx2d, analyserL, 'rgba(95,216,196,0.85)', 2);
+      drawAnalyserWave(ctx2d, analyserR, 'rgba(227,177,94,0.85)', 2);
+    } else {
+      vizPhase += 0.015;
+      drawIdleWave(ctx2d, vizPhase, 'rgba(139,143,163,0.45)');
+    }
+  }
+  frame();
+}
+
+/* ======================================================================
+   10. i18n
+   ====================================================================== */
+const I18N = {
+  ro:{
+    title:'Melodii fără frontiere',
+    subtitle:'Generator de muzică originală, complet offline — cu straturi de unde binefăcătoare pentru ascultare pozitivă.',
+    titleTagline:'Generator muzical original',
+    genreHeading:'Alege un gen muzical', compHeading:'Compoziție', toggleAllBtn:'⇕ Extinde / restrânge tot',
+    genreSearchPlaceholder:'Caută un gen (ex: „flamenco", „drone", „vals"…)', genreNoResults:'Niciun gen găsit.',
+    seedLabel:'Sămânță', randomBtn:'🎲 Aleatoriu', tempoLabel:'Tempo',
+    durationLabel:'Durată', continuousOpt:'Buclă continuă', regenBtn:'↻ Regenerează',
+    entrainHeading:'Unde binefăcătoare',
+    entrainHint:'Straturi audio auxiliare (binaurale, izocronice sau ton pur), asociate popular cu stări de relaxare, concentrare sau meditație. Benzile de mai jos corespund convențiilor EEG standard; eficacitatea subiectivă variază de la o persoană la alta.',
+    modeLabel:'Mod', modePure:'Ton pur', modeBinaural:'Binaural', modeIso:'Izocronic',
+    carrierLabel:'Frecvență purtătoare', beatLabel:'Frecvență bătaie', mixLabel:'Amestec',
+    disclaimer:'Notă: aceste tonuri sunt oferite exclusiv în scop relaxant și experiențial, nu ca tratament medical — dovezile științifice rămân limitate. Dacă suferiți de epilepsie, altă afecțiune neurologică sau sunteți însărcinată, cereți sfatul unui medic înainte de utilizare. Nu ascultați în timp ce conduceți. Opriți dacă simțiți disconfort. Efectul binaural necesită căști stereo.',
+    playBtn:'Redă', pauseBtn:'Pauză', stopBtn:'Stop', masterVolLabel:'Volum',
+    statusIdle:'Pregătit', statusPlaying:'Se redă', statusPaused:'Pauzat',
+    exportHeading:'Exportă', exportDurLabel:'Durată export',
+    exportWavBtn:'⬇ Exportă WAV', exportJsonBtn:'⬇ Exportă setări (JSON)', importJsonBtn:'⬆ Importă setări',
+    exporting:'Se exportă…', exportDone:'Descărcare pornită.', exportError:'Eroare la export.', importError:'Fișier de setări invalid.',
+    footerLicense:'Licență CC0 · fără telemetrie · fără dependențe externe · 100% offline',
+    footerNote:'Toate melodiile sunt generate algoritmic, în timp real — original, fără mostre și fără materiale protejate prin drepturi de autor.',
+  },
+  en:{
+    title:'Borderless Melodies',
+    subtitle:'A fully offline generator of original music — with beneficial-wave layers for positive listening.',
+    titleTagline:'Original Music Generator',
+    genreHeading:'Choose a genre', compHeading:'Composition', toggleAllBtn:'⇕ Expand / collapse all',
+    genreSearchPlaceholder:'Search genres (e.g. "flamenco", "drone", "waltz"…)', genreNoResults:'No genres found.',
+    seedLabel:'Seed', randomBtn:'🎲 Randomize', tempoLabel:'Tempo',
+    durationLabel:'Duration', continuousOpt:'Continuous loop', regenBtn:'↻ Regenerate',
+    entrainHeading:'Beneficial waves',
+    entrainHint:'Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.',
+    modeLabel:'Mode', modePure:'Pure tone', modeBinaural:'Binaural', modeIso:'Isochronic',
+    carrierLabel:'Carrier frequency', beatLabel:'Beat frequency', mixLabel:'Mix',
+    disclaimer:'Note: these tones are offered purely for relaxation and experiential purposes, not as medical treatment — scientific evidence remains limited. If you have epilepsy, another neurological condition, or are pregnant, consult a doctor before use. Do not listen while driving. Stop if you feel discomfort. The binaural effect requires stereo headphones.',
+    playBtn:'Play', pauseBtn:'Pause', stopBtn:'Stop', masterVolLabel:'Volume',
+    statusIdle:'Ready', statusPlaying:'Playing', statusPaused:'Paused',
+    exportHeading:'Export', exportDurLabel:'Export length',
+    exportWavBtn:'⬇ Export WAV', exportJsonBtn:'⬇ Export settings (JSON)', importJsonBtn:'⬆ Import settings',
+    exporting:'Exporting…', exportDone:'Download started.', exportError:'Export failed.', importError:'Invalid settings file.',
+    footerLicense:'CC0 license · no telemetry · no external dependencies · 100% offline',
+    footerNote:'All music is generated algorithmically, in real time — original, with no samples and no copyrighted material.',
+  },
+  fr:{
+    title:'Mélodies sans frontières',
+    subtitle:'Un générateur de musique originale, entièrement hors ligne — avec des couches d\'ondes bénéfiques pour une écoute positive.',
+    titleTagline:'Générateur musical original',
+    genreHeading:'Choisissez un genre',
+    compHeading:'Composition',
+    toggleAllBtn:'⇕ Tout développer / réduire',
+    genreSearchPlaceholder:'Rechercher un genre (ex. « flamenco », « drone », « valse »…)',
+    genreNoResults:'Aucun genre trouvé.',
+    seedLabel:'Graine',
+    randomBtn:'🎲 Aléatoire',
+    tempoLabel:'Tempo',
+    durationLabel:'Durée',
+    continuousOpt:'Boucle continue',
+    regenBtn:'↻ Régénérer',
+    entrainHeading:'Ondes bénéfiques',
+    entrainHint:'Couches audio auxiliaires (binaurales, isochrones ou ton pur), populairement associées à la relaxation, la concentration ou la méditation. Les bandes ci-dessous suivent les conventions EEG standard ; l\'efficacité subjective varie selon les personnes.',
+    modeLabel:'Mode',
+    modePure:'Ton pur',
+    modeBinaural:'Binaural',
+    modeIso:'Isochrone',
+    carrierLabel:'Fréquence porteuse',
+    beatLabel:'Fréquence de battement',
+    mixLabel:'Mélange',
+    disclaimer:'Remarque : ces tonalités sont proposées uniquement à des fins de relaxation et d\'expérience, et non comme traitement médical — les preuves scientifiques restent limitées. Si vous souffrez d\'épilepsie, d\'une autre affection neurologique, ou si vous êtes enceinte, consultez un médecin avant utilisation. N\'écoutez pas en conduisant. Arrêtez si vous ressentez un inconfort. L\'effet binaural nécessite un casque stéréo.',
+    playBtn:'Lecture',
+    pauseBtn:'Pause',
+    stopBtn:'Arrêt',
+    masterVolLabel:'Volume',
+    statusIdle:'Prêt',
+    statusPlaying:'Lecture en cours',
+    statusPaused:'En pause',
+    exportHeading:'Exporter',
+    exportDurLabel:'Durée d\'export',
+    exportWavBtn:'⬇ Exporter en WAV',
+    exportJsonBtn:'⬇ Exporter les réglages (JSON)',
+    importJsonBtn:'⬆ Importer les réglages',
+    exporting:'Exportation…',
+    exportDone:'Téléchargement démarré.',
+    exportError:'Échec de l\'export.',
+    importError:'Fichier de réglages invalide.',
+    footerLicense:'Licence CC0 · aucune télémétrie · aucune dépendance externe · 100 % hors ligne',
+    footerNote:'Toute la musique est générée algorithmiquement, en temps réel — originale, sans échantillons ni matériel protégé par des droits d\'auteur.',
+  },
+  it:{
+    title:'Melodie senza frontiere',
+    subtitle:'Un generatore di musica originale, completamente offline — con strati di onde benefiche per un ascolto positivo.',
+    titleTagline:'Generatore musicale originale',
+    genreHeading:'Scegli un genere',
+    compHeading:'Composizione',
+    toggleAllBtn:'⇕ Espandi / comprimi tutto',
+    genreSearchPlaceholder:'Cerca un genere (es. "flamenco", "drone", "valzer"…)',
+    genreNoResults:'Nessun genere trovato.',
+    seedLabel:'Seme',
+    randomBtn:'🎲 Casuale',
+    tempoLabel:'Tempo',
+    durationLabel:'Durata',
+    continuousOpt:'Loop continuo',
+    regenBtn:'↻ Rigenera',
+    entrainHeading:'Onde benefiche',
+    entrainHint:'Strati audio ausiliari (binaurali, isocroni o tono puro), popolarmente associati a stati di rilassamento, concentrazione o meditazione. Le bande qui sotto seguono le convenzioni EEG standard; l\'efficacia soggettiva varia da persona a persona.',
+    modeLabel:'Modalità',
+    modePure:'Tono puro',
+    modeBinaural:'Binaurale',
+    modeIso:'Isocrono',
+    carrierLabel:'Frequenza portante',
+    beatLabel:'Frequenza di battimento',
+    mixLabel:'Mix',
+    disclaimer:'Nota: questi toni sono offerti esclusivamente a scopo rilassante ed esperienziale, non come trattamento medico — le prove scientifiche restano limitate. Se soffri di epilessia, un\'altra condizione neurologica, o sei incinta, consulta un medico prima dell\'uso. Non ascoltare mentre guidi. Interrompi se avverti disagio. L\'effetto binaurale richiede cuffie stereo.',
+    playBtn:'Riproduci',
+    pauseBtn:'Pausa',
+    stopBtn:'Stop',
+    masterVolLabel:'Volume',
+    statusIdle:'Pronto',
+    statusPlaying:'In riproduzione',
+    statusPaused:'In pausa',
+    exportHeading:'Esporta',
+    exportDurLabel:'Durata esportazione',
+    exportWavBtn:'⬇ Esporta WAV',
+    exportJsonBtn:'⬇ Esporta impostazioni (JSON)',
+    importJsonBtn:'⬆ Importa impostazioni',
+    exporting:'Esportazione…',
+    exportDone:'Download avviato.',
+    exportError:'Esportazione fallita.',
+    importError:'File di impostazioni non valido.',
+    footerLicense:'Licenza CC0 · nessuna telemetria · nessuna dipendenza esterna · 100% offline',
+    footerNote:'Tutta la musica è generata algoritmicamente, in tempo reale — originale, senza campioni né materiale protetto da copyright.',
+  },
+  es:{
+    title:'Melodías sin fronteras',
+    subtitle:'Un generador de música original, totalmente sin conexión — con capas de ondas beneficiosas para una escucha positiva.',
+    titleTagline:'Generador musical original',
+    genreHeading:'Elige un género',
+    compHeading:'Composición',
+    toggleAllBtn:'⇕ Expandir / contraer todo',
+    genreSearchPlaceholder:'Buscar un género (ej. "flamenco", "drone", "vals"…)',
+    genreNoResults:'No se encontraron géneros.',
+    seedLabel:'Semilla',
+    randomBtn:'🎲 Aleatorio',
+    tempoLabel:'Tempo',
+    durationLabel:'Duración',
+    continuousOpt:'Bucle continuo',
+    regenBtn:'↻ Regenerar',
+    entrainHeading:'Ondas beneficiosas',
+    entrainHint:'Capas de audio auxiliares (binaurales, isocrónicas o de tono puro), popularmente asociadas con la relajación, la concentración o la meditación. Las bandas de abajo siguen las convenciones EEG estándar; la eficacia subjetiva varía según la persona.',
+    modeLabel:'Modo',
+    modePure:'Tono puro',
+    modeBinaural:'Binaural',
+    modeIso:'Isocrónico',
+    carrierLabel:'Frecuencia portadora',
+    beatLabel:'Frecuencia de batido',
+    mixLabel:'Mezcla',
+    disclaimer:'Nota: estos tonos se ofrecen exclusivamente con fines relajantes y experienciales, no como tratamiento médico — la evidencia científica sigue siendo limitada. Si tiene epilepsia, otra afección neurológica, o está embarazada, consulte a un médico antes de usarlo. No escuche mientras conduce. Deténgase si siente malestar. El efecto binaural requiere auriculares estéreo.',
+    playBtn:'Reproducir',
+    pauseBtn:'Pausa',
+    stopBtn:'Detener',
+    masterVolLabel:'Volumen',
+    statusIdle:'Listo',
+    statusPlaying:'Reproduciendo',
+    statusPaused:'Pausado',
+    exportHeading:'Exportar',
+    exportDurLabel:'Duración de exportación',
+    exportWavBtn:'⬇ Exportar WAV',
+    exportJsonBtn:'⬇ Exportar ajustes (JSON)',
+    importJsonBtn:'⬆ Importar ajustes',
+    exporting:'Exportando…',
+    exportDone:'Descarga iniciada.',
+    exportError:'Error en la exportación.',
+    importError:'Archivo de ajustes no válido.',
+    footerLicense:'Licencia CC0 · sin telemetría · sin dependencias externas · 100 % sin conexión',
+    footerNote:'Toda la música se genera algorítmicamente, en tiempo real — original, sin muestras ni material protegido por derechos de autor.',
+  },
+  pt:{
+    title:'Melodias sem fronteiras',
+    subtitle:'Um gerador de música original, totalmente offline — com camadas de ondas benéficas para uma escuta positiva.',
+    titleTagline:'Gerador musical original',
+    genreHeading:'Escolha um gênero',
+    compHeading:'Composição',
+    toggleAllBtn:'⇕ Expandir / recolher tudo',
+    genreSearchPlaceholder:'Pesquisar um gênero (ex.: "flamenco", "drone", "valsa"…)',
+    genreNoResults:'Nenhum gênero encontrado.',
+    seedLabel:'Semente',
+    randomBtn:'🎲 Aleatório',
+    tempoLabel:'Tempo',
+    durationLabel:'Duração',
+    continuousOpt:'Loop contínuo',
+    regenBtn:'↻ Regenerar',
+    entrainHeading:'Ondas benéficas',
+    entrainHint:'Camadas de áudio auxiliares (binaurais, isocrônicas ou de tom puro), popularmente associadas a estados de relaxamento, concentração ou meditação. As bandas abaixo seguem as convenções padrão de EEG; a eficácia subjetiva varia de pessoa para pessoa.',
+    modeLabel:'Modo',
+    modePure:'Tom puro',
+    modeBinaural:'Binaural',
+    modeIso:'Isocrônico',
+    carrierLabel:'Frequência portadora',
+    beatLabel:'Frequência de batimento',
+    mixLabel:'Mistura',
+    disclaimer:'Nota: estes tons são oferecidos exclusivamente para fins relaxantes e experienciais, não como tratamento médico — as evidências científicas continuam limitadas. Se sofre de epilepsia, outra condição neurológica, ou está grávida, consulte um médico antes de usar. Não ouça enquanto conduz. Pare se sentir desconforto. O efeito binaural requer fones de ouvido estéreo.',
+    playBtn:'Reproduzir',
+    pauseBtn:'Pausa',
+    stopBtn:'Parar',
+    masterVolLabel:'Volume',
+    statusIdle:'Pronto',
+    statusPlaying:'A reproduzir',
+    statusPaused:'Em pausa',
+    exportHeading:'Exportar',
+    exportDurLabel:'Duração da exportação',
+    exportWavBtn:'⬇ Exportar WAV',
+    exportJsonBtn:'⬇ Exportar configurações (JSON)',
+    importJsonBtn:'⬆ Importar configurações',
+    exporting:'A exportar…',
+    exportDone:'Descarregamento iniciado.',
+    exportError:'Falha na exportação.',
+    importError:'Ficheiro de configurações inválido.',
+    footerLicense:'Licença CC0 · sem telemetria · sem dependências externas · 100% offline',
+    footerNote:'Toda a música é gerada algoritmicamente, em tempo real — original, sem amostras e sem material protegido por direitos autorais.',
+  },
+  de:{
+    title:'Melodien ohne Grenzen',
+    subtitle:'Ein vollständig offline arbeitender Generator für Originalmusik — mit wohltuenden Wellenschichten für positives Hören.',
+    titleTagline:'Originaler Musikgenerator',
+    genreHeading:'Genre wählen',
+    compHeading:'Komposition',
+    toggleAllBtn:'⇕ Alle ein-/ausklappen',
+    genreSearchPlaceholder:'Genre suchen (z. B. „Flamenco", „Drone", „Walzer" …)',
+    genreNoResults:'Keine Genres gefunden.',
+    seedLabel:'Startwert',
+    randomBtn:'🎲 Zufällig',
+    tempoLabel:'Tempo',
+    durationLabel:'Dauer',
+    continuousOpt:'Endlosschleife',
+    regenBtn:'↻ Neu generieren',
+    entrainHeading:'Wohltuende Wellen',
+    entrainHint:'Zusätzliche Audioebenen (binaural, isochron oder reiner Ton), die populär mit Entspannung, Konzentration oder Meditation assoziiert werden. Die untenstehenden Bänder folgen den üblichen EEG-Konventionen; die subjektive Wirksamkeit ist von Person zu Person unterschiedlich.',
+    modeLabel:'Modus',
+    modePure:'Reiner Ton',
+    modeBinaural:'Binaural',
+    modeIso:'Isochron',
+    carrierLabel:'Trägerfrequenz',
+    beatLabel:'Schwebungsfrequenz',
+    mixLabel:'Mischung',
+    disclaimer:'Hinweis: Diese Töne dienen ausschließlich Entspannungs- und Erfahrungszwecken, nicht als medizinische Behandlung — die wissenschaftliche Evidenz bleibt begrenzt. Bei Epilepsie, einer anderen neurologischen Erkrankung oder Schwangerschaft vor der Nutzung ärztlichen Rat einholen. Nicht beim Autofahren hören. Bei Unwohlsein abbrechen. Der binaurale Effekt erfordert Stereo-Kopfhörer.',
+    playBtn:'Wiedergabe',
+    pauseBtn:'Pause',
+    stopBtn:'Stopp',
+    masterVolLabel:'Lautstärke',
+    statusIdle:'Bereit',
+    statusPlaying:'Wird wiedergegeben',
+    statusPaused:'Pausiert',
+    exportHeading:'Exportieren',
+    exportDurLabel:'Exportlänge',
+    exportWavBtn:'⬇ WAV exportieren',
+    exportJsonBtn:'⬇ Einstellungen exportieren (JSON)',
+    importJsonBtn:'⬆ Einstellungen importieren',
+    exporting:'Wird exportiert…',
+    exportDone:'Download gestartet.',
+    exportError:'Export fehlgeschlagen.',
+    importError:'Ungültige Einstellungsdatei.',
+    footerLicense:'CC0-Lizenz · keine Telemetrie · keine externen Abhängigkeiten · 100 % offline',
+    footerNote:'Die gesamte Musik wird algorithmisch in Echtzeit erzeugt — originell, ohne Samples und ohne urheberrechtlich geschütztes Material.',
+  }
+};
+let currentLang = 'en';
+function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) || key; }
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){ el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
+  document.documentElement.lang = currentLang;
+  document.title = t('title') + ' — ' + t('titleTagline');
+  renderGenreCards(); renderChips();
+}
+
+/* ======================================================================
+   11. STARE UI, RANDARE GENURI/CHIP-URI, WIRING EVENIMENTE
+   ====================================================================== */
+const state = { genreKey:'ambient', entrainMode:'binaural' };
+let expandedCategories = new Set(['atmospheric']);
+
+function genreGlyphSVG(g){
+  const w=120,h=22,mid=h/2, steps=44;
+  let d = 'M0,'+mid.toFixed(1);
+  for (let i=1;i<=steps;i++){
+    const x=(i/steps)*w;
+    const phase=(i/steps)*Math.PI*2*g.freq;
+    let y;
+    if (g.wave==='saw'){ const frac=(phase%(Math.PI*2))/(Math.PI*2); y = mid + (frac*2-1)*g.amp; }
+    else { y = mid + Math.sin(phase)*g.amp; }
+    if (g.jitter) y += Math.sin(phase*7.3)*g.jitter*0.3;
+    d += ' L'+x.toFixed(1)+','+y.toFixed(1);
+  }
+  return '<svg class="genre-glyph" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none"><path d="'+d+'" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+}
+
+let genreSearchQuery = '';
+
+function renderGenreCards(){
+  const grid = document.getElementById('genreGrid');
+  grid.innerHTML = '';
+  const query = genreSearchQuery.trim().toLowerCase();
+  let anyMatch = false;
+  CATEGORY_ORDER.forEach(function(catKey){
+    const catGenres = GENRE_ORDER.filter(function(key){
+      if (GENRES[key].category !== catKey) return false;
+      if (!query) return true;
+      const g = GENRES[key];
+      return (g.name[currentLang]+' '+g.desc[currentLang]).toLowerCase().indexOf(query) !== -1;
+    });
+    if (query && catGenres.length === 0) return;
+    if (catGenres.length) anyMatch = true;
+    const isOpen = expandedCategories.has(catKey);
+
+    const header = document.createElement('button');
+    header.type = 'button';
+    header.className = 'category-header' + (isOpen ? ' open' : '');
+    header.innerHTML = '<span class="category-chevron">▸</span><span class="category-title">'+CATEGORIES[catKey][currentLang]+'</span><span class="category-count">'+catGenres.length+'</span>';
+    header.addEventListener('click', function(){
+      if (expandedCategories.has(catKey)) expandedCategories.delete(catKey);
+      else expandedCategories.add(catKey);
+      renderGenreCards();
+    });
+    grid.appendChild(header);
+
+    if (isOpen){
+      const inner = document.createElement('div');
+      inner.className = 'genre-grid';
+      catGenres.forEach(function(key){
+        const g = GENRES[key];
+        const card = document.createElement('button');
+        card.className = 'genre-card' + (state.genreKey===key ? ' active' : '');
+        card.innerHTML = genreGlyphSVG(g.glyph) + '<h3>'+g.name[currentLang]+'</h3><p>'+g.desc[currentLang]+'</p>';
+        card.addEventListener('click', function(){ selectGenre(key); });
+        inner.appendChild(card);
+      });
+      grid.appendChild(inner);
+    }
+  });
+  if (query && !anyMatch){
+    const empty = document.createElement('p');
+    empty.className = 'hint';
+    empty.style.padding = '6px 4px';
+    empty.textContent = t('genreNoResults');
+    grid.appendChild(empty);
+  }
+}
+
+function selectGenre(key){
+  state.genreKey = key;
+  const g = GENRES[key];
+  expandedCategories.add(g.category);
+  const tempoSlider = document.getElementById('tempoSlider');
+  tempoSlider.min = g.tempoRange[0]; tempoSlider.max = g.tempoRange[1];
+  tempoSlider.value = Math.round((g.tempoRange[0]+g.tempoRange[1])/2);
+  const rec = BRAINWAVE_PRESETS[g.recommendedEntrainment];
+  if (rec) document.getElementById('beatSlider').value = rec.hz;
+  renderGenreCards();
+  refreshReadouts();
+  updateTransportUI();
+  if (isPlaying || isPaused){ startPlayback(); }
+}
+
+function renderChips(){
+  const solChips = document.getElementById('solfeggioChips');
+  solChips.innerHTML = '';
+  SOLFEGGIO_PRESETS.forEach(function(p){
+    const chip = document.createElement('button');
+    chip.className = 'chip'; chip.type='button';
+    chip.textContent = (currentLang==='ro' ? p.ro : p.en);
+    chip.addEventListener('click', function(){
+      document.getElementById('carrierSlider').value = p.hz;
+      refreshReadouts();
+      if (entrainmentLayer && entrainmentLayer.updateParams){
+        entrainmentLayer.updateParams(p.hz, parseFloat(document.getElementById('beatSlider').value));
+      }
+    });
+    solChips.appendChild(chip);
+  });
+  const bwChips = document.getElementById('brainwaveChips');
+  bwChips.innerHTML = '';
+  BRAINWAVE_ORDER.forEach(function(key){
+    const p = BRAINWAVE_PRESETS[key];
+    const chip = document.createElement('button');
+    chip.className = 'chip'; chip.type='button';
+    chip.textContent = p.label[currentLang]+' · '+p.desc[currentLang];
+    chip.addEventListener('click', function(){
+      document.getElementById('beatSlider').value = p.hz;
+      refreshReadouts();
+      if (entrainmentLayer && entrainmentLayer.updateParams){
+        entrainmentLayer.updateParams(parseFloat(document.getElementById('carrierSlider').value), p.hz);
+      }
+    });
+    bwChips.appendChild(chip);
+  });
+}
+
+function refreshReadouts(){
+  document.getElementById('tempoReadout').textContent = document.getElementById('tempoSlider').value+' BPM';
+  document.getElementById('carrierReadout').textContent = document.getElementById('carrierSlider').value+' Hz';
+  document.getElementById('beatReadout').textContent = document.getElementById('beatSlider').value+' Hz';
+  document.getElementById('entrainMixReadout').textContent = document.getElementById('entrainMixSlider').value+'%';
+  const durSec = parseInt(document.getElementById('exportDurationSelect').value,10);
+  const estMB = ((durSec*44100*2*2)/1048576).toFixed(0);
+  document.getElementById('exportSizeEstimate').textContent = '~'+estMB+' MB';
+}
+
+function updateModeButtons(){
+  document.querySelectorAll('#modeControl button').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-mode')===state.entrainMode);
+  });
+  const showBeat = state.entrainMode !== 'pure';
+  document.getElementById('beatFieldRow').style.display = showBeat ? 'flex' : 'none';
+  document.getElementById('brainwaveChips').style.display = showBeat ? 'flex' : 'none';
+}
+
+function updateTransportUI(){
+  const icon = document.getElementById('playPauseIcon');
+  const label = document.getElementById('playPauseLabel');
+  const stopBtn = document.getElementById('stopBtn');
+  const status = document.getElementById('statusText');
+  const miniBtn = document.getElementById('miniPlayPauseBtn');
+  const miniStop = document.getElementById('miniStopBtn');
+  const miniGenre = document.getElementById('miniPlayerGenre');
+  if (miniGenre) miniGenre.textContent = GENRES[state.genreKey].name[currentLang];
+  if (isPlaying){
+    icon.textContent='⏸'; label.textContent=t('pauseBtn'); stopBtn.disabled=false; status.textContent=t('statusPlaying');
+    if (miniBtn){ miniBtn.textContent='⏸'; miniStop.disabled=false; }
+  } else if (isPaused){
+    icon.textContent='▶'; label.textContent=t('playBtn'); stopBtn.disabled=false; status.textContent=t('statusPaused');
+    if (miniBtn){ miniBtn.textContent='▶'; miniStop.disabled=false; }
+  } else {
+    icon.textContent='▶'; label.textContent=t('playBtn'); stopBtn.disabled=true; status.textContent=t('statusIdle');
+    if (miniBtn){ miniBtn.textContent='▶'; miniStop.disabled=true; }
+  }
+}
+
+function rebuildEntrainmentLive(){
+  if (!audioCtx || !masterGain) return;
+  const s = getCurrentSettings();
+  if (entrainmentLayer){ entrainmentLayer.stop(audioCtx.currentTime+0.05); entrainmentLayer=null; }
+  if (s.entrainEnabled){
+    entrainmentLayer = createEntrainmentLayer(audioCtx, s.entrainMode, s.carrierHz, s.beatHz, s.entrainMix*0.5);
+    entrainmentLayer.output.connect(masterGain);
+  }
+}
+
+/* ======================================================================
+   12. INITIALIZARE
+   ====================================================================== */
+document.addEventListener('DOMContentLoaded', function(){
+  resizeCanvas();
+  selectGenre('ambient');
+  updateModeButtons();
+  applyI18n();
+  refreshReadouts();
+  initVisualizerLoop();
+
+  document.getElementById('playPauseBtn').addEventListener('click', function(){
+    if (!audioCtx){ startPlayback(); }
+    else if (isPlaying){ pausePlayback(); }
+    else if (isPaused){ resumePlayback(); }
+  });
+  document.getElementById('stopBtn').addEventListener('click', stopAll);
+  document.getElementById('regenerateBtn').addEventListener('click', function(){ startPlayback(); });
+  document.getElementById('randomSeedBtn').addEventListener('click', function(){
+    document.getElementById('seedInput').value = Math.floor(Math.random()*1000000);
+  });
+  document.getElementById('toggleAllCategoriesBtn').addEventListener('click', function(){
+    if (expandedCategories.size === CATEGORY_ORDER.length){ expandedCategories = new Set(); }
+    else { expandedCategories = new Set(CATEGORY_ORDER); }
+    renderGenreCards();
+  });
+  document.getElementById('genreSearchInput').addEventListener('input', function(){
+    genreSearchQuery = this.value;
+    const q = genreSearchQuery.trim().toLowerCase();
+    if (q){
+      CATEGORY_ORDER.forEach(function(catKey){
+        const hasMatch = GENRE_ORDER.some(function(key){
+          if (GENRES[key].category !== catKey) return false;
+          const g = GENRES[key];
+          return (g.name[currentLang]+' '+g.desc[currentLang]).toLowerCase().indexOf(q) !== -1;
+        });
+        if (hasMatch) expandedCategories.add(catKey);
+      });
+    }
+    renderGenreCards();
+  });
+  document.getElementById('miniPlayPauseBtn').addEventListener('click', function(){
+    document.getElementById('playPauseBtn').click();
+  });
+  document.getElementById('miniStopBtn').addEventListener('click', stopAll);
+
+  document.getElementById('tempoSlider').addEventListener('input', refreshReadouts);
+  document.getElementById('carrierSlider').addEventListener('input', function(){
+    refreshReadouts();
+    if (entrainmentLayer && entrainmentLayer.updateParams){
+      entrainmentLayer.updateParams(parseFloat(this.value), parseFloat(document.getElementById('beatSlider').value));
+    }
+  });
+  document.getElementById('beatSlider').addEventListener('input', function(){
+    refreshReadouts();
+    if (entrainmentLayer && entrainmentLayer.updateParams){
+      entrainmentLayer.updateParams(parseFloat(document.getElementById('carrierSlider').value), parseFloat(this.value));
+    }
+  });
+  document.getElementById('entrainMixSlider').addEventListener('input', function(){
+    refreshReadouts();
+    if (entrainmentLayer && entrainmentLayer.output && audioCtx){
+      entrainmentLayer.output.gain.setTargetAtTime(parseInt(this.value,10)/100*0.5, audioCtx.currentTime, 0.1);
+    }
+  });
+  document.getElementById('masterVolSlider').addEventListener('input', function(){
+    if (masterGain && audioCtx){ masterGain.gain.setTargetAtTime(parseInt(this.value,10)/100, audioCtx.currentTime, 0.05); }
+  });
+  document.getElementById('exportDurationSelect').addEventListener('change', refreshReadouts);
+
+  document.querySelectorAll('#modeControl button').forEach(function(b){
+    b.addEventListener('click', function(){
+      state.entrainMode = b.getAttribute('data-mode');
+      updateModeButtons();
+      rebuildEntrainmentLive();
+    });
+  });
+  document.getElementById('entrainToggle').addEventListener('change', function(){
+    if (!audioCtx || !masterGain) return;
+    if (this.checked && !entrainmentLayer){
+      const s = getCurrentSettings();
+      entrainmentLayer = createEntrainmentLayer(audioCtx, s.entrainMode, s.carrierHz, s.beatHz, s.entrainMix*0.5);
+      entrainmentLayer.output.connect(masterGain);
+    } else if (!this.checked && entrainmentLayer){
+      entrainmentLayer.stop(audioCtx.currentTime+0.05);
+      entrainmentLayer = null;
+    }
+  });
+
+  document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+    b.addEventListener('click', function(){
+      currentLang = b.getAttribute('data-lang-btn');
+      document.querySelectorAll('[data-lang-btn]').forEach(function(x){ x.classList.toggle('active', x===b); });
+      applyI18n(); updateModeButtons(); updateTransportUI();
+    });
+  });
+
+  document.getElementById('exportWavBtn').addEventListener('click', async function(){
+    const btn = this;
+    const progressEl = document.getElementById('exportProgress');
+    btn.disabled = true;
+    progressEl.style.display='block';
+    progressEl.textContent = t('exporting');
+    try{
+      await exportWav();
+      progressEl.textContent = t('exportDone');
+    }catch(err){
+      progressEl.textContent = t('exportError');
+    }
+    setTimeout(function(){ progressEl.style.display='none'; btn.disabled=false; }, 2500);
+  });
+  document.getElementById('exportJsonBtn').addEventListener('click', exportSettingsJson);
+  document.getElementById('importJsonBtn').addEventListener('click', function(){
+    document.getElementById('importJsonFile').click();
+  });
+  document.getElementById('importJsonFile').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{ applyImportedSettings(JSON.parse(ev.target.result)); }
+      catch(err){ alert(t('importError')); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('orientationchange', function(){ setTimeout(resizeCanvas, 120); });
+  document.addEventListener('keydown', function(e){
+    if (e.code==='Space'){
+      const tag = document.activeElement.tagName;
+      if (tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA'||tag==='BUTTON') return;
+      e.preventDefault();
+      document.getElementById('playPauseBtn').click();
+    }
+  });
+});
+
+})();
+</script>
+</body>
+</html>
