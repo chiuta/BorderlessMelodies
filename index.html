@@ -118,8 +118,8 @@ header p.subtitle{color:var(--text-dim);font-size:1.02rem;max-width:600px;margin
   color:var(--text); font-family:inherit; min-height:0;
 }
 .genre-card-delete{
-  position:absolute; top:6px; right:6px; width:22px; height:22px; min-height:0;
-  padding:0; border-radius:50%; font-size:0.85rem; line-height:1;
+  position:absolute; top:6px; right:6px; width:32px; height:32px; min-height:0;
+  padding:0; border-radius:50%; font-size:0.95rem; line-height:1;
   background:rgba(0,0,0,0.35); border:1px solid var(--border); color:var(--text-dim);
   display:flex; align-items:center; justify-content:center;
 }
@@ -212,16 +212,18 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 .fractal-overlay canvas{display:block; width:100%; height:100%;}
 .fractal-close{
   position:absolute; top:18px; right:18px; z-index:2;
-  width:40px; height:40px; padding:0; min-height:0;
+  width:44px; height:44px; padding:0; min-height:0;
   background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.7);
   border-radius:50%; font-size:1rem; line-height:1;
   display:flex; align-items:center; justify-content:center;
   opacity:0; transition:opacity .3s;
 }
 .fractal-overlay.show-controls .fractal-close{opacity:1;}
+.fractal-overlay.show-controls:not(.dragging){cursor:grab;}
+.fractal-overlay.dragging{cursor:grabbing;}
 .support-widget{position:fixed; bottom:16px; right:16px; z-index:60;}
 .support-heart{
-  width:40px; height:40px; padding:0; min-height:0; border-radius:50%;
+  width:44px; height:44px; padding:0; min-height:0; border-radius:50%;
   background:var(--panel-2); border:1px solid var(--border); color:var(--dusty);
   font-size:1.1rem; display:flex; align-items:center; justify-content:center;
 }
@@ -244,7 +246,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 }
 .fractal-overlay.show-controls .fractal-controls{opacity:1; pointer-events:auto;}
 .fractal-zoom-btn{
-  width:40px; height:40px; padding:0; min-height:0;
+  width:44px; height:44px; padding:0; min-height:0;
   background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.75);
   border-radius:50%; font-size:1.1rem; line-height:1;
   display:flex; align-items:center; justify-content:center;
@@ -557,6 +559,12 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             <span class="readout mono" id="tempoReadout">70 BPM</span>
           </div>
           <div class="field-row">
+            <label data-i18n="varietyLabel">Variety &amp; arc</label>
+            <input type="range" id="varietyIntensitySlider" min="0" max="100" value="55">
+            <span class="readout mono" id="varietyIntensityReadout">55%</span>
+          </div>
+          <p class="hint" data-i18n="varietyHint">Gently varies density and brightness over the piece's length — an evolving arc instead of one static loop. 0% keeps the classic constant behavior.</p>
+          <div class="field-row">
             <label data-i18n="durationLabel">Duration</label>
             <select id="durationSelect">
               <option value="120">2 min</option>
@@ -604,6 +612,57 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           </div>
           <p class="disclaimer" data-i18n="disclaimer">Note: these tones are offered purely for relaxation and experiential purposes, not as medical treatment — scientific evidence remains limited. If you have epilepsy, another neurological condition, or are pregnant, consult a doctor before use. Do not listen while driving. Stop if you feel discomfort. The binaural effect requires stereo headphones.</p>
         </section>
+
+        <section class="panel" id="voicePanel">
+          <div class="panel-header-row">
+            <h2 data-i18n="voiceHeading">Human voice</h2>
+            <label class="switch"><input type="checkbox" id="voiceToggle"><span class="slider-toggle"></span></label>
+          </div>
+          <p class="hint" data-i18n="voiceHint">A procedurally synthesized wordless vocal layer (formant synthesis) — soft syllables like "ah", "oh", "mmm" that change each time, woven over any genre. No recordings, no samples.</p>
+          <div class="field-row">
+            <label data-i18n="voiceCharacterLabel">Character</label>
+            <select id="voiceCharacterSelect">
+              <option value="childFemale" data-i18n="voice_childFemale">Child (girl)</option>
+              <option value="childMale" data-i18n="voice_childMale">Child (boy)</option>
+              <option value="teenFemale" data-i18n="voice_teenFemale">Teen girl</option>
+              <option value="teenMale" data-i18n="voice_teenMale">Teen boy</option>
+              <option value="youngFemale" selected data-i18n="voice_youngFemale">Young woman</option>
+              <option value="youngMale" data-i18n="voice_youngMale">Young man</option>
+              <option value="matureFemale" data-i18n="voice_matureFemale">Mature woman</option>
+              <option value="matureMale" data-i18n="voice_matureMale">Mature man</option>
+              <option value="seniorFemale" data-i18n="voice_seniorFemale">Senior woman</option>
+              <option value="seniorMale" data-i18n="voice_seniorMale">Senior man</option>
+              <option value="robotic" data-i18n="voice_robotic">Melodious robotic</option>
+            </select>
+          </div>
+          <div class="field-row">
+            <label data-i18n="voiceDensityLabel">Presence</label>
+            <input type="range" id="voiceDensitySlider" min="0" max="100" value="30">
+            <span class="readout mono" id="voiceDensityReadout">30%</span>
+          </div>
+          <div class="field-row">
+            <label data-i18n="voiceMixLabel">Volume</label>
+            <input type="range" id="voiceMixSlider" min="0" max="100" value="55">
+            <span class="readout mono" id="voiceMixReadout">55%</span>
+          </div>
+        </section>
+
+        <section class="panel" id="ritualSoundsPanel">
+          <h2 data-i18n="ritualHeading">Gong &amp; conch</h2>
+          <p class="hint" data-i18n="ritualHint">Two ceremonial sounds, synthesized procedurally — an inharmonic gong (bell-like partials) and a breathy conch call. Ring them manually anytime, or let them mark the start/end of a session automatically.</p>
+          <div class="btn-row">
+            <button type="button" id="ringGongBtn" data-i18n="ringGongBtn">🔔 Ring the gong</button>
+            <button type="button" id="blowConchBtn" data-i18n="blowConchBtn">🐚 Blow the conch</button>
+          </div>
+          <div class="field-row">
+            <label class="switch"><input type="checkbox" id="autoGongToggle"><span class="slider-toggle"></span></label>
+            <label data-i18n="autoGongLabel">Automatic gong at start</label>
+          </div>
+          <div class="field-row">
+            <label class="switch"><input type="checkbox" id="autoConchToggle"><span class="slider-toggle"></span></label>
+            <label data-i18n="autoConchLabel">Automatic conch at end</label>
+          </div>
+        </section>
       </div>
 
       <div class="col-right">
@@ -638,8 +697,15 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             </select>
             <span class="readout mono" id="exportSizeEstimate">~31 MB</span>
           </div>
+          <div class="field-row">
+            <label data-i18n="audioFormatLabel">Audio format</label>
+            <select id="audioFormatSelect">
+              <option value="wav">WAV (uncompressed)</option>
+              <option value="flac">FLAC (lossless, ~50% smaller)</option>
+            </select>
+          </div>
           <div class="btn-row">
-            <button id="exportWavBtn" data-i18n="exportWavBtn">⬇ Export WAV</button>
+            <button id="exportWavBtn" data-i18n="exportAudioBtn">⬇ Export audio</button>
             <button id="exportJsonBtn" data-i18n="exportJsonBtn">⬇ Export settings (JSON)</button>
             <button id="importJsonBtn" data-i18n="importJsonBtn">⬆ Import settings</button>
             <input type="file" id="importJsonFile" accept="application/json" style="display:none;">
@@ -657,9 +723,50 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           <div class="btn-row">
             <button id="generateCoverBtn" class="btn-accent" data-i18n="generateCoverBtn">🎨 Generate cover</button>
             <button id="coverModeBtn" class="fractal-mode-btn cover-mode-btn" data-mode="2d">2D</button>
+            <select id="coverFormatSelect">
+              <option value="png">PNG</option>
+              <option value="webp">WebP</option>
+              <option value="jpeg">JPEG</option>
+            </select>
             <button id="exportCoverBtn" disabled data-i18n="exportCoverBtn">⬇ Export PNG</button>
           </div>
           <div id="coverProgress" class="hint mono" style="display:none;margin-top:10px;"></div>
+        </section>
+
+        <section class="panel" id="videoExportPanel">
+          <h2 data-i18n="videoHeading">Video export</h2>
+          <p class="hint" data-i18n="videoHint">Records the fractal visualizer together with the currently playing audio into a video file — open formats only (WebM: VP8/VP9 + Opus), fully offline.</p>
+          <p class="hint" data-i18n="videoRealtimeNote">⏱ Recording happens in real time — a 20-minute video takes 20 real minutes. Keep this tab open and active.</p>
+          <div class="field-row">
+            <label data-i18n="videoResLabel">Resolution</label>
+            <select id="videoResSelect">
+              <option value="640">640 × 640</option>
+              <option value="1080" selected>1080 × 1080</option>
+              <option value="1280x720">1280 × 720</option>
+              <option value="1920x1080">1920 × 1080</option>
+            </select>
+          </div>
+          <div class="field-row">
+            <label data-i18n="videoDurLabel">Duration</label>
+            <select id="videoDurSelect">
+              <option value="10">10s</option>
+              <option value="15" selected>15s</option>
+              <option value="30">30s</option>
+              <option value="60">60s</option>
+              <option value="120">2 min</option>
+              <option value="300">5 min</option>
+              <option value="600">10 min</option>
+              <option value="900">15 min</option>
+              <option value="1200">20 min</option>
+            </select>
+            <button id="videoModeBtn" class="fractal-mode-btn cover-mode-btn" data-mode="2d">2D</button>
+            <select id="videoFormatSelect"></select>
+          </div>
+          <div class="btn-row">
+            <button id="recordVideoBtn" class="btn-accent" data-i18n="recordVideoBtn">🎬 Record video</button>
+            <button id="cancelVideoBtn" style="display:none;" data-i18n="cancelVideoBtn">✕ Cancel</button>
+          </div>
+          <div id="videoProgress" class="hint mono" style="display:none;margin-top:10px;"></div>
         </section>
       </div>
     </div>
@@ -885,6 +992,28 @@ const GENRES = {
     filterCutoff:1200, reverbMix:0.6, arp:false,
     texture:'ocean', recommendedEntrainment:'delta', category:'atmospheric',
   },
+  whalesong: {
+    name:{ro:'Cântecul Balenelor', en:'Whale Song', fr:'Chant de Baleine', it:'Canto delle Balene', es:'Canto de Ballenas', pt:'Canto das Baleias', de:'Walgesang'},
+    desc:{ro:'Chemări joase, lungi alunecări de ton — ecoul unei ființe imense în adâncul rece.', en:'Low, long pitch-slides — the echo of a vast being in the cold deep.', fr:'Des appels graves, de longs glissements de ton — l\'écho d\'un être immense dans les profondeurs froides.', it:'Richiami bassi, lunghi scivolamenti di tono — l\'eco di un essere immenso nelle profondità fredde.', es:'Llamadas graves, largos deslizamientos de tono — el eco de un ser inmenso en las profundidades frías.', pt:'Chamados graves, longos deslizamentos de tom — o eco de um ser imenso nas profundezas frias.', de:'Tiefe Rufe, lange Tongleiten — das Echo eines gewaltigen Wesens in der kalten Tiefe.'},
+    glyph:{freq:0.2, amp:11, jitter:3, wave:'sine'},
+    scale:'minorPenta', progression:'modalVamp', tempoRange:[24,32], barsPerChord:8,
+    lead:{use:true, density:0.09, octave:3, swing:false, wave:'sine', portamento:0.7},
+    pad:{attack:5.5, release:7.0, seventh:false, octave:2, wave:'sine'},
+    bass:{octave:1, pattern:'sustain'},
+    filterCutoff:900, reverbMix:0.65, arp:false,
+    texture:'ocean', recommendedEntrainment:'delta', category:'atmospheric',
+  },
+  wildlife: {
+    name:{ro:'Floră & Faună', en:'Flora & Fauna', fr:'Flore & Faune', it:'Flora & Fauna', es:'Flora & Fauna', pt:'Flora & Fauna', de:'Flora & Fauna'},
+    desc:{ro:'Ciripit vioi, foșnet de frunze — un cor viu de creaturi mărunte în pădure.', en:'Lively chirps, rustling leaves — a living chorus of small creatures in the forest.', fr:'Des gazouillis vifs, un bruissement de feuilles — un chœur vivant de petites créatures dans la forêt.', it:'Cinguettii vivaci, fruscio di foglie — un coro vivo di piccole creature nella foresta.', es:'Trinos animados, susurro de hojas — un coro vivo de pequeñas criaturas en el bosque.', pt:'Trinados animados, farfalhar de folhas — um coro vivo de pequenas criaturas na floresta.', de:'Lebhaftes Zwitschern, raschelndes Laub — ein lebendiger Chor kleiner Waldgeschöpfe.'},
+    glyph:{freq:3.4, amp:8, jitter:6, wave:'sine'},
+    scale:'majorPenta', progression:'ambientModal', tempoRange:[76,88],
+    lead:{use:true, density:0.4, octave:6, swing:false, wave:'triangle', glitch:0.12},
+    pad:{attack:1.4, release:2.2, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:2600, reverbMix:0.4, arp:true, arpPattern:'random', arpStepsPerBar:12,
+    texture:'wind', recommendedEntrainment:'theta', category:'atmospheric',
+  },
   aurora: {
     name:{ro:'Aurora Boreală', en:'Aurora Borealis', fr:'Aurore Boréale', it:'Aurora Boreale', es:'Aurora Boreal', pt:'Aurora Boreal', de:'Aurora Borealis'},
     desc:{ro:'Gamă lidiană, sclipiri dezacordate — lumini verzi peste zăpadă.', en:'Lydian scale, shimmering detune — green lights over snow.', fr:'Gamme lydienne, scintillements légèrement désaccordés — des lumières vertes sur la neige.', it:'Scala lidia, scintillii leggermente stonati — luci verdi sulla neve.', es:'Escala lidia, destellos ligeramente desafinados — luces verdes sobre la nieve.', pt:'Escala lídia, brilhos ligeiramente desafinados — luzes verdes sobre a neve.', de:'Lydische Tonleiter, leicht verstimmtes Schimmern — grünes Licht über Schnee.'},
@@ -1109,6 +1238,17 @@ const GENRES = {
     bass:{octave:2, pattern:'sustain'},
     filterCutoff:1800, reverbMix:0.5, arp:false,
     texture:'vinyl', recommendedEntrainment:'alpha', category:'electronic',
+  },
+  unknownsignal: {
+    name:{ro:'Semnal Necunoscut', en:'Unknown Signal', fr:'Signal Inconnu', it:'Segnale Sconosciuto', es:'Señal Desconocida', pt:'Sinal Desconhecido', de:'Unbekanntes Signal'},
+    desc:{ro:'Ritmuri fracturate, armonii dezacordate — o încercare de a asculta ceva ce nu e de-al nostru.', en:'Fractured rhythms, detuned harmony — an attempt to listen to something not our own.', fr:'Des rythmes fracturés, une harmonie désaccordée — une tentative d\'écouter quelque chose qui n\'est pas de chez nous.', it:'Ritmi frammentati, armonia stonata — un tentativo di ascoltare qualcosa che non è nostro.', es:'Ritmos fracturados, armonía desafinada — un intento de escuchar algo que no es nuestro.', pt:'Ritmos fraturados, harmonia desafinada — uma tentativa de ouvir algo que não é nosso.', de:'Zersplitterte Rhythmen, verstimmte Harmonie — ein Versuch, etwas nicht Irdisches zu hören.'},
+    glyph:{freq:5.0, amp:7, jitter:9, wave:'saw'},
+    scale:'nikriz', progression:'jazzy', tempoRange:[54,66],
+    lead:{use:true, density:0.28, octave:5, swing:false, wave:'sawtooth', glitch:0.32, detune:10},
+    pad:{attack:2.6, release:3.8, seventh:false, octave:4, wave:'sawtooth', detune:9},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2100, reverbMix:0.55, arp:true, arpPattern:'random', arpStepsPerBar:10,
+    texture:null, recommendedEntrainment:'gamma', category:'electronic',
   },
 
   celtic: {
@@ -1632,6 +1772,11 @@ let customGenres = {};
 function customGenreOrder(){ return Object.keys(customGenres).filter(function(k){ return k !== '__previewTest__'; }); }
 function getGenre(key){ return GENRES[key] || customGenres[key]; }
 function isCustomGenre(key){ return !GENRES[key] && !!customGenres[key]; }
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = String(str);
+  return div.innerHTML;
+}
 function genreName(g){
   if (typeof g.name === 'string') return g.name;
   return g.name[currentLang] || g.name.en || Object.values(g.name)[0];
@@ -1666,7 +1811,23 @@ const SOLFEGGIO_PRESETS = [
    4. GENERATOR DE COMPOZIȚIE — transformă un seed + un gen într-o
       partitură (listă de evenimente cu timp/frecvență/durată)
    ====================================================================== */
-function createCompositionState(seed, genreKey, tempo, rootMidiOverride){
+function computeArcEnvelope(elapsedTime, totalDuration, intensity){
+  if (!intensity) return 1; // varietate 0% = comportament static neschimbat (compatibil cu ce exista deja)
+  const cyclePeriod = 210; // ~3.5 minute per ciclu de "respirație", se repetă la nesfârșit — funcționează și în modul Continuu
+  const breathing = 0.5 + 0.5*Math.sin((elapsedTime/cyclePeriod)*Math.PI*2 - Math.PI/2);
+  let raw = 0.62 + 0.38*breathing;
+  if (totalDuration && isFinite(totalDuration) && totalDuration > 30){
+    const introLen = Math.min(20, totalDuration*0.12);
+    const outroLen = Math.min(25, totalDuration*0.15);
+    if (elapsedTime < introLen) raw *= (0.55 + 0.45*(elapsedTime/introLen));
+    const timeLeft = totalDuration - elapsedTime;
+    if (timeLeft >= 0 && timeLeft < outroLen) raw *= (0.5 + 0.5*(timeLeft/outroLen));
+  }
+  raw = Math.max(0.35, Math.min(1.1, raw));
+  return 1 + (raw - 1) * intensity;
+}
+
+function createCompositionState(seed, genreKey, tempo, rootMidiOverride, varietyIntensity, totalDuration, voiceEnabled, voiceDensity){
   const genre = getGenre(genreKey);
   const rng = mulberry32(seed);
   const rootMidi = (rootMidiOverride != null) ? rootMidiOverride : (60 + Math.floor(rng() * 12));
@@ -1678,6 +1839,10 @@ function createCompositionState(seed, genreKey, tempo, rootMidiOverride){
     beatDur: 60 / tempo,
     barsGenerated: 0,
     elapsedTime: 0,
+    varietyIntensity: varietyIntensity != null ? varietyIntensity : 0.55,
+    totalDuration: totalDuration != null ? totalDuration : null,
+    voiceEnabled: !!voiceEnabled,
+    voiceDensity: voiceDensity != null ? voiceDensity : 0.3,
   };
 }
 
@@ -1690,8 +1855,10 @@ function generateChunk(state, durationSec){
   const stepDur = state.beatDur / 4;
   const barDur = stepsPerBar * stepDur;
   const barsToGenerate = Math.max(1, Math.ceil(durationSec / barDur));
-  const events = { pad:[], bass:[], lead:[], arp:[] };
+  const events = { pad:[], bass:[], lead:[], arp:[], voice:[] };
   const startBar = state.barsGenerated;
+  const envelope = computeArcEnvelope(state.elapsedTime, state.totalDuration, state.varietyIntensity);
+  const arpPlayProb = Math.min(1, 0.4 + 0.6*envelope);
   const midBeat = Math.floor(meter/2);
 
   for (let b = 0; b < barsToGenerate; b++){
@@ -1719,6 +1886,15 @@ function generateChunk(state, durationSec){
       });
     }
 
+    // ---- VOCE UMANĂ (strat opțional, încrucișat pe orice gen) ----
+    if (state.voiceEnabled && isChordStart && rng() < state.voiceDensity){
+      const voiceOctave = 4;
+      const toneIdx = chord.tones[Math.floor(rng()*chord.tones.length)];
+      const voiceFreq = midiToFreq(pitchMidi(state.rootMidi, voiceOctave, toneIdx));
+      const vowel = VOWEL_KEYS[Math.floor(rng()*VOWEL_KEYS.length)];
+      events.voice.push({ time: localBarStart, freq: voiceFreq, dur: chordDur*0.65, vowel: vowel });
+    }
+
     // ---- BASS ----
     const bassPattern = genre.bass.pattern || (genre.bass.walking ? 'walking' : 'sustain');
     if (bassPattern === 'walking'){
@@ -1740,12 +1916,13 @@ function generateChunk(state, durationSec){
     // ---- LEAD ----
     if (genre.lead.use){
       let leadOctaveThisBar = genre.lead.octave;
-      let leadDensityThisBar = genre.lead.density;
+      let leadDensityThisBar = genre.lead.density * envelope;
       if (genre.lead.callResponse){
         const phraseLen = genre.lead.callResponsePhrase || 2;
         const phase = Math.floor(bar / phraseLen) % 2;
-        if (phase === 1){ leadOctaveThisBar = genre.lead.octave - 1; leadDensityThisBar = genre.lead.density * 0.7; }
+        if (phase === 1){ leadOctaveThisBar = genre.lead.octave - 1; leadDensityThisBar = genre.lead.density * envelope * 0.7; }
       }
+      leadDensityThisBar = Math.max(0, Math.min(1, leadDensityThisBar));
       for (let s = 0; s < stepsPerBar; s++){
         if (rng() < leadDensityThisBar){
           const idx = pickWeightedIndex(rng, scaleIntervals.length, chord.degreeIdxs, 2.2);
@@ -1788,6 +1965,7 @@ function generateChunk(state, durationSec){
       const arpStepsPerBar = genre.arpStepsPerBar || 8;
       const arpStepDur = barDur/arpStepsPerBar;
       for (let a = 0; a < arpStepsPerBar; a++){
+        if (rng() >= arpPlayProb) continue;
         const tone = pattern[a % pattern.length];
         const freq = midiToFreq(pitchMidi(state.rootMidi, 5, tone));
         events.arp.push({ time: localBarStart + a*arpStepDur, freq:freq, dur: arpStepDur*0.85 });
@@ -1796,7 +1974,7 @@ function generateChunk(state, durationSec){
   }
 
   state.barsGenerated += barsToGenerate;
-  return { events: events, duration: barsToGenerate*barDur };
+  return { events: events, duration: barsToGenerate*barDur, envelope: envelope };
 }
 
 /* ======================================================================
@@ -1855,6 +2033,176 @@ function triggerNote(ctx, dest, freq, startTime, duration, opts){
   osc.start(startTime);
   osc.stop(startTime + duration + 0.08);
   return osc;
+}
+
+// Frecvențe medii de formanți (F1, F2, F3) pentru vocale — valori standard,
+// general cunoscute în fonetica acustică (nu conțin nimic protejat prin
+// drepturi de autor, sunt date științifice, ca și frecvențele notelor
+// muzicale). Sursa sonoră (osc. dinte-de-fierăstrău, bogat armonic) trece
+// prin trei filtre bandpass paralele acordate pe aceste frecvențe — aceeași
+// tehnică de "sinteză prin formanți" folosită de decenii în vocodere și
+// sintetizatoare de voce, scrisă aici de la zero, fără nicio librărie.
+const VOWEL_FORMANTS = {
+  ah: [700, 1220, 2600], oh: [500, 700, 2600], oo: [325, 700, 2530],
+  ee: [270, 2290, 3010], eh: [530, 1840, 2480], mm: [250, 1100, 2200], la: [600, 1300, 2600],
+};
+const VOWEL_KEYS = Object.keys(VOWEL_FORMANTS);
+
+// Caractere de voce: varsta x gen, plus o varianta robotica. formantScale
+// aproximeaza diferentele reale de lungime a tractului vocal (copiii au
+// tract vocal mai scurt -> formanti mai inalti; barbatii adulti, mai lung
+// -> formanti mai josi) - raporturi general cunoscute in fonetica acustica,
+// nu date protejate. pitchSemitones transpune tonul fundamental.
+const VOICE_CHARACTERS = {
+  childFemale:  { pitchSemitones:12, formantScale:1.30, vibratoRate:5.8, vibratoDepth:7 },
+  childMale:    { pitchSemitones:11, formantScale:1.28, vibratoRate:5.6, vibratoDepth:7 },
+  teenFemale:   { pitchSemitones:7,  formantScale:1.18, vibratoRate:5.5, vibratoDepth:8 },
+  teenMale:     { pitchSemitones:3,  formantScale:1.12, vibratoRate:5.3, vibratoDepth:8 },
+  youngFemale:  { pitchSemitones:5,  formantScale:1.18, vibratoRate:5.3, vibratoDepth:9 },
+  youngMale:    { pitchSemitones:0,  formantScale:1.0,  vibratoRate:5.0, vibratoDepth:9 },
+  matureFemale: { pitchSemitones:4,  formantScale:1.15, vibratoRate:5.0, vibratoDepth:9 },
+  matureMale:   { pitchSemitones:-3, formantScale:0.95, vibratoRate:4.8, vibratoDepth:9 },
+  seniorFemale: { pitchSemitones:3,  formantScale:1.13, vibratoRate:4.4, vibratoDepth:13 },
+  seniorMale:   { pitchSemitones:-4, formantScale:0.92, vibratoRate:4.2, vibratoDepth:13 },
+  robotic:      { pitchSemitones:0,  formantScale:1.0,  vibratoRate:0,   vibratoDepth:0, robotic:true },
+};
+
+function triggerVoiceNote(ctx, dest, freq, startTime, duration, vowelKey, peakGain, characterKey){
+  const character = VOICE_CHARACTERS[characterKey] || VOICE_CHARACTERS.youngFemale;
+  const formants = VOWEL_FORMANTS[vowelKey] || VOWEL_FORMANTS.ah;
+  const shiftedFreq = freq * Math.pow(2, character.pitchSemitones/12);
+
+  const osc = ctx.createOscillator();
+  osc.type = character.robotic ? 'square' : 'sawtooth';
+  osc.frequency.setValueAtTime(shiftedFreq, startTime);
+
+  if (character.vibratoRate){
+    const vibratoLFO = ctx.createOscillator();
+    vibratoLFO.type = 'sine';
+    vibratoLFO.frequency.setValueAtTime(character.vibratoRate, startTime);
+    const vibratoGain = ctx.createGain();
+    vibratoGain.gain.setValueAtTime(character.vibratoDepth, startTime);
+    vibratoLFO.connect(vibratoGain); vibratoGain.connect(osc.detune);
+    vibratoLFO.start(startTime); vibratoLFO.stop(startTime + duration + 0.2);
+  }
+
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0, startTime);
+  const attack = Math.min(0.14, Math.max(duration*0.35, 0.01));
+  env.gain.linearRampToValueAtTime(1, startTime + attack);
+  const releaseStart = Math.max(startTime + attack, startTime + duration - 0.35);
+  env.gain.setValueAtTime(1, releaseStart);
+  env.gain.linearRampToValueAtTime(0.0001, startTime + duration);
+  osc.connect(env);
+
+  let formantInput = env;
+  if (character.robotic){
+    // Nuanta "robotica melodioasa": ring-modulation subtil (amestecat, nu
+    // total) peste sursa, plus filtre de formanti mai inguste (mai
+    // rezonante) - o coloratura sintetica, fara sa strice inaltimea
+    // muzicala a notei.
+    const ringOsc = ctx.createOscillator();
+    ringOsc.type = 'sine'; ringOsc.frequency.setValueAtTime(38, startTime);
+    const ringDepth = ctx.createGain(); ringDepth.gain.setValueAtTime(0.4, startTime);
+    const ringMixed = ctx.createGain(); ringMixed.gain.setValueAtTime(1, startTime);
+    ringOsc.connect(ringDepth); ringDepth.connect(ringMixed.gain);
+    ringOsc.start(startTime); ringOsc.stop(startTime + duration + 0.2);
+    env.connect(ringMixed);
+    formantInput = ringMixed;
+  }
+
+  const formantWeights = [1.0, 0.55, 0.28];
+  const formantQ = character.robotic ? 20 : 10;
+  formants.forEach(function(fFreq, i){
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.setValueAtTime(fFreq * character.formantScale, startTime);
+    bp.Q.value = formantQ;
+    const fGain = ctx.createGain();
+    fGain.gain.value = peakGain * formantWeights[i];
+    formantInput.connect(bp); bp.connect(fGain); fGain.connect(dest);
+  });
+
+  osc.start(startTime);
+  osc.stop(startTime + duration + 0.25);
+  return osc;
+}
+
+// Gong: spectru INARMONIC (partiale la rapoarte ne-intregi fata de
+// fundamentala, nu armonice muzicale obisnuite) - tehnica standard de
+// sinteza de clopote/gonguri, fiecare partiala cu propriul declin lung.
+const GONG_PARTIALS = [1.0, 1.41, 2.0, 2.37, 3.06, 3.83, 4.42];
+function triggerGong(ctx, dest, baseFreq, startTime, duration, gain){
+  const nodes = [];
+  // Variație: niciun gong nu sună identic cu altul - mică dezacordare a
+  // frecvenței de bază, jitter propriu pe fiecare parțială, durată ușor variabilă.
+  const baseJitter = 1 + (Math.random()-0.5)*0.05;
+  const actualBaseFreq = baseFreq * baseJitter;
+  const durationJitter = duration * (0.85 + Math.random()*0.3);
+  GONG_PARTIALS.forEach(function(ratio, i){
+    const ratioJitter = ratio * (1 + (Math.random()-0.5)*0.025);
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(actualBaseFreq*ratioJitter, startTime);
+    const env = ctx.createGain();
+    const peak = gain * (1/(i+1)) * 0.85;
+    env.gain.setValueAtTime(0, startTime);
+    env.gain.linearRampToValueAtTime(Math.max(peak,0.0001), startTime + 0.025);
+    const decayTime = Math.max(0.6, durationJitter * (1 - i*0.09));
+    env.gain.exponentialRampToValueAtTime(0.0008, startTime + decayTime);
+    osc.connect(env); env.connect(dest);
+    osc.start(startTime); osc.stop(startTime + decayTime + 0.3);
+    nodes.push(osc);
+  });
+  return nodes;
+}
+
+// Scoică: ton jos, susținut, cu o ușoară instabilitate de frecvență (ca la
+// suflarea prin scoică) și suflu filtrat dedesubt.
+function triggerConch(ctx, dest, baseFreq, startTime, duration, gain){
+  const nodes = [];
+  // Variație: mică dezacordare a frecvenței de bază, viteză proprie de
+  // "tremurat" (wobble), durată și cantitate de suflu ușor variabile.
+  const freqJitter = 1 + (Math.random()-0.5)*0.07;
+  const actualBaseFreq = baseFreq * freqJitter;
+  const durationJitter = duration * (0.85 + Math.random()*0.3);
+  const wobbleRate = 0.55 + Math.random()*0.5;
+  const breathAmount = 0.6 + Math.random()*0.8;
+
+  const osc = ctx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(actualBaseFreq, startTime);
+  const wobble = ctx.createOscillator();
+  wobble.type = 'sine'; wobble.frequency.setValueAtTime(wobbleRate, startTime);
+  const wobbleGain = ctx.createGain(); wobbleGain.gain.setValueAtTime(actualBaseFreq*0.015, startTime);
+  wobble.connect(wobbleGain); wobbleGain.connect(osc.frequency);
+  wobble.start(startTime); wobble.stop(startTime + durationJitter + 0.5);
+
+  const osc2 = ctx.createOscillator();
+  osc2.type = 'triangle'; osc2.frequency.setValueAtTime(actualBaseFreq*1.003, startTime);
+
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0, startTime);
+  env.gain.linearRampToValueAtTime(gain, startTime + 0.4);
+  const releaseStart = Math.max(startTime+0.4, startTime + durationJitter - 0.7);
+  env.gain.setValueAtTime(gain, releaseStart);
+  env.gain.exponentialRampToValueAtTime(0.0008, startTime + durationJitter);
+
+  osc.connect(env); osc2.connect(env);
+
+  const noiseSrc = ctx.createBufferSource();
+  noiseSrc.buffer = createNoiseBuffer(ctx, durationJitter+0.2);
+  const noiseFilt = ctx.createBiquadFilter();
+  noiseFilt.type = 'bandpass'; noiseFilt.frequency.setValueAtTime(actualBaseFreq*1.5, startTime); noiseFilt.Q.value = 0.6;
+  const noiseGain = ctx.createGain(); noiseGain.gain.setValueAtTime(gain*0.15*breathAmount, startTime);
+  noiseSrc.connect(noiseFilt); noiseFilt.connect(noiseGain); noiseGain.connect(dest);
+
+  env.connect(dest);
+  osc.start(startTime); osc.stop(startTime + durationJitter + 0.5);
+  osc2.start(startTime); osc2.stop(startTime + durationJitter + 0.5);
+  noiseSrc.start(startTime); noiseSrc.stop(startTime + durationJitter + 0.3);
+  nodes.push(osc, osc2);
+  return nodes;
 }
 
 function createImpulseResponse(ctx, duration, decay){
@@ -1950,10 +2298,11 @@ function buildMusicGraph(ctx, dest, genre){
   return dry;
 }
 
-function scheduleEvents(ctx, bus, events, baseTime, genre){
+function scheduleEvents(ctx, bus, events, baseTime, genre, filterEnvelope, voiceMix, voiceCharacter){
   const oscList = [];
-  const padCutoff = genre.padFilterCutoff || genre.filterCutoff;
-  const leadCutoff = genre.leadFilterCutoff || genre.filterCutoff;
+  const filterMult = 0.85 + 0.15*(filterEnvelope != null ? filterEnvelope : 1);
+  const padCutoff = (genre.padFilterCutoff || genre.filterCutoff) * filterMult;
+  const leadCutoff = (genre.leadFilterCutoff || genre.filterCutoff) * filterMult;
   const leadAttack = genre.lead.attack != null ? genre.lead.attack : 0.015;
   const leadRelease = genre.lead.release != null ? genre.lead.release : 0.22;
   events.pad.forEach(function(e){
@@ -1985,6 +2334,11 @@ function scheduleEvents(ctx, bus, events, baseTime, genre){
   events.arp.forEach(function(e){
     oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave:'triangle', attack:0.008, release:0.12, gain:0.09, filterCutoff:leadCutoff }));
   });
+  if (voiceMix){
+    events.voice.forEach(function(e){
+      oscList.push(triggerVoiceNote(ctx, bus, e.freq, baseTime+e.time, e.dur, e.vowel, voiceMix*0.5, voiceCharacter));
+    });
+  }
   return oscList;
 }
 
@@ -2050,10 +2404,25 @@ let pieceDurationSec = 0;
 let isPlaying = false;
 let isPaused = false;
 let stopTimeoutId = null;
+let scheduleMoreAudioFn = null; // reparare mobil: reincarca programarea dupa suspendare in fundal
+let audioUnlocked = false;
 
 function ensureAudioContext(){
   if (!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-  if (audioCtx.state === 'suspended'){ audioCtx.resume(); }
+  if (audioCtx.state === 'suspended'){
+    try{ audioCtx.resume().catch(function(){}); }catch(e){}
+  }
+  if (!audioUnlocked){
+    audioUnlocked = true;
+    // truc standard pentru iOS Safari: redarea unui buffer minuscul si silentios
+    // "deblocheaza" definitiv contextul pentru sesiunea curenta, chiar si in cazuri
+    // in care resume() singur nu e suficient pe unele versiuni de iOS
+    try{
+      const b = audioCtx.createBuffer(1, 1, 22050);
+      const s = audioCtx.createBufferSource();
+      s.buffer = b; s.connect(audioCtx.destination); s.start(0);
+    }catch(e){}
+  }
   return audioCtx;
 }
 
@@ -2069,12 +2438,19 @@ function getCurrentSettings(){
     beatHz: parseFloat(document.getElementById('beatSlider').value),
     entrainMix: parseInt(document.getElementById('entrainMixSlider').value,10)/100,
     masterVol: parseInt(document.getElementById('masterVolSlider').value,10)/100,
+    varietyIntensity: parseInt(document.getElementById('varietyIntensitySlider').value,10)/100,
+    voiceEnabled: document.getElementById('voiceToggle').checked,
+    voiceDensity: parseInt(document.getElementById('voiceDensitySlider').value,10)/100,
+    voiceMix: parseInt(document.getElementById('voiceMixSlider').value,10)/100,
+    voiceCharacter: document.getElementById('voiceCharacterSelect').value,
   };
 }
 
-function stopAll(){
+function stopAll(triggerClosingSound){
   if (continuousTimer){ clearInterval(continuousTimer); continuousTimer=null; }
   if (stopTimeoutId){ clearTimeout(stopTimeoutId); stopTimeoutId=null; }
+  const wasPlaying = isPlaying;
+  const rootMidiForConch = compState ? compState.rootMidi : null;
   if (audioCtx && masterGain){
     const now = audioCtx.currentTime;
     try{
@@ -2093,13 +2469,34 @@ function stopAll(){
   }
   masterGain=null; limiterNode=null; analyserL=null; analyserR=null;
   entrainmentLayer=null; textureLayer=null; activeOscillators=[];
+  scheduleMoreAudioFn = null;
   isPlaying=false; isPaused=false;
   updateTransportUI();
   document.getElementById('timeReadout').textContent = '—';
+  // Scoica automata: doar la o oprire REALA (final natural sau Stop apasat),
+  // niciodata la curatarea interna facuta de startPlayback() inainte de a porni
+  // ceva nou (altfel ar suna aproape de fiecare data cand apesi Play).
+  if (triggerClosingSound && wasPlaying && document.getElementById('autoConchToggle').checked){
+    const conchFreq = rootMidiForConch != null ? midiToFreq(rootMidiForConch - 12) : 130.81;
+    playRitualSoundManually(function(c, d, t){ triggerConch(c, d, conchFreq, t, 5, 0.22); });
+  }
+}
+
+function playRitualSoundManually(triggerFn){
+  const ctx = ensureAudioContext();
+  let dest;
+  if (masterGain){
+    dest = masterGain;
+  } else {
+    const tempLimiter = createLimiter(ctx);
+    tempLimiter.connect(ctx.destination);
+    dest = tempLimiter;
+  }
+  triggerFn(ctx, dest, ctx.currentTime + 0.05);
 }
 
 function startPlayback(){
-  stopAll();
+  stopAll(false);
   const settings = getCurrentSettings();
   const ctx = ensureAudioContext();
 
@@ -2128,16 +2525,31 @@ function startPlayback(){
     entrainmentLayer.output.connect(masterGain);
   }
 
-  compState = createCompositionState(settings.seed, settings.genreKey, settings.tempo);
+  const totalDurationForArc = settings.duration === 'continuous' ? null : parseInt(settings.duration,10);
+  compState = createCompositionState(settings.seed, settings.genreKey, settings.tempo, null, settings.varietyIntensity, totalDurationForArc, settings.voiceEnabled, settings.voiceDensity);
+  if (document.getElementById('autoGongToggle').checked){
+    const gongFreq = midiToFreq(compState.rootMidi - 24);
+    triggerGong(ctx, masterGain, gongFreq, ctx.currentTime + 0.1, 4.5, 0.22);
+  }
   playStartCtxTime = ctx.currentTime + 0.15;
+  let oscillatorBatches = []; // curatate periodic - vezi mai jos (repara scurgerea de memorie in modul Continuous)
 
   function scheduleNextChunk(sec){
     const chunk = generateChunk(compState, sec);
     const chunkStartTime = playStartCtxTime + compState.elapsedTime;
-    const oscs = scheduleEvents(ctx, musicBusInput, chunk.events, chunkStartTime, genre);
-    activeOscillators = activeOscillators.concat(oscs);
+    const oscs = scheduleEvents(ctx, musicBusInput, chunk.events, chunkStartTime, genre, chunk.envelope, settings.voiceMix, settings.voiceCharacter);
+    oscillatorBatches.push({addedAt: Date.now(), oscs: oscs});
+    const cutoff = Date.now() - 120000; // 2 min — cu CHUNK_SEC=45s, orice lot mai vechi e garantat terminat
+    while (oscillatorBatches.length && oscillatorBatches[0].addedAt < cutoff) oscillatorBatches.shift();
+    activeOscillators = [];
+    oscillatorBatches.forEach(function(b){ activeOscillators = activeOscillators.concat(b.oscs); });
     compState.elapsedTime += chunk.duration;
   }
+  scheduleMoreAudioFn = function(){
+    if (!isPlaying) return;
+    if (pieceDurationSec !== Infinity && compState.elapsedTime >= pieceDurationSec - 0.5) return;
+    scheduleNextChunk(Math.min(CHUNK_SEC, pieceDurationSec===Infinity ? CHUNK_SEC : pieceDurationSec - compState.elapsedTime));
+  };
 
   // Programare pe bucati mici (nu toata durata dintr-o data): pentru genuri dense
   // (arpegii rapide, barsPerChord mare), generarea + programarea intregii durate
@@ -2164,7 +2576,7 @@ function startPlayback(){
       masterGain.gain.setValueAtTime(settings.masterVol, fadeStart);
       masterGain.gain.linearRampToValueAtTime(0.0001, playStartCtxTime + pieceDurationSec);
     }
-    stopTimeoutId = setTimeout(function(){ if (isPlaying) stopAll(); }, (pieceDurationSec+0.6)*1000);
+    stopTimeoutId = setTimeout(function(){ if (isPlaying) stopAll(true); }, (pieceDurationSec+0.6)*1000);
   }
 
   isPlaying = true; isPaused = false;
@@ -2202,6 +2614,303 @@ function interleaveStereo(l,r){
   for (let i=0;i<l.length;i++){ out[idx++]=l[i]; out[idx++]=r[i]; }
   return out;
 }
+/* ======================================================================
+   7b. ENCODER FLAC (lucrare proprie originala, validata bit-exact impotriva
+       decodorului oficial de referinta flac 1.4.3 - vezi nota din raspuns)
+   ====================================================================== */
+// Encoder FLAC minimal dar valid conform specificatiei oficiale:
+// predictori ficsi (ordin 0-4) + codare Rice partitionata, canale
+// independente (nu mid-side). Implementare proprie, de la zero, testata
+// impotriva decodorului de referinta oficial (flac 1.4.3).
+
+class BitWriter{
+  constructor(){ this.bytes=[]; this.cur=0; this.nbits=0; }
+  writeBits(value, n){ // scrie n biti din value, MSB primul (asa cere spec-ul FLAC)
+    for (let i=n-1;i>=0;i--){
+      const bit = (value >>> i) & 1;
+      this.cur = (this.cur<<1)|bit;
+      this.nbits++;
+      if (this.nbits===8){ this.bytes.push(this.cur); this.cur=0; this.nbits=0; }
+    }
+  }
+  writeUnary(q){ // biti de 0 terminati de un bit de 1 (RFC 9639 sectiunea 5: "zero bits terminated with a one bit")
+    for (let i=0;i<q;i++) this.writeBits(0,1);
+    this.writeBits(1,1);
+  }
+  align(){ if (this.nbits>0){ this.cur = this.cur << (8-this.nbits); this.bytes.push(this.cur); this.cur=0; this.nbits=0; } }
+  toUint8Array(){ this.align(); return new Uint8Array(this.bytes); }
+  byteLengthSoFar(){ return this.bytes.length + (this.nbits>0?1:0); }
+}
+
+function crc8(bytes, start, end){
+  let crc = 0;
+  for (let i=start;i<end;i++){
+    crc ^= bytes[i];
+    for (let b=0;b<8;b++){
+      crc = (crc & 0x80) ? ((crc<<1) ^ 0x07) & 0xFF : (crc<<1) & 0xFF;
+    }
+  }
+  return crc;
+}
+function crc16(bytes, start, end){
+  let crc = 0;
+  for (let i=start;i<end;i++){
+    crc ^= (bytes[i] << 8);
+    for (let b=0;b<8;b++){
+      crc = (crc & 0x8000) ? ((crc<<1) ^ 0x8005) & 0xFFFF : (crc<<1) & 0xFFFF;
+    }
+  }
+  return crc;
+}
+
+// MD5 minimal (pentru campul de semnatura din STREAMINFO - optional din
+// punct de vedere al decodarii, dar il calculez corect pentru conformitate deplina)
+function md5(bytes){
+  function rotl(x,c){ return (x<<c)|(x>>>(32-c)); }
+  const s = [7,12,17,22,7,12,17,22,7,12,17,22,7,12,17,22,
+             5,9,14,20,5,9,14,20,5,9,14,20,5,9,14,20,
+             4,11,16,23,4,11,16,23,4,11,16,23,4,11,16,23,
+             6,10,15,21,6,10,15,21,6,10,15,21,6,10,15,21];
+  const K = new Int32Array(64);
+  for (let i=0;i<64;i++) K[i] = Math.floor(Math.abs(Math.sin(i+1)) * 4294967296) | 0;
+  let a0=0x67452301, b0=0xefcdab89, c0=0x98badcfe, d0=0x10325476;
+  const origLen = bytes.length;
+  const bitLen = origLen*8;
+  const padLen = ((origLen % 64) < 56) ? (56 - (origLen%64)) : (120 - (origLen%64));
+  const total = origLen + padLen + 8;
+  const msg = new Uint8Array(total);
+  msg.set(bytes);
+  msg[origLen] = 0x80;
+  const dv = new DataView(msg.buffer);
+  dv.setUint32(total-8, bitLen>>>0, true);
+  dv.setUint32(total-4, Math.floor(bitLen/4294967296)>>>0, true);
+  for (let chunk=0; chunk<total; chunk+=64){
+    const M = new Int32Array(16);
+    for (let i=0;i<16;i++) M[i] = dv.getInt32(chunk+i*4, true);
+    let A=a0,B=b0,C=c0,D=d0;
+    for (let i=0;i<64;i++){
+      let F,g;
+      if (i<16){ F=(B&C)|(~B&D); g=i; }
+      else if (i<32){ F=(D&B)|(~D&C); g=(5*i+1)%16; }
+      else if (i<48){ F=B^C^D; g=(3*i+5)%16; }
+      else { F=C^(B|~D); g=(7*i)%16; }
+      F = (F + A + K[i] + M[g]) | 0;
+      A=D; D=C; C=B;
+      B = (B + rotl(F, s[i])) | 0;
+    }
+    a0=(a0+A)|0; b0=(b0+B)|0; c0=(c0+C)|0; d0=(d0+D)|0;
+  }
+  const out = new Uint8Array(16);
+  const odv = new DataView(out.buffer);
+  odv.setInt32(0,a0,true); odv.setInt32(4,b0,true); odv.setInt32(8,c0,true); odv.setInt32(12,d0,true);
+  return out;
+}
+
+function fixedResidual(samples, order, start, n){
+  const r = new Int32Array(n);
+  for (let i=0;i<n;i++){
+    const idx = start+i;
+    switch(order){
+      case 0: r[i] = samples[idx]; break;
+      case 1: r[i] = samples[idx] - samples[idx-1]; break;
+      case 2: r[i] = samples[idx] - 2*samples[idx-1] + samples[idx-2]; break;
+      case 3: r[i] = samples[idx] - 3*samples[idx-1] + 3*samples[idx-2] - samples[idx-3]; break;
+      case 4: r[i] = samples[idx] - 4*samples[idx-1] + 6*samples[idx-2] - 4*samples[idx-3] + samples[idx-4]; break;
+    }
+  }
+  return r;
+}
+function zigzag(n){ return n>=0 ? (n*2) : (-n*2-1); }
+
+function bestRiceParam(residual, start, count){
+  let sum = 0;
+  for (let i=start;i<start+count;i++) sum += Math.abs(residual[i]);
+  const mean = sum/count || 0;
+  let k = 0;
+  while ((1<<k) < mean && k<14) k++;
+  let bestK = k, bestCost = Infinity;
+  for (let kk=Math.max(0,k-1); kk<=Math.min(14,k+1); kk++){ // k=15 e rezervat ca escape, niciodata valid ca parametru
+    let cost = 0;
+    for (let i=start;i<start+count;i++){
+      const u = zigzag(residual[i]);
+      cost += (u >>> kk) + 1 + kk;
+    }
+    if (cost < bestCost){ bestCost = cost; bestK = kk; }
+  }
+  return { k:bestK, cost:bestCost };
+}
+
+function writeResidualPartitioned(bw, residual, predOrder, blockSize){
+  // partitionare simpla: o singura partitie (ordin 0) - suficient pentru
+  // corectitudine; optimizarea multi-partitie ar imbunatati compresia dar
+  // nu e necesara pentru un fisier FLAC valid
+  const partOrder = 0;
+  bw.writeBits(0, 2); // metoda 0: parametru rice pe 4 biti
+  bw.writeBits(partOrder, 4);
+  const count = blockSize - predOrder;
+  const {k} = bestRiceParam(residual, 0, count);
+  bw.writeBits(k, 4);
+  for (let i=0;i<count;i++){
+    const u = zigzag(residual[i]);
+    const q = u >>> k;
+    bw.writeUnary(q);
+    if (k>0) bw.writeBits(u & ((1<<k)-1), k);
+  }
+}
+
+function encodeFixedSubframe(bw, samples, start, blockSize, bps){
+  let best = null;
+  const maxOrder = Math.min(4, blockSize-1);
+  for (let order=0; order<=maxOrder; order++){
+    if (start < order) continue; // nu avem esantioane anterioare suficiente (doar la primul bloc)
+    const r = fixedResidual(samples, order, start+order, blockSize-order);
+    let sum=0; for (let i=0;i<r.length;i++) sum += Math.abs(r[i]);
+    if (!best || sum < best.sum) best = {order, residual:r, sum};
+  }
+  if (!best) best = {order:0, residual: fixedResidual(samples,0,start,blockSize), sum:0};
+
+  bw.writeBits(0,1); // padding
+  bw.writeBits(0b001000 | best.order, 6); // tip subframe: fixed, ordinul in ultimii 3 biti
+  bw.writeBits(0,1); // fara "wasted bits"
+  for (let i=0;i<best.order;i++){
+    writeSigned(bw, samples[start+i], bps);
+  }
+  writeResidualPartitioned(bw, best.residual, best.order, blockSize);
+}
+function writeSigned(bw, value, bits){
+  const mask = (bits>=32) ? 0xFFFFFFFF : ((1<<bits)-1);
+  bw.writeBits(value & mask, bits);
+}
+
+function utf8EncodeFrameNumber(bw, n){
+  // codare "UTF-8-like" ceruta de spec pentru numarul de cadru/esantion
+  if (n < 0x80){ bw.writeBits(n,8); return; }
+  let bytesNeeded, prefix;
+  if (n < 0x800){ bytesNeeded=2; prefix=0xC0; }
+  else if (n < 0x10000){ bytesNeeded=3; prefix=0xE0; }
+  else if (n < 0x200000){ bytesNeeded=4; prefix=0xF0; }
+  else if (n < 0x4000000){ bytesNeeded=5; prefix=0xF8; }
+  else { bytesNeeded=6; prefix=0xFC; }
+  const bytesArr = [];
+  let v = n;
+  for (let i=0;i<bytesNeeded-1;i++){ bytesArr.unshift(0x80 | (v & 0x3F)); v >>>= 6; }
+  bytesArr.unshift(prefix | v);
+  for (const b of bytesArr) bw.writeBits(b, 8);
+}
+
+const BLOCKSIZE_CODES = {256:0x8,512:0x9,1024:0xA,2048:0xB,4096:0xC,8192:0xD,16384:0xE,4608:0x6};
+function encodeFrame(channels, start, blockSize, sampleRate, bps, frameNumber){
+  const bw = new BitWriter();
+  bw.writeBits(0b11111111111110, 14); // sync
+  bw.writeBits(0, 1); // reserved
+  bw.writeBits(0, 1); // fixed blocking strategy
+
+  const blockCode = BLOCKSIZE_CODES[blockSize] || 0x7; // 0111 = "get 16-bit (blocksize-1) de la sfarsitul antetului"
+  bw.writeBits(blockCode, 4);
+  bw.writeBits(0, 4); // sample rate: 0000 = ia din STREAMINFO
+  const nCh = channels.length;
+  bw.writeBits(nCh===2 ? 0b0001 : 0b0000, 4); // 2 canale independente, sau mono
+  const bpsCode = {8:0b001,16:0b100,24:0b110}[bps] || 0b000;
+  bw.writeBits(bpsCode, 3);
+  bw.writeBits(0,1); // reserved
+
+  utf8EncodeFrameNumber(bw, frameNumber);
+  if (blockCode === 0x7) bw.writeBits(blockSize-1, 16);
+
+  bw.align(); // aliniez pentru calculul CRC-8 pe octeti intregi ai antetului
+  const headerBytes = bw.toUint8Array();
+  const crcHeader = crc8(headerBytes, 0, headerBytes.length);
+
+  const bw2 = new BitWriter();
+  bw2.bytes = Array.from(headerBytes);
+  bw2.writeBits(crcHeader, 8);
+
+  for (let ch=0; ch<nCh; ch++){
+    encodeFixedSubframe(bw2, channels[ch], start, blockSize, bps);
+  }
+  bw2.align();
+  const frameBytesNoCrc = bw2.toUint8Array();
+  const crcFrame = crc16(frameBytesNoCrc, 0, frameBytesNoCrc.length);
+
+  const final = new Uint8Array(frameBytesNoCrc.length + 2);
+  final.set(frameBytesNoCrc);
+  final[frameBytesNoCrc.length] = (crcFrame>>>8)&0xFF;
+  final[frameBytesNoCrc.length+1] = crcFrame & 0xFF;
+  return final;
+}
+
+function encodeFlac(channelsData, sampleRate, bps){
+  const nCh = channelsData.length;
+  const totalSamples = channelsData[0].length;
+  const blockSize = 4096;
+
+  const md5Input = [];
+  for (let i=0;i<totalSamples;i++){
+    for (let ch=0; ch<nCh; ch++){
+      const v = channelsData[ch][i];
+      md5Input.push(v & 0xFF, (v>>8)&0xFF); // presupunem bps=16 pentru semnatura MD5
+    }
+  }
+  const md5sig = md5(new Uint8Array(md5Input));
+
+  const streaminfo = new BitWriter();
+  streaminfo.writeBits(blockSize, 16); // min blocksize
+  streaminfo.writeBits(blockSize, 16); // max blocksize
+  streaminfo.writeBits(0, 24); // min framesize necunoscut
+  streaminfo.writeBits(0, 24); // max framesize necunoscut
+  streaminfo.writeBits(sampleRate, 20);
+  streaminfo.writeBits(nCh-1, 3);
+  streaminfo.writeBits(bps-1, 5);
+  // total esantioane: 36 biti - JS nu are int de 36 biti, scriu in doua parti
+  const totalHi = Math.floor(totalSamples / Math.pow(2,32));
+  const totalLo = totalSamples >>> 0;
+  streaminfo.writeBits(totalHi, 4);
+  streaminfo.writeBits(totalLo, 32);
+  for (let i=0;i<16;i++) streaminfo.writeBits(md5sig[i], 8);
+  const streaminfoBytes = streaminfo.toUint8Array();
+
+  const parts = [];
+  parts.push(new TextEncoder().encode('fLaC'));
+  const mdHeader = new Uint8Array(4);
+  mdHeader[0] = 0x80; // ultimul bloc de metadate (bit 7) + tip 0 (STREAMINFO)
+  mdHeader[1] = (streaminfoBytes.length>>16)&0xFF;
+  mdHeader[2] = (streaminfoBytes.length>>8)&0xFF;
+  mdHeader[3] = streaminfoBytes.length&0xFF;
+  parts.push(mdHeader, streaminfoBytes);
+
+  let frameNum = 0;
+  for (let start=0; start<totalSamples; start+=blockSize){
+    const thisBlockSize = Math.min(blockSize, totalSamples-start);
+    const frame = encodeFrame(channelsData, start, thisBlockSize, sampleRate, bps, frameNum);
+    parts.push(frame);
+    frameNum++;
+  }
+
+  let totalLen = 0;
+  for (const p of parts) totalLen += p.length;
+  const out = new Uint8Array(totalLen);
+  let offset = 0;
+  for (const p of parts){ out.set(p, offset); offset += p.length; }
+  return out;
+}
+
+
+function floatChannelToInt16(floatArr){
+  const out = new Int16Array(floatArr.length);
+  for (let i=0;i<floatArr.length;i++){
+    const s = Math.max(-1, Math.min(1, floatArr[i]));
+    out[i] = s<0 ? s*0x8000 : s*0x7FFF;
+  }
+  return out;
+}
+function encodeFlacFromBuffer(audioBuffer){
+  const numCh = audioBuffer.numberOfChannels;
+  const channelsData = [];
+  for (let ch=0; ch<numCh; ch++) channelsData.push(floatChannelToInt16(audioBuffer.getChannelData(ch)));
+  const bytes = encodeFlac(channelsData, audioBuffer.sampleRate, 16);
+  return new Blob([bytes], {type:'audio/flac'});
+}
+
 function encodeWavFromBuffer(audioBuffer){
   const numCh = audioBuffer.numberOfChannels;
   const sampleRate = audioBuffer.sampleRate;
@@ -2220,6 +2929,7 @@ function encodeWavFromBuffer(audioBuffer){
 
 async function exportWav(){
   const durSec = parseInt(document.getElementById('exportDurationSelect').value,10);
+  const format = document.getElementById('audioFormatSelect').value;
   const settings = getCurrentSettings();
   const sampleRate = 44100;
   const offlineCtx = new OfflineAudioContext(2, Math.ceil(sampleRate*(durSec+1)), sampleRate);
@@ -2237,15 +2947,15 @@ async function exportWav(){
     const ent = createEntrainmentLayer(offlineCtx, settings.entrainMode, settings.carrierHz, settings.beatHz, settings.entrainMix*0.5);
     ent.output.connect(oMasterGain);
   }
-  const exportState = createCompositionState(settings.seed, settings.genreKey, settings.tempo);
+  const exportState = createCompositionState(settings.seed, settings.genreKey, settings.tempo, null, settings.varietyIntensity, durSec, settings.voiceEnabled, settings.voiceDensity);
   const chunk = generateChunk(exportState, durSec);
-  scheduleEvents(offlineCtx, musicBusInput, chunk.events, 0, genre);
+  scheduleEvents(offlineCtx, musicBusInput, chunk.events, 0, genre, chunk.envelope, settings.voiceMix, settings.voiceCharacter);
 
   const rendered = await offlineCtx.startRendering();
-  const blob = encodeWavFromBuffer(rendered);
+  const blob = format==='flac' ? encodeFlacFromBuffer(rendered) : encodeWavFromBuffer(rendered);
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'melodii-fara-frontiere-'+settings.genreKey+'-seed'+settings.seed+'.wav';
+  a.href = url; a.download = 'melodii-fara-frontiere-'+settings.genreKey+'-seed'+settings.seed+'.'+format;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
 }
@@ -2340,7 +3050,9 @@ const I18N = {
     titleTagline:'Generator muzical original',
     genreHeading:'Alege un gen muzical', compHeading:'Compoziție', toggleAllBtn:'⇕ Extinde / restrânge tot',
     genreSearchPlaceholder:'Caută un gen (ex: „flamenco", „drone", „vals"…)', genreNoResults:'Niciun gen găsit.',
-    seedLabel:'Sămânță', randomBtn:'🎲 Aleatoriu', tempoLabel:'Tempo',
+    seedLabel:'Sămânță', randomBtn:'🎲 Aleatoriu', tempoLabel:'Tempo', varietyLabel:'Varietate și arc', varietyHint:'Variază ușor densitatea și strălucirea pe parcursul piesei — un arc care evoluează, nu o singură buclă statică. 0% păstrează comportamentul clasic, constant.',
+    voiceHeading:'Voce umană', voiceHint:'Un strat vocal sintetizat procedural (sinteză de formanți) — silabe fără cuvinte, „ah", „oh", „mmm", care se schimbă de fiecare dată, țesute peste orice gen. Fără înregistrări, fără mostre.',
+    voiceDensityLabel:'Prezență', voiceMixLabel:'Volum', voiceCharacterLabel:'Caracter', voice_childFemale:'Copil (fată)', voice_childMale:'Copil (băiat)', voice_teenFemale:'Adolescentă', voice_teenMale:'Adolescent', voice_youngFemale:'Tânără', voice_youngMale:'Tânăr', voice_matureFemale:'Matură', voice_matureMale:'Matur', voice_seniorFemale:'Senioră', voice_seniorMale:'Senior', voice_robotic:'Robotică melodioasă', ritualHeading:'Gong & scoică', ritualHint:'Două sunete ceremoniale, sintetizate procedural — un gong inarmonic (parțiale ca la clopote) și o chemare de scoică, cu suflu. Sună-le manual oricând, sau lasă-le să marcheze automat începutul/finalul unei sesiuni.', ringGongBtn:'🔔 Sună gongul', blowConchBtn:'🐚 Suflă în scoică', autoGongLabel:'Gong automat la început', autoConchLabel:'Scoică automată la final',
     durationLabel:'Durată', continuousOpt:'Buclă continuă', regenBtn:'↻ Regenerează',
     entrainHeading:'Unde binefăcătoare',
     entrainHint:'Straturi audio auxiliare (binaurale, izocronice sau ton pur), asociate popular cu stări de relaxare, concentrare sau meditație. Benzile de mai jos corespund convențiilor EEG standard; eficacitatea subiectivă variază de la o persoană la alta.',
@@ -2350,13 +3062,19 @@ const I18N = {
     playBtn:'Redă', pauseBtn:'Pauză', stopBtn:'Stop', masterVolLabel:'Volum',
     statusIdle:'Pregătit', statusPlaying:'Se redă', statusPaused:'Pauzat',
     exportHeading:'Exportă', exportDurLabel:'Durată export',
-    exportWavBtn:'⬇ Exportă WAV', exportJsonBtn:'⬇ Exportă setări (JSON)', importJsonBtn:'⬆ Importă setări',
+    exportAudioBtn:'⬇ Exportă audio', audioFormatLabel:'Format audio',
+    videoHeading:'Export video', videoHint:'Înregistrează vizualizatorul fractal împreună cu audio-ul redat curent într-un fișier video — doar formate deschise (WebM: VP8/VP9 + Opus), complet offline.',
+    videoRealtimeNote:'⏱ Înregistrarea se face în timp real — un video de 20 de minute durează 20 de minute reale. Lasă acest tab deschis și activ.',
+    videoResLabel:'Rezoluție', videoDurLabel:'Durată',
+    recordVideoBtn:'🎬 Înregistrează video', cancelVideoBtn:'✕ Anulează',
+    recordingProgress:'Se înregistrează… {n} rămase', videoNotSupported:'Browserul nu suportă înregistrare video',
+    videoInProgressWarning:'Se înregistrează un video. Așteaptă să se termine sau anulează-l înainte de a deschide vizualizatorul.', exportJsonBtn:'⬇ Exportă setări (JSON)', importJsonBtn:'⬆ Importă setări',
     exporting:'Se exportă…', exportDone:'Descărcare pornită.', exportError:'Eroare la export.', importError:'Fișier de setări invalid.',
     footerLicense:'Licență CC0 · fără telemetrie · fără dependențe externe · 100% offline',
     footerNote:'Toate melodiile sunt generate algoritmic, în timp real — original, fără mostre și fără materiale protejate prin drepturi de autor.',
-    fractalBtn:'⛶ Vizualizator complet', closeFractalBtn:'✕ Ieșire', fractalHint:'Apasă oriunde sau Esc pentru a ieși',
+    fractalBtn:'Vizualizator complet', closeFractalBtn:'✕ Ieșire', fractalHint:'Apasă oriunde sau Esc pentru a ieși',
     coverHeading:'Copertă', coverHint:'Artă generativă originală, legată de sămânța și genul curent — o copertă vizuală unică pentru această melodie, reproductibilă din aceeași sămânță.',
-    coverPlaceholder:'Apasă "Generează copertă" pentru a crea una', generateCoverBtn:'🎨 Generează copertă', exportCoverBtn:'⬇ Exportă PNG',
+    coverPlaceholder:'Apasă "Generează copertă" pentru a crea una', generateCoverBtn:'🎨 Generează copertă', exportCoverBtn:'⬇ Exportă',
     generatingCover:'Se generează…', coverError:'Eroare la generare.',
     supportLabel:'Sprijină:', footerTradeFreePre:'Filozofie trade-free ·', footerTradeFreePost:'· fără reclame, fără urmărire, fără cont',
     createCustomBtn:'➕ Creează gen propriu',
@@ -2419,7 +3137,9 @@ const I18N = {
     titleTagline:'Original Music Generator',
     genreHeading:'Choose a genre', compHeading:'Composition', toggleAllBtn:'⇕ Expand / collapse all',
     genreSearchPlaceholder:'Search genres (e.g. "flamenco", "drone", "waltz"…)', genreNoResults:'No genres found.',
-    seedLabel:'Seed', randomBtn:'🎲 Randomize', tempoLabel:'Tempo',
+    seedLabel:'Seed', randomBtn:'🎲 Randomize', tempoLabel:'Tempo', varietyLabel:'Variety & arc', varietyHint:'Gently varies density and brightness over the piece\'s length — an evolving arc instead of one static loop. 0% keeps the classic constant behavior.',
+    voiceHeading:'Human voice', voiceHint:'A procedurally synthesized wordless vocal layer (formant synthesis) — soft syllables like "ah", "oh", "mmm" that change each time, woven over any genre. No recordings, no samples.',
+    voiceDensityLabel:'Presence', voiceMixLabel:'Volume', voiceCharacterLabel:'Character', voice_childFemale:'Child (girl)', voice_childMale:'Child (boy)', voice_teenFemale:'Teen girl', voice_teenMale:'Teen boy', voice_youngFemale:'Young woman', voice_youngMale:'Young man', voice_matureFemale:'Mature woman', voice_matureMale:'Mature man', voice_seniorFemale:'Senior woman', voice_seniorMale:'Senior man', voice_robotic:'Melodious robotic', ritualHeading:'Gong &amp; conch', ritualHint:'Two ceremonial sounds, synthesized procedurally — an inharmonic gong (bell-like partials) and a breathy conch call. Ring them manually anytime, or let them mark the start/end of a session automatically.', ringGongBtn:'🔔 Ring the gong', blowConchBtn:'🐚 Blow the conch', autoGongLabel:'Automatic gong at start', autoConchLabel:'Automatic conch at end',
     durationLabel:'Duration', continuousOpt:'Continuous loop', regenBtn:'↻ Regenerate',
     entrainHeading:'Beneficial waves',
     entrainHint:'Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.',
@@ -2429,13 +3149,19 @@ const I18N = {
     playBtn:'Play', pauseBtn:'Pause', stopBtn:'Stop', masterVolLabel:'Volume',
     statusIdle:'Ready', statusPlaying:'Playing', statusPaused:'Paused',
     exportHeading:'Export', exportDurLabel:'Export length',
-    exportWavBtn:'⬇ Export WAV', exportJsonBtn:'⬇ Export settings (JSON)', importJsonBtn:'⬆ Import settings',
+    exportAudioBtn:'⬇ Export audio', audioFormatLabel:'Audio format',
+    videoHeading:'Video export', videoHint:'Records the fractal visualizer together with the currently playing audio into a video file — open formats only (WebM: VP8/VP9 + Opus), fully offline.',
+    videoRealtimeNote:'⏱ Recording happens in real time — a 20-minute video takes 20 real minutes. Keep this tab open and active.',
+    videoResLabel:'Resolution', videoDurLabel:'Duration',
+    recordVideoBtn:'🎬 Record video', cancelVideoBtn:'✕ Cancel',
+    recordingProgress:'Recording… {n} remaining', videoNotSupported:'Browser does not support video recording',
+    videoInProgressWarning:'A video is currently recording. Wait for it to finish or cancel it before opening the visualizer.', exportJsonBtn:'⬇ Export settings (JSON)', importJsonBtn:'⬆ Import settings',
     exporting:'Exporting…', exportDone:'Download started.', exportError:'Export failed.', importError:'Invalid settings file.',
     footerLicense:'CC0 license · no telemetry · no external dependencies · 100% offline',
     footerNote:'All music is generated algorithmically, in real time — original, with no samples and no copyrighted material.',
-    fractalBtn:'⛶ Full visualizer', closeFractalBtn:'✕ Exit', fractalHint:'Click anywhere or press Esc to exit',
+    fractalBtn:'Full visualizer', closeFractalBtn:'✕ Exit', fractalHint:'Click anywhere or press Esc to exit',
     coverHeading:'Cover art', coverHint:'Original generative art tied to your current seed and genre — a one-of-a-kind visual cover for this song, reproducible from the same seed.',
-    coverPlaceholder:'Press "Generate cover" to create one', generateCoverBtn:'🎨 Generate cover', exportCoverBtn:'⬇ Export PNG',
+    coverPlaceholder:'Press "Generate cover" to create one', generateCoverBtn:'🎨 Generate cover', exportCoverBtn:'⬇ Export',
     generatingCover:'Generating…', coverError:'Generation failed.',
     supportLabel:'Support:', footerTradeFreePre:'Trade-free philosophy ·', footerTradeFreePost:'· no ads, no tracking, no account',
     createCustomBtn:'➕ Create custom genre',
@@ -2503,7 +3229,9 @@ const I18N = {
     genreNoResults:'Aucun genre trouvé.',
     seedLabel:'Graine',
     randomBtn:'🎲 Aléatoire',
-    tempoLabel:'Tempo',
+    tempoLabel:'Tempo', varietyLabel:'Variété & arc', varietyHint:'Varie légèrement la densité et la luminosité sur la durée du morceau — un arc évolutif plutôt qu\'une seule boucle statique. 0% conserve le comportement classique, constant.',
+    voiceHeading:'Voix humaine', voiceHint:'Une couche vocale synthétisée de manière procédurale (synthèse par formants) — des syllabes sans mots comme « ah », « oh », « mmm » qui changent à chaque fois, tissées sur n\'importe quel genre. Aucun enregistrement, aucun échantillon.',
+    voiceDensityLabel:'Présence', voiceMixLabel:'Volume', voiceCharacterLabel:'Personnage', voice_childFemale:'Enfant (fille)', voice_childMale:'Enfant (garçon)', voice_teenFemale:'Adolescente', voice_teenMale:'Adolescent', voice_youngFemale:'Jeune femme', voice_youngMale:'Jeune homme', voice_matureFemale:'Femme mûre', voice_matureMale:'Homme mûr', voice_seniorFemale:'Femme âgée', voice_seniorMale:'Homme âgé', voice_robotic:'Robotique mélodieuse', ritualHeading:'Gong & conque', ritualHint:'Deux sons cérémoniels, synthétisés de manière procédurale — un gong inharmonique (partiels façon cloche) et un appel de conque, soufflé. Faites-les sonner manuellement à tout moment, ou laissez-les marquer automatiquement le début/la fin d\'une séance.', ringGongBtn:'🔔 Faire sonner le gong', blowConchBtn:'🐚 Souffler dans la conque', autoGongLabel:'Gong automatique au début', autoConchLabel:'Conque automatique à la fin',
     durationLabel:'Durée',
     continuousOpt:'Boucle continue',
     regenBtn:'↻ Régénérer',
@@ -2526,7 +3254,13 @@ const I18N = {
     statusPaused:'En pause',
     exportHeading:'Exporter',
     exportDurLabel:'Durée d\'export',
-    exportWavBtn:'⬇ Exporter en WAV',
+    exportAudioBtn:'⬇ Exporter l\'audio', audioFormatLabel:'Format audio',
+    videoHeading:'Export vidéo', videoHint:'Enregistre le visualiseur fractal avec l\'audio en cours de lecture dans un fichier vidéo — formats ouverts uniquement (WebM : VP8/VP9 + Opus), entièrement hors ligne.',
+    videoRealtimeNote:'⏱ L\'enregistrement se fait en temps réel — une vidéo de 20 minutes prend 20 minutes réelles. Gardez cet onglet ouvert et actif.',
+    videoResLabel:'Résolution', videoDurLabel:'Durée',
+    recordVideoBtn:'🎬 Enregistrer la vidéo', cancelVideoBtn:'✕ Annuler',
+    recordingProgress:'Enregistrement… {n} restantes', videoNotSupported:'Le navigateur ne prend pas en charge l\'enregistrement vidéo',
+    videoInProgressWarning:'Un enregistrement vidéo est en cours. Attendez qu\'il se termine ou annulez-le avant d\'ouvrir le visualiseur.',
     exportJsonBtn:'⬇ Exporter les réglages (JSON)',
     importJsonBtn:'⬆ Importer les réglages',
     exporting:'Exportation…',
@@ -2535,9 +3269,9 @@ const I18N = {
     importError:'Fichier de réglages invalide.',
     footerLicense:'Licence CC0 · aucune télémétrie · aucune dépendance externe · 100 % hors ligne',
     footerNote:'Toute la musique est générée algorithmiquement, en temps réel — originale, sans échantillons ni matériel protégé par des droits d\'auteur.',
-    fractalBtn:'⛶ Visualiseur plein écran', closeFractalBtn:'✕ Quitter', fractalHint:'Cliquez n\'importe où ou appuyez sur Échap pour quitter',
+    fractalBtn:'Visualiseur plein écran', closeFractalBtn:'✕ Quitter', fractalHint:'Cliquez n\'importe où ou appuyez sur Échap pour quitter',
     coverHeading:'Pochette', coverHint:'Art génératif original lié à votre graine et votre genre actuels — une pochette visuelle unique pour ce morceau, reproductible à partir de la même graine.',
-    coverPlaceholder:'Appuyez sur « Générer une pochette » pour en créer une', generateCoverBtn:'🎨 Générer une pochette', exportCoverBtn:'⬇ Exporter en PNG',
+    coverPlaceholder:'Appuyez sur « Générer une pochette » pour en créer une', generateCoverBtn:'🎨 Générer une pochette', exportCoverBtn:'⬇ Exporter',
     generatingCover:'Génération…', coverError:'Échec de la génération.',
     supportLabel:'Soutenir :', footerTradeFreePre:'Philosophie trade-free ·', footerTradeFreePost:'· sans publicité, sans suivi, sans compte',
     createCustomBtn:'➕ Créer un genre personnalisé',
@@ -2605,7 +3339,9 @@ const I18N = {
     genreNoResults:'Nessun genere trovato.',
     seedLabel:'Seme',
     randomBtn:'🎲 Casuale',
-    tempoLabel:'Tempo',
+    tempoLabel:'Tempo', varietyLabel:'Varietà & arco', varietyHint:'Varia leggermente la densità e la luminosità lungo il brano — un arco che evolve invece di un unico loop statico. 0% mantiene il comportamento classico, costante.',
+    voiceHeading:'Voce umana', voiceHint:'Uno strato vocale sintetizzato proceduralmente (sintesi di formanti) — sillabe senza parole come "ah", "oh", "mmm" che cambiano ogni volta, intrecciate su qualsiasi genere. Nessuna registrazione, nessun campione.',
+    voiceDensityLabel:'Presenza', voiceMixLabel:'Volume', voiceCharacterLabel:'Carattere', voice_childFemale:'Bambina', voice_childMale:'Bambino', voice_teenFemale:'Adolescente (ragazza)', voice_teenMale:'Adolescente (ragazzo)', voice_youngFemale:'Giovane donna', voice_youngMale:'Giovane uomo', voice_matureFemale:'Donna matura', voice_matureMale:'Uomo maturo', voice_seniorFemale:'Donna anziana', voice_seniorMale:'Uomo anziano', voice_robotic:'Robotica melodiosa', ritualHeading:'Gong e conchiglia', ritualHint:'Due suoni cerimoniali, sintetizzati proceduralmente — un gong inarmonico (parziali simili a campane) e un richiamo di conchiglia, soffiato. Suonali manualmente in qualsiasi momento, oppure lasciali segnare automaticamente l\'inizio/la fine di una sessione.', ringGongBtn:'🔔 Suona il gong', blowConchBtn:'🐚 Soffia nella conchiglia', autoGongLabel:'Gong automatico all\'inizio', autoConchLabel:'Conchiglia automatica alla fine',
     durationLabel:'Durata',
     continuousOpt:'Loop continuo',
     regenBtn:'↻ Rigenera',
@@ -2628,7 +3364,13 @@ const I18N = {
     statusPaused:'In pausa',
     exportHeading:'Esporta',
     exportDurLabel:'Durata esportazione',
-    exportWavBtn:'⬇ Esporta WAV',
+    exportAudioBtn:'⬇ Esporta audio', audioFormatLabel:'Formato audio',
+    videoHeading:'Esporta video', videoHint:'Registra il visualizzatore frattale insieme all\'audio in riproduzione in un file video — solo formati aperti (WebM: VP8/VP9 + Opus), completamente offline.',
+    videoRealtimeNote:'⏱ La registrazione avviene in tempo reale — un video di 20 minuti richiede 20 minuti reali. Tieni questa scheda aperta e attiva.',
+    videoResLabel:'Risoluzione', videoDurLabel:'Durata',
+    recordVideoBtn:'🎬 Registra video', cancelVideoBtn:'✕ Annulla',
+    recordingProgress:'Registrazione… {n} rimanenti', videoNotSupported:'Il browser non supporta la registrazione video',
+    videoInProgressWarning:'È in corso una registrazione video. Attendi che finisca o annullala prima di aprire il visualizzatore.',
     exportJsonBtn:'⬇ Esporta impostazioni (JSON)',
     importJsonBtn:'⬆ Importa impostazioni',
     exporting:'Esportazione…',
@@ -2637,9 +3379,9 @@ const I18N = {
     importError:'File di impostazioni non valido.',
     footerLicense:'Licenza CC0 · nessuna telemetria · nessuna dipendenza esterna · 100% offline',
     footerNote:'Tutta la musica è generata algoritmicamente, in tempo reale — originale, senza campioni né materiale protetto da copyright.',
-    fractalBtn:'⛶ Visualizzatore a schermo intero', closeFractalBtn:'✕ Esci', fractalHint:'Clicca ovunque o premi Esc per uscire',
+    fractalBtn:'Visualizzatore a schermo intero', closeFractalBtn:'✕ Esci', fractalHint:'Clicca ovunque o premi Esc per uscire',
     coverHeading:'Copertina', coverHint:'Arte generativa originale legata al tuo seme e genere attuali — una copertina visiva unica per questo brano, riproducibile dallo stesso seme.',
-    coverPlaceholder:'Premi "Genera copertina" per crearne una', generateCoverBtn:'🎨 Genera copertina', exportCoverBtn:'⬇ Esporta PNG',
+    coverPlaceholder:'Premi "Genera copertina" per crearne una', generateCoverBtn:'🎨 Genera copertina', exportCoverBtn:'⬇ Esporta',
     generatingCover:'Generazione…', coverError:'Generazione fallita.',
     supportLabel:'Sostieni:', footerTradeFreePre:'Filosofia trade-free ·', footerTradeFreePost:'· senza pubblicità, senza tracciamento, senza account',
     createCustomBtn:'➕ Crea genere personalizzato',
@@ -2707,7 +3449,9 @@ const I18N = {
     genreNoResults:'No se encontraron géneros.',
     seedLabel:'Semilla',
     randomBtn:'🎲 Aleatorio',
-    tempoLabel:'Tempo',
+    tempoLabel:'Tempo', varietyLabel:'Variedad y arco', varietyHint:'Varía suavemente la densidad y el brillo a lo largo de la pieza — un arco que evoluciona en vez de un solo bucle estático. 0% mantiene el comportamiento clásico, constante.',
+    voiceHeading:'Voz humana', voiceHint:'Una capa vocal sintetizada proceduralmente (síntesis de formantes) — sílabas sin palabras como "ah", "oh", "mmm" que cambian cada vez, entretejidas sobre cualquier género. Sin grabaciones, sin muestras.',
+    voiceDensityLabel:'Presencia', voiceMixLabel:'Volumen', voiceCharacterLabel:'Personaje', voice_childFemale:'Niña', voice_childMale:'Niño', voice_teenFemale:'Adolescente (chica)', voice_teenMale:'Adolescente (chico)', voice_youngFemale:'Mujer joven', voice_youngMale:'Hombre joven', voice_matureFemale:'Mujer madura', voice_matureMale:'Hombre maduro', voice_seniorFemale:'Mujer mayor', voice_seniorMale:'Hombre mayor', voice_robotic:'Robótica melodiosa', ritualHeading:'Gong y caracola', ritualHint:'Dos sonidos ceremoniales, sintetizados de forma procedural — un gong inarmónico (parciales tipo campana) y una llamada de caracola, soplada. Hazlos sonar manualmente cuando quieras, o deja que marquen automáticamente el inicio/final de una sesión.', ringGongBtn:'🔔 Toca el gong', blowConchBtn:'🐚 Sopla la caracola', autoGongLabel:'Gong automático al inicio', autoConchLabel:'Caracola automática al final',
     durationLabel:'Duración',
     continuousOpt:'Bucle continuo',
     regenBtn:'↻ Regenerar',
@@ -2730,7 +3474,13 @@ const I18N = {
     statusPaused:'Pausado',
     exportHeading:'Exportar',
     exportDurLabel:'Duración de exportación',
-    exportWavBtn:'⬇ Exportar WAV',
+    exportAudioBtn:'⬇ Exportar audio', audioFormatLabel:'Formato de audio',
+    videoHeading:'Exportar video', videoHint:'Graba el visualizador fractal junto con el audio en reproducción en un archivo de video — solo formatos abiertos (WebM: VP8/VP9 + Opus), totalmente sin conexión.',
+    videoRealtimeNote:'⏱ La grabación ocurre en tiempo real — un video de 20 minutos tarda 20 minutos reales. Mantén esta pestaña abierta y activa.',
+    videoResLabel:'Resolución', videoDurLabel:'Duración',
+    recordVideoBtn:'🎬 Grabar video', cancelVideoBtn:'✕ Cancelar',
+    recordingProgress:'Grabando… {n} restantes', videoNotSupported:'El navegador no admite grabación de video',
+    videoInProgressWarning:'Se está grabando un video. Espera a que termine o cancélalo antes de abrir el visualizador.',
     exportJsonBtn:'⬇ Exportar ajustes (JSON)',
     importJsonBtn:'⬆ Importar ajustes',
     exporting:'Exportando…',
@@ -2739,9 +3489,9 @@ const I18N = {
     importError:'Archivo de ajustes no válido.',
     footerLicense:'Licencia CC0 · sin telemetría · sin dependencias externas · 100 % sin conexión',
     footerNote:'Toda la música se genera algorítmicamente, en tiempo real — original, sin muestras ni material protegido por derechos de autor.',
-    fractalBtn:'⛶ Visualizador de pantalla completa', closeFractalBtn:'✕ Salir', fractalHint:'Haz clic en cualquier lugar o pulsa Esc para salir',
+    fractalBtn:'Visualizador de pantalla completa', closeFractalBtn:'✕ Salir', fractalHint:'Haz clic en cualquier lugar o pulsa Esc para salir',
     coverHeading:'Portada', coverHint:'Arte generativo original vinculado a tu semilla y género actuales — una portada visual única para esta canción, reproducible desde la misma semilla.',
-    coverPlaceholder:'Pulsa "Generar portada" para crear una', generateCoverBtn:'🎨 Generar portada', exportCoverBtn:'⬇ Exportar PNG',
+    coverPlaceholder:'Pulsa "Generar portada" para crear una', generateCoverBtn:'🎨 Generar portada', exportCoverBtn:'⬇ Exportar',
     generatingCover:'Generando…', coverError:'Error de generación.',
     supportLabel:'Apoya:', footerTradeFreePre:'Filosofía trade-free ·', footerTradeFreePost:'· sin anuncios, sin seguimiento, sin cuenta',
     createCustomBtn:'➕ Crear género personalizado',
@@ -2809,7 +3559,9 @@ const I18N = {
     genreNoResults:'Nenhum gênero encontrado.',
     seedLabel:'Semente',
     randomBtn:'🎲 Aleatório',
-    tempoLabel:'Tempo',
+    tempoLabel:'Tempo', varietyLabel:'Variedade e arco', varietyHint:'Varia suavemente a densidade e o brilho ao longo da peça — um arco que evolui em vez de um único loop estático. 0% mantém o comportamento clássico, constante.',
+    voiceHeading:'Voz humana', voiceHint:'Uma camada vocal sintetizada proceduralmente (síntese de formantes) — sílabas sem palavras como "ah", "oh", "mmm" que mudam a cada vez, entrelaçadas sobre qualquer gênero. Sem gravações, sem amostras.',
+    voiceDensityLabel:'Presença', voiceMixLabel:'Volume', voiceCharacterLabel:'Personagem', voice_childFemale:'Menina', voice_childMale:'Menino', voice_teenFemale:'Adolescente (menina)', voice_teenMale:'Adolescente (menino)', voice_youngFemale:'Mulher jovem', voice_youngMale:'Homem jovem', voice_matureFemale:'Mulher madura', voice_matureMale:'Homem maduro', voice_seniorFemale:'Mulher idosa', voice_seniorMale:'Homem idoso', voice_robotic:'Robótica melodiosa', ritualHeading:'Gongo e búzio', ritualHint:'Dois sons cerimoniais, sintetizados proceduralmente — um gongo inarmônico (parciais tipo sino) e um chamado de búzio, soprado. Toque-os manualmente a qualquer momento, ou deixe-os marcar automaticamente o início/fim de uma sessão.', ringGongBtn:'🔔 Toque o gongo', blowConchBtn:'🐚 Sopre o búzio', autoGongLabel:'Gongo automático no início', autoConchLabel:'Búzio automático no final',
     durationLabel:'Duração',
     continuousOpt:'Loop contínuo',
     regenBtn:'↻ Regenerar',
@@ -2832,7 +3584,13 @@ const I18N = {
     statusPaused:'Em pausa',
     exportHeading:'Exportar',
     exportDurLabel:'Duração da exportação',
-    exportWavBtn:'⬇ Exportar WAV',
+    exportAudioBtn:'⬇ Exportar audio', audioFormatLabel:'Formato de audio',
+    videoHeading:'Exportar vídeo', videoHint:'Grava o visualizador fractal junto com o áudio em reprodução num arquivo de vídeo — apenas formatos abertos (WebM: VP8/VP9 + Opus), totalmente offline.',
+    videoRealtimeNote:'⏱ A gravação ocorre em tempo real — um vídeo de 20 minutos demora 20 minutos reais. Mantenha esta aba aberta e ativa.',
+    videoResLabel:'Resolução', videoDurLabel:'Duração',
+    recordVideoBtn:'🎬 Gravar vídeo', cancelVideoBtn:'✕ Cancelar',
+    recordingProgress:'A gravar… {n} restantes', videoNotSupported:'O navegador não suporta gravação de vídeo',
+    videoInProgressWarning:'Um vídeo está a ser gravado. Aguarde que termine ou cancele-o antes de abrir o visualizador.',
     exportJsonBtn:'⬇ Exportar configurações (JSON)',
     importJsonBtn:'⬆ Importar configurações',
     exporting:'A exportar…',
@@ -2841,9 +3599,9 @@ const I18N = {
     importError:'Ficheiro de configurações inválido.',
     footerLicense:'Licença CC0 · sem telemetria · sem dependências externas · 100% offline',
     footerNote:'Toda a música é gerada algoritmicamente, em tempo real — original, sem amostras e sem material protegido por direitos autorais.',
-    fractalBtn:'⛶ Visualizador de tela cheia', closeFractalBtn:'✕ Sair', fractalHint:'Clique em qualquer lugar ou pressione Esc para sair',
+    fractalBtn:'Visualizador de tela cheia', closeFractalBtn:'✕ Sair', fractalHint:'Clique em qualquer lugar ou pressione Esc para sair',
     coverHeading:'Capa', coverHint:'Arte generativa original ligada à sua semente e gênero atuais — uma capa visual única para esta música, reproduzível a partir da mesma semente.',
-    coverPlaceholder:'Prima "Gerar capa" para criar uma', generateCoverBtn:'🎨 Gerar capa', exportCoverBtn:'⬇ Exportar PNG',
+    coverPlaceholder:'Prima "Gerar capa" para criar uma', generateCoverBtn:'🎨 Gerar capa', exportCoverBtn:'⬇ Exportar',
     generatingCover:'A gerar…', coverError:'Falha na geração.',
     supportLabel:'Apoie:', footerTradeFreePre:'Filosofia trade-free ·', footerTradeFreePost:'· sem anúncios, sem rastreamento, sem conta',
     createCustomBtn:'➕ Criar gênero personalizado',
@@ -2911,7 +3669,9 @@ const I18N = {
     genreNoResults:'Keine Genres gefunden.',
     seedLabel:'Startwert',
     randomBtn:'🎲 Zufällig',
-    tempoLabel:'Tempo',
+    tempoLabel:'Tempo', varietyLabel:'Vielfalt & Bogen', varietyHint:'Variiert sanft Dichte und Klangfarbe über die Dauer des Stücks — ein sich entwickelnder Bogen statt einer einzigen statischen Schleife. 0% behält das klassische, konstante Verhalten bei.',
+    voiceHeading:'Menschliche Stimme', voiceHint:'Eine prozedural synthetisierte, wortlose Gesangsebene (Formantsynthese) — weiche Silben wie „ah", „oh", „mmm", die sich jedes Mal ändern, über jedes Genre gewoben. Keine Aufnahmen, keine Samples.',
+    voiceDensityLabel:'Präsenz', voiceMixLabel:'Lautstärke', voiceCharacterLabel:'Charakter', voice_childFemale:'Kind (Mädchen)', voice_childMale:'Kind (Junge)', voice_teenFemale:'Teenager (Mädchen)', voice_teenMale:'Teenager (Junge)', voice_youngFemale:'Junge Frau', voice_youngMale:'Junger Mann', voice_matureFemale:'Reife Frau', voice_matureMale:'Reifer Mann', voice_seniorFemale:'Ältere Frau', voice_seniorMale:'Älterer Mann', voice_robotic:'Melodiöse Roboterstimme', ritualHeading:'Gong &amp; Muschelhorn', ritualHint:'Zwei zeremonielle Klänge, prozedural synthetisiert — ein unharmonischer Gong (glockenartige Teiltöne) und ein gehauchter Muschelhorn-Ruf. Läuten Sie sie jederzeit manuell, oder lassen Sie sie automatisch Anfang/Ende einer Sitzung markieren.', ringGongBtn:'🔔 Gong schlagen', blowConchBtn:'🐚 Muschelhorn blasen', autoGongLabel:'Automatischer Gong zu Beginn', autoConchLabel:'Automatisches Muschelhorn am Ende',
     durationLabel:'Dauer',
     continuousOpt:'Endlosschleife',
     regenBtn:'↻ Neu generieren',
@@ -2934,7 +3694,13 @@ const I18N = {
     statusPaused:'Pausiert',
     exportHeading:'Exportieren',
     exportDurLabel:'Exportlänge',
-    exportWavBtn:'⬇ WAV exportieren',
+    exportAudioBtn:'⬇ Audio exportieren', audioFormatLabel:'Audioformat',
+    videoHeading:'Video-Export', videoHint:'Zeichnet den Fraktal-Visualisierer zusammen mit dem aktuell abgespielten Audio in einer Videodatei auf — nur offene Formate (WebM: VP8/VP9 + Opus), vollständig offline.',
+    videoRealtimeNote:'⏱ Die Aufnahme erfolgt in Echtzeit — ein 20-minütiges Video dauert 20 echte Minuten. Lassen Sie diesen Tab geöffnet und aktiv.',
+    videoResLabel:'Auflösung', videoDurLabel:'Dauer',
+    recordVideoBtn:'🎬 Video aufnehmen', cancelVideoBtn:'✕ Abbrechen',
+    recordingProgress:'Aufnahme… {n} verbleibend', videoNotSupported:'Browser unterstützt keine Videoaufnahme',
+    videoInProgressWarning:'Es wird gerade ein Video aufgenommen. Warten Sie, bis es fertig ist, oder brechen Sie es ab, bevor Sie den Visualisierer öffnen.',
     exportJsonBtn:'⬇ Einstellungen exportieren (JSON)',
     importJsonBtn:'⬆ Einstellungen importieren',
     exporting:'Wird exportiert…',
@@ -2943,9 +3709,9 @@ const I18N = {
     importError:'Ungültige Einstellungsdatei.',
     footerLicense:'CC0-Lizenz · keine Telemetrie · keine externen Abhängigkeiten · 100 % offline',
     footerNote:'Die gesamte Musik wird algorithmisch in Echtzeit erzeugt — originell, ohne Samples und ohne urheberrechtlich geschütztes Material.',
-    fractalBtn:'⛶ Vollbild-Visualisierer', closeFractalBtn:'✕ Beenden', fractalHint:'Klicken Sie irgendwo oder drücken Sie Esc zum Beenden',
+    fractalBtn:'Vollbild-Visualisierer', closeFractalBtn:'✕ Beenden', fractalHint:'Klicken Sie irgendwo oder drücken Sie Esc zum Beenden',
     coverHeading:'Cover', coverHint:'Originale generative Kunst, verknüpft mit Ihrem aktuellen Startwert und Genre — ein einzigartiges visuelles Cover für diesen Song, reproduzierbar aus demselben Startwert.',
-    coverPlaceholder:'Drücken Sie „Cover erstellen", um eines zu erzeugen', generateCoverBtn:'🎨 Cover erstellen', exportCoverBtn:'⬇ PNG exportieren',
+    coverPlaceholder:'Drücken Sie „Cover erstellen", um eines zu erzeugen', generateCoverBtn:'🎨 Cover erstellen', exportCoverBtn:'⬇ Exportieren',
     generatingCover:'Wird erzeugt…', coverError:'Erzeugung fehlgeschlagen.',
     supportLabel:'Unterstützen:', footerTradeFreePre:'Trade-free-Philosophie ·', footerTradeFreePost:'· keine Werbung, kein Tracking, kein Konto',
     createCustomBtn:'➕ Eigenes Genre erstellen',
@@ -3077,7 +3843,7 @@ function renderGenreCards(){
         const selectBtn = document.createElement('button');
         selectBtn.type = 'button';
         selectBtn.className = 'genre-card-select';
-        selectBtn.innerHTML = genreGlyphSVG(g.glyph) + '<h3>'+genreName(g)+'</h3><p>'+genreDesc(g)+'</p>';
+        selectBtn.innerHTML = genreGlyphSVG(g.glyph) + '<h3>'+escapeHtml(genreName(g))+'</h3><p>'+escapeHtml(genreDesc(g))+'</p>';
         selectBtn.addEventListener('click', function(){ selectGenre(key); });
         card.appendChild(selectBtn);
         if (isCustomCat){
@@ -3157,6 +3923,9 @@ function renderChips(){
 
 function refreshReadouts(){
   document.getElementById('tempoReadout').textContent = document.getElementById('tempoSlider').value+' BPM';
+  document.getElementById('varietyIntensityReadout').textContent = document.getElementById('varietyIntensitySlider').value+'%';
+  document.getElementById('voiceDensityReadout').textContent = document.getElementById('voiceDensitySlider').value+'%';
+  document.getElementById('voiceMixReadout').textContent = document.getElementById('voiceMixSlider').value+'%';
   document.getElementById('carrierReadout').textContent = document.getElementById('carrierSlider').value+' Hz';
   document.getElementById('beatReadout').textContent = document.getElementById('beatSlider').value+' Hz';
   document.getElementById('entrainMixReadout').textContent = document.getElementById('entrainMixSlider').value+'%';
@@ -3488,7 +4257,21 @@ const FRACTAL_VARIATIONS = {
   disc:       function(x,y){ const r=Math.sqrt(x*x+y*y)*Math.PI, th=Math.atan2(y,x)/Math.PI; return [th*Math.sin(r), th*Math.cos(r)]; },
 };
 const FRACTAL_VARIATION_NAMES = Object.keys(FRACTAL_VARIATIONS);
-const FRACTAL_POINT_COUNT = 3500;
+function estimateFractalPointCount(){
+  // Euristica de capacitate a dispozitivului (nu "sniffing" de user-agent,
+  // care e fragil) - reduce automat numarul de puncte pe hardware mai slab,
+  // ca animatia sa ramana fluida si pe telefoane mai vechi.
+  const cores = navigator.hardwareConcurrency || 4;
+  const smallScreen = Math.min(window.innerWidth||1024, window.innerHeight||768) < 700;
+  if (cores <= 2) return 1800;
+  if (cores <= 4 && smallScreen) return 2400;
+  return 3500;
+}
+const FRACTAL_POINT_COUNT = estimateFractalPointCount();
+const PREFERS_REDUCED_MOTION = (function(){
+  try{ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+  catch(e){ return false; }
+})();
 
 // --- Extensie 3D (transformari afine cu 12 coeficienti + variatii neliniare
 // generice extinse la 3 dimensiuni + rotatie + proiectie perspectiva
@@ -3586,6 +4369,7 @@ let fractalGenomeA = null, fractalGenomeB = null;
 let fractalTransitionStart = 0, fractalTransitionDur = 18000;
 let fractalCamCenterX = 0, fractalCamCenterY = 0, fractalCamScale = 1;
 let fractalUserZoom = 1;
+let fractalUserPanX = 0, fractalUserPanY = 0;
 let fractalMode = '2d';
 let fractalRotationAngle = 0;
 let fractalHueDrift = 0;
@@ -3616,24 +4400,51 @@ function newFractalTarget(){
     fractalGenomeB = randomFractalGenome(fractalRng, fractalGenomeA.length);
   }
   fractalTransitionStart = performance.now();
-  fractalTransitionDur = 14000 + fractalRng()*10000;
+  fractalTransitionDur = (14000 + fractalRng()*10000) * (PREFERS_REDUCED_MOTION ? 2.5 : 1);
 }
+function getBeatPulse(){
+  if (!(isPlaying && compState && audioCtx)) return 0;
+  const beatDur = compState.beatDur || 0.6;
+  const elapsed = audioCtx.currentTime - playStartCtxTime;
+  if (elapsed < 0 || !isFinite(elapsed)) return 0;
+  const phase = (elapsed % beatDur) / beatDur; // 0 = chiar pe timp, -> 1 = chiar inainte de urmatorul timp
+  return Math.pow(Math.max(0, 1 - phase), 3); // puls care se stinge repede dupa fiecare timp
+}
+
+let fractalSyntheticPhase = 0;
+function getFractalSyntheticEnergy(){
+  // Fara nicio melodie care sa cante, generez o "energie" variabila, usor
+  // aleatoare, ca animatia sa nu ramana plata/statica - o suma de cateva
+  // sinusoide la frecvente incomensurabile (nu se repeta niciodata identic
+  // pe termen scurt) plus un strop de zgomot.
+  fractalSyntheticPhase += 0.012;
+  const wave = 0.5 + 0.28*Math.sin(fractalSyntheticPhase*1.3) + 0.14*Math.sin(fractalSyntheticPhase*3.1+0.7) + 0.08*Math.sin(fractalSyntheticPhase*0.53+2.2);
+  return Math.max(0, Math.min(1, wave + (Math.random()-0.5)*0.06));
+}
+
 function getFractalAudioEnergy(){
-  if (!(isPlaying && analyserL)) return 0;
-  try{
-    if (!fractalAudioBuf || fractalAudioBuf.length !== analyserL.frequencyBinCount){
-      fractalAudioBuf = new Uint8Array(analyserL.frequencyBinCount);
-    }
-    analyserL.getByteTimeDomainData(fractalAudioBuf);
-    let sum = 0, count = 0;
-    for (let i=0;i<fractalAudioBuf.length;i+=8){ const v=(fractalAudioBuf[i]-128)/128; sum += v*v; count++; }
-    return Math.min(1, Math.sqrt(sum/count)*3.5);
-  }catch(e){ return 0; }
+  if (!isPlaying) return getFractalSyntheticEnergy();
+  let waveformEnergy = 0;
+  if (analyserL){
+    try{
+      if (!fractalAudioBuf || fractalAudioBuf.length !== analyserL.frequencyBinCount){
+        fractalAudioBuf = new Uint8Array(analyserL.frequencyBinCount);
+      }
+      analyserL.getByteTimeDomainData(fractalAudioBuf);
+      let sum = 0, count = 0;
+      for (let i=0;i<fractalAudioBuf.length;i+=8){ const v=(fractalAudioBuf[i]-128)/128; sum += v*v; count++; }
+      waveformEnergy = Math.min(1, Math.sqrt(sum/count)*3.5);
+    }catch(e){ waveformEnergy = 0; }
+  }
+  const beatPulse = getBeatPulse();
+  return Math.min(1, waveformEnergy*0.7 + beatPulse*0.5);
 }
+
+let activeFractalCanvas = null; // canvas-ul folosit de bucla de randare - implicit cel al vizualizatorului, redirectionabil pentru exportul video
 
 function drawFractalFrame(){
   fractalRAF = requestAnimationFrame(drawFractalFrame);
-  const canvas = document.getElementById('fractalCanvas');
+  const canvas = activeFractalCanvas || document.getElementById('fractalCanvas');
   const ctx2d = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   if (!W || !H) return;
@@ -3645,8 +4456,9 @@ function drawFractalFrame(){
   const genome = is3D ? lerpFractalGenome3D(fractalGenomeA, fractalGenomeB, tClamped) : lerpFractalGenome(fractalGenomeA, fractalGenomeB, tClamped);
 
   const energy = getFractalAudioEnergy();
-  fractalHueDrift += 0.05 + energy*0.15;
-  if (is3D) fractalRotationAngle += 0.0018 + energy*0.0035;
+  const motionScale = PREFERS_REDUCED_MOTION ? 0.15 : 1;
+  fractalHueDrift += (0.05 + energy*0.15) * motionScale;
+  if (is3D) fractalRotationAngle += (0.0018 + energy*0.0035) * motionScale;
 
   ctx2d.globalCompositeOperation = 'source-over';
   ctx2d.fillStyle = 'rgba(5,5,10,0.09)';
@@ -3689,8 +4501,8 @@ function drawFractalFrame(){
     }
 
     sx += finalX; sy += finalY; sx2 += finalX*finalX; sy2 += finalY*finalY;
-    const sxp = (finalX - fractalCamCenterX) * fractalCamScale * fractalUserZoom + W/2;
-    const syp = (finalY - fractalCamCenterY) * fractalCamScale * fractalUserZoom + H/2;
+    const sxp = (finalX - fractalCamCenterX) * fractalCamScale * fractalUserZoom + W/2 + fractalUserPanX;
+    const syp = (finalY - fractalCamCenterY) * fractalCamScale * fractalUserZoom + H/2 + fractalUserPanY;
     if (sxp >= -2 && sxp <= W+2 && syp >= -2 && syp <= H+2){
       const hue = (fn.hue + fractalHueDrift) % 360;
       ctx2d.fillStyle = 'hsla('+hue.toFixed(0)+',85%,60%,'+(baseAlpha*depthAlpha).toFixed(2)+')';
@@ -3732,11 +4544,21 @@ function switchFractalMode(newMode){
   newFractalTarget();
   fractalCamCenterX = 0; fractalCamCenterY = 0;
   fractalCamScale = Math.min(window.innerWidth, window.innerHeight)*0.2;
+  fractalUserPanX = 0; fractalUserPanY = 0;
 }
 
 function openFractalVisualizer(){
+  // Nu deschid peste un export video in curs - i-ar "ingheta" canvas-ul de
+  // inregistrare (impart aceleasi variabile de randare). O inregistrare poate
+  // dura pana la 20 de minute; mai bine cer utilizatorului sa astepte/anuleze
+  // decat sa-i stric silentios munca.
+  if (videoRecorder && videoRecorder.state === 'recording'){
+    alert(t('videoInProgressWarning'));
+    return;
+  }
   const overlay = document.getElementById('fractalOverlay');
   overlay.classList.add('open');
+  activeFractalCanvas = document.getElementById('fractalCanvas');
   document.documentElement.style.overflow = 'hidden';
   document.body.style.overflow = 'hidden';
   resizeFractalCanvas();
@@ -3747,6 +4569,7 @@ function openFractalVisualizer(){
   fractalCamCenterX = 0; fractalCamCenterY = 0;
   fractalCamScale = Math.min(window.innerWidth, window.innerHeight)*0.2;
   fractalUserZoom = 1;
+  fractalUserPanX = 0; fractalUserPanY = 0;
   fractalOpen = true;
   if (fractalRAF) cancelAnimationFrame(fractalRAF);
   drawFractalFrame();
@@ -3774,7 +4597,149 @@ function fractalApplyZoomFactor(factor){
 }
 function fractalZoomIn(){ fractalApplyZoomFactor(1.2); }
 function fractalZoomOut(){ fractalApplyZoomFactor(1/1.2); }
-function fractalZoomReset(){ fractalUserZoom = 1; }
+function fractalZoomReset(){ fractalUserZoom = 1; fractalUserPanX = 0; fractalUserPanY = 0; }
+
+/* ======================================================================
+   14c. EXPORT VIDEO (vizualizator + audio, formate deschise, offline)
+   Foloseste API-uri native ale browserului: canvas.captureStream() +
+   AudioContext.createMediaStreamDestination() + MediaRecorder (WebM cu
+   VP8/VP9 + Opus - toate formate deschise, fara librarii externe).
+   ====================================================================== */
+const VIDEO_MIME_CANDIDATES = [
+  {mime:'video/webm;codecs=vp9,opus', label:'WebM (VP9 + Opus)'},
+  {mime:'video/webm;codecs=vp8,opus', label:'WebM (VP8 + Opus)'},
+  {mime:'video/webm;codecs=av1,opus', label:'WebM (AV1 + Opus)'},
+  {mime:'video/webm', label:'WebM'},
+  {mime:'video/mp4', label:'MP4'},
+];
+let videoRecorder = null, videoRecordTimeout = null, videoCountdownInterval = null;
+let videoStreamDest = null, videoTapConnected = false;
+
+function populateVideoFormatSelect(){
+  const sel = document.getElementById('videoFormatSelect');
+  sel.innerHTML = '';
+  let any = false;
+  const canvasSupportsCaptureStream = !!(document.createElement('canvas').captureStream);
+  let audioSupportsStreamDest = false;
+  try{
+    const ACtor = window.AudioContext || window.webkitAudioContext;
+    audioSupportsStreamDest = !!(ACtor && ACtor.prototype && ACtor.prototype.createMediaStreamDestination);
+  }catch(e){ audioSupportsStreamDest = false; }
+  if (window.MediaRecorder && canvasSupportsCaptureStream && audioSupportsStreamDest){
+    VIDEO_MIME_CANDIDATES.forEach(function(c){
+      if (MediaRecorder.isTypeSupported(c.mime)){
+        const opt = document.createElement('option');
+        opt.value = c.mime; opt.textContent = c.label;
+        sel.appendChild(opt);
+        any = true;
+      }
+    });
+  }
+  if (!any){
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = t('videoNotSupported');
+    sel.appendChild(opt);
+    document.getElementById('recordVideoBtn').disabled = true;
+  }
+}
+
+function parseVideoResolution(val){
+  if (val.indexOf('x') !== -1){ const p = val.split('x'); return [parseInt(p[0],10), parseInt(p[1],10)]; }
+  const n = parseInt(val,10); return [n,n];
+}
+
+async function startVideoExport(){
+  const mime = document.getElementById('videoFormatSelect').value;
+  if (!mime) return;
+  // Vizualizatorul fullscreen si exportul video folosesc aceleasi variabile
+  // partajate de randare (activeFractalCanvas, fractalRAF) - daca ambele ar
+  // rula simultan, unul dintre canvas-uri ar ramane "inghetat". Inchid automat
+  // vizualizatorul (cost redus, doar o fereastra vizuala) inainte de a incepe.
+  if (fractalOpen) closeFractalVisualizer();
+  const [W,H] = parseVideoResolution(document.getElementById('videoResSelect').value);
+  const duration = parseInt(document.getElementById('videoDurSelect').value, 10);
+  const mode = document.getElementById('videoModeBtn').dataset.mode;
+
+  // Pornesc mereu o sesiune noua in mod "continuu", indiferent ce reda inainte
+  // (chiar daca deja canta ceva). Altfel, daca redarea curenta avea o durata
+  // fixa mai scurta decat exportul video ales, sunetul s-ar fi oprit la
+  // jumatatea filmului, lasand restul in liniste.
+  const durationSelectEl = document.getElementById('durationSelect');
+  const prevDurationVal = durationSelectEl.value;
+  durationSelectEl.value = 'continuous';
+  startPlayback();
+  // NU restaurez inca valoarea vizuala - o fac in onstop, ca selectorul sa arate
+  // corect "Continuu" pe toata durata reala a inregistrarii (nu doar o clipa).
+
+  videoStreamDest = audioCtx.createMediaStreamDestination();
+  masterGain.connect(videoStreamDest);
+  videoTapConnected = true;
+
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = W; exportCanvas.height = H;
+
+  if (fractalRAF) cancelAnimationFrame(fractalRAF);
+  activeFractalCanvas = exportCanvas;
+  fractalMode = mode;
+  fractalRng = mulberry32((Date.now() % 4294967296) >>> 0);
+  initFractalPoints();
+  fractalGenomeB = null;
+  newFractalTarget();
+  fractalCamCenterX = 0; fractalCamCenterY = 0;
+  fractalCamScale = Math.min(W,H)*0.2;
+  fractalUserZoom = 1; fractalUserPanX = 0; fractalUserPanY = 0;
+  fractalRotationAngle = 0;
+  drawFractalFrame();
+
+  const videoStream = exportCanvas.captureStream(30);
+  const combined = new MediaStream(videoStream.getVideoTracks().concat(videoStreamDest.stream.getAudioTracks()));
+  const chunks = [];
+  videoRecorder = new MediaRecorder(combined, {mimeType: mime});
+  videoRecorder.ondataavailable = function(e){ if (e.data && e.data.size>0) chunks.push(e.data); };
+  videoRecorder.onstop = function(){
+    if (fractalRAF){ cancelAnimationFrame(fractalRAF); fractalRAF = null; }
+    activeFractalCanvas = null;
+    if (videoTapConnected){ try{ masterGain.disconnect(videoStreamDest); }catch(e){} videoTapConnected = false; }
+    document.getElementById('durationSelect').value = prevDurationVal;
+    const ext = mime.indexOf('mp4')!==-1 ? 'mp4' : 'webm';
+    const blob = new Blob(chunks, {type: mime});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'melodii-fara-frontiere-video-seed'+document.getElementById('seedInput').value+'.'+ext;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+    document.getElementById('recordVideoBtn').disabled = false;
+    document.getElementById('cancelVideoBtn').style.display = 'none';
+    document.getElementById('videoProgress').style.display = 'none';
+  };
+  videoRecorder.start();
+
+  document.getElementById('recordVideoBtn').disabled = true;
+  document.getElementById('cancelVideoBtn').style.display = 'inline-block';
+  const progressEl = document.getElementById('videoProgress');
+  progressEl.style.display = 'block';
+  let remaining = duration;
+  function fmtRemaining(sec){
+    if (sec < 60) return sec+'s';
+    const m = Math.floor(sec/60), s = sec%60;
+    return m+':'+String(s).padStart(2,'0');
+  }
+  progressEl.textContent = t('recordingProgress').replace('{n}', fmtRemaining(remaining));
+  videoCountdownInterval = setInterval(function(){
+    remaining--;
+    if (remaining>0) progressEl.textContent = t('recordingProgress').replace('{n}', fmtRemaining(remaining));
+  }, 1000);
+  videoRecordTimeout = setTimeout(function(){
+    if (videoCountdownInterval){ clearInterval(videoCountdownInterval); videoCountdownInterval=null; }
+    if (videoRecorder && videoRecorder.state !== 'inactive') videoRecorder.stop();
+  }, duration*1000);
+}
+
+function cancelVideoExport(){
+  if (videoRecordTimeout){ clearTimeout(videoRecordTimeout); videoRecordTimeout = null; }
+  if (videoCountdownInterval){ clearInterval(videoCountdownInterval); videoCountdownInterval = null; }
+  if (videoRecorder && videoRecorder.state !== 'inactive') videoRecorder.stop();
+}
 
 /* ======================================================================
    14b. COPERTĂ GENERATIVĂ (imagine originală, legată de sămânță + gen)
@@ -3942,15 +4907,19 @@ function renderCoverArt(){
 }
 
 function exportCoverArt(){
+  const format = document.getElementById('coverFormatSelect').value;
+  const mimeTypes = { png:'image/png', webp:'image/webp', jpeg:'image/jpeg' };
+  const mime = mimeTypes[format] || 'image/png';
+  const quality = (format === 'jpeg' || format === 'webp') ? 0.92 : undefined;
   const canvas = document.getElementById('coverCanvas');
   canvas.toBlob(function(blob){
     if (!blob) return;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'melodii-fara-frontiere-coperta-seed'+document.getElementById('seedInput').value+'.png';
+    a.href = url; a.download = 'melodii-fara-frontiere-coperta-seed'+document.getElementById('seedInput').value+'.'+format;
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
-  }, 'image/png');
+  }, mime, quality);
 }
 
 
@@ -3966,11 +4935,19 @@ document.addEventListener('DOMContentLoaded', function(){
   initVisualizerLoop();
 
   document.getElementById('playPauseBtn').addEventListener('click', function(){
-    if (!audioCtx){ startPlayback(); }
-    else if (isPlaying){ pausePlayback(); }
+    if (isPlaying){ pausePlayback(); }
     else if (isPaused){ resumePlayback(); }
+    else { startPlayback(); }
   });
-  document.getElementById('stopBtn').addEventListener('click', stopAll);
+  document.getElementById('stopBtn').addEventListener('click', function(){ stopAll(true); });
+  document.getElementById('ringGongBtn').addEventListener('click', function(){
+    const freq = compState ? midiToFreq(compState.rootMidi - 24) : 87.31;
+    playRitualSoundManually(function(c, d, t){ triggerGong(c, d, freq, t, 4.5, 0.22); });
+  });
+  document.getElementById('blowConchBtn').addEventListener('click', function(){
+    const freq = compState ? midiToFreq(compState.rootMidi - 12) : 130.81;
+    playRitualSoundManually(function(c, d, t){ triggerConch(c, d, freq, t, 5, 0.22); });
+  });
   document.getElementById('regenerateBtn').addEventListener('click', function(){ startPlayback(); });
   document.getElementById('randomSeedBtn').addEventListener('click', function(){
     document.getElementById('seedInput').value = Math.floor(Math.random()*1000000);
@@ -4003,6 +4980,9 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('miniStopBtn').addEventListener('click', stopAll);
 
   document.getElementById('tempoSlider').addEventListener('input', refreshReadouts);
+  document.getElementById('varietyIntensitySlider').addEventListener('input', refreshReadouts);
+  document.getElementById('voiceDensitySlider').addEventListener('input', refreshReadouts);
+  document.getElementById('voiceMixSlider').addEventListener('input', refreshReadouts);
   document.getElementById('carrierSlider').addEventListener('input', function(){
     refreshReadouts();
     if (entrainmentLayer && entrainmentLayer.updateParams){
@@ -4092,12 +5072,35 @@ document.addEventListener('DOMContentLoaded', function(){
     this.textContent = newMode.toUpperCase();
   });
 
+  populateVideoFormatSelect();
+  document.getElementById('videoModeBtn').addEventListener('click', function(){
+    const newMode = this.dataset.mode === '2d' ? '3d' : '2d';
+    this.dataset.mode = newMode;
+    this.textContent = newMode.toUpperCase();
+  });
+  document.getElementById('recordVideoBtn').addEventListener('click', startVideoExport);
+  document.getElementById('cancelVideoBtn').addEventListener('click', cancelVideoExport);
+
   document.getElementById('openFractalBtn').addEventListener('click', openFractalVisualizer);
   document.getElementById('closeFractalBtn').addEventListener('click', function(e){
     e.stopPropagation();
     closeFractalVisualizer();
   });
-  document.getElementById('fractalOverlay').addEventListener('click', closeFractalVisualizer);
+  let fractalLastTouchTime = 0;
+  let fractalDragActive = false, fractalDragMoved = false;
+  let fractalDragLastX = 0, fractalDragLastY = 0;
+
+  document.getElementById('fractalOverlay').addEventListener('click', function(e){
+    // Pe mobil, un tap declanseaza si un eveniment "click" sintetic imediat dupa
+    // touchend. Fara aceasta verificare, atingerea ecranului inchidea vizualizatorul
+    // in loc sa arate doar controalele ascunse (asa cum se intampla cu mousemove
+    // pe desktop). Ferestruica de 500ms acopera intarzierea tipica a click-ului
+    // sintetic, fara sa afecteze un click real de mouse ulterior.
+    if (Date.now() - fractalLastTouchTime < 500) return;
+    // Un click care incheie o deplasare (drag) nu trebuie sa inchida vizualizatorul.
+    if (fractalDragMoved){ fractalDragMoved = false; return; }
+    closeFractalVisualizer();
+  });
   document.getElementById('fractalOverlay').addEventListener('mousemove', showFractalControlsBriefly);
   document.getElementById('fractalOverlay').addEventListener('touchstart', showFractalControlsBriefly, {passive:true});
 
@@ -4106,6 +5109,29 @@ document.addEventListener('DOMContentLoaded', function(){
     fractalApplyZoomFactor(Math.pow(1.001, -e.deltaY));
     showFractalControlsBriefly();
   }, {passive:false});
+
+  // --- Deplasare (pan) cu click stanga + miscarea mouse-ului ---
+  document.getElementById('fractalOverlay').addEventListener('mousedown', function(e){
+    if (e.button !== 0) return; // doar click stanga
+    fractalDragActive = true;
+    fractalDragMoved = false;
+    fractalDragLastX = e.clientX; fractalDragLastY = e.clientY;
+    document.getElementById('fractalOverlay').classList.add('dragging');
+  });
+  document.addEventListener('mousemove', function(e){
+    if (!fractalOpen || !fractalDragActive) return;
+    const dx = e.clientX - fractalDragLastX, dy = e.clientY - fractalDragLastY;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) fractalDragMoved = true;
+    if (fractalDragMoved){
+      fractalUserPanX += dx; fractalUserPanY += dy;
+      fractalDragLastX = e.clientX; fractalDragLastY = e.clientY;
+      showFractalControlsBriefly();
+    }
+  });
+  document.addEventListener('mouseup', function(){
+    fractalDragActive = false;
+    document.getElementById('fractalOverlay').classList.remove('dragging');
+  });
 
   let fractalPinchStartDist = null, fractalPinchStartZoom = 1;
   function fractalTouchDist(touches){
@@ -4117,6 +5143,12 @@ document.addEventListener('DOMContentLoaded', function(){
     if (e.touches.length === 2){
       fractalPinchStartDist = fractalTouchDist(e.touches);
       fractalPinchStartZoom = fractalUserZoom;
+      fractalDragActive = false; // 2 degete = pinch, nu deplasare
+    } else if (e.touches.length === 1){
+      // --- Deplasare (pan) cu un deget + miscare pe touchscreen ---
+      fractalDragActive = true;
+      fractalDragMoved = false;
+      fractalDragLastX = e.touches[0].clientX; fractalDragLastY = e.touches[0].clientY;
     }
   }, {passive:true});
   document.getElementById('fractalOverlay').addEventListener('touchmove', function(e){
@@ -4124,10 +5156,18 @@ document.addEventListener('DOMContentLoaded', function(){
       e.preventDefault();
       const ratio = fractalTouchDist(e.touches) / fractalPinchStartDist;
       fractalUserZoom = Math.min(10000, Math.max(0.001, fractalPinchStartZoom*ratio));
+    } else if (e.touches.length === 1 && fractalDragActive){
+      e.preventDefault();
+      const dx = e.touches[0].clientX - fractalDragLastX, dy = e.touches[0].clientY - fractalDragLastY;
+      if (Math.abs(dx) > 2 || Math.abs(dy) > 2) fractalDragMoved = true;
+      fractalUserPanX += dx; fractalUserPanY += dy;
+      fractalDragLastX = e.touches[0].clientX; fractalDragLastY = e.touches[0].clientY;
     }
   }, {passive:false});
   document.getElementById('fractalOverlay').addEventListener('touchend', function(e){
     if (e.touches.length < 2) fractalPinchStartDist = null;
+    if (e.touches.length === 0) fractalDragActive = false;
+    fractalLastTouchTime = Date.now();
   }, {passive:true});
   document.getElementById('fractalZoomIn').addEventListener('click', function(e){ e.stopPropagation(); fractalZoomIn(); showFractalControlsBriefly(); });
   document.getElementById('fractalZoomOut').addEventListener('click', function(e){ e.stopPropagation(); fractalZoomOut(); showFractalControlsBriefly(); });
@@ -4149,6 +5189,22 @@ document.addEventListener('DOMContentLoaded', function(){
     if (e.key === 'Escape' && fractalOpen) closeFractalVisualizer();
   });
   window.addEventListener('resize', function(){ if (fractalOpen) resizeFractalCanvas(); });
+
+  document.addEventListener('visibilitychange', function(){
+    if (document.visibilityState === 'visible' && audioCtx && isPlaying){
+      if (audioCtx.state === 'suspended'){
+        try{ audioCtx.resume().catch(function(){}); }catch(e){}
+      }
+      // pe mobil, timer-ele de fundal (setInterval) pot fi incetinite/oprite cand
+      // aplicatia e minimizata; la revenire, daca programarea a ramas in urma
+      // fata de ce s-ar fi auzit deja, completez imediat golul in loc sa las
+      // redarea sa se opreasca tacut cand se termina ultimul bloc programat
+      if (scheduleMoreAudioFn && compState){
+        const scheduledAheadSec = (playStartCtxTime + compState.elapsedTime) - audioCtx.currentTime;
+        if (scheduledAheadSec < 8) scheduleMoreAudioFn();
+      }
+    }
+  });
   document.addEventListener('fullscreenchange', function(){
     if (!document.fullscreenElement && fractalOpen) closeFractalVisualizer();
   });
