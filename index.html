@@ -106,13 +106,40 @@ header p.subtitle{color:var(--text-dim);font-size:1.02rem;max-width:600px;margin
 }
 .btn-small{padding:7px 13px; font-size:0.78rem;}
 .genre-card{
+  position:relative;
   background:var(--panel-2); border:1px solid var(--border); border-radius:var(--radius-sm);
-  padding:15px 16px; text-align:left; cursor:pointer; color:var(--text);
   transition:border-color .18s, transform .15s, background .18s;
-  font-family:inherit; display:flex; flex-direction:column; gap:6px;
 }
 .genre-card:hover{border-color:rgba(95,216,196,0.4); transform:translateY(-2px);}
 .genre-card.active{border-color:var(--wave); background:var(--wave-soft);}
+.genre-card-select{
+  display:flex; flex-direction:column; gap:6px; width:100%;
+  background:transparent; border:none; padding:15px 16px; text-align:left; cursor:pointer;
+  color:var(--text); font-family:inherit; min-height:0;
+}
+.genre-card-delete{
+  position:absolute; top:6px; right:6px; width:22px; height:22px; min-height:0;
+  padding:0; border-radius:50%; font-size:0.85rem; line-height:1;
+  background:rgba(0,0,0,0.35); border:1px solid var(--border); color:var(--text-dim);
+  display:flex; align-items:center; justify-content:center;
+}
+.genre-card-delete:hover{background:var(--dusty); color:#fff; border-color:var(--dusty);}
+.editor-section-title{
+  font-family:var(--serif); font-size:1.05rem; font-weight:600; color:var(--wave);
+  margin:20px 0 12px; padding-top:14px; border-top:1px solid var(--border);
+}
+.editor-section-title:first-of-type{border-top:none; padding-top:0; margin-top:16px;}
+
+.cover-preview-wrap{
+  position:relative; width:100%; max-width:360px; aspect-ratio:1/1; margin:0 auto 16px;
+  border-radius:var(--radius-sm); overflow:hidden; background:var(--panel-2); border:1px solid var(--border);
+}
+#coverCanvas{width:100%; height:100%; display:block;}
+.cover-placeholder{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:20px; color:var(--text-dimmer); font-size:0.85rem; line-height:1.5;
+}
+.cover-placeholder.hidden{display:none;}
 .genre-card h3{font-family:var(--serif); font-size:1.14rem; margin:0; font-weight:600;}
 .genre-card p{
   font-size:0.8rem; color:var(--text-dim); margin:0; line-height:1.5;
@@ -177,6 +204,60 @@ canvas#visualizer{width:100%;height:150px;display:block;border-radius:var(--radi
 .status-row{display:flex;justify-content:space-between;color:var(--text-dim);font-size:0.83rem;font-family:var(--mono);}
 
 footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:28px;line-height:1.85;}
+
+.fractal-overlay{
+  display:none; position:fixed; inset:0; z-index:200; background:#000; cursor:none;
+}
+.fractal-overlay.open{display:block;}
+.fractal-overlay canvas{display:block; width:100%; height:100%;}
+.fractal-close{
+  position:absolute; top:18px; right:18px; z-index:2;
+  width:40px; height:40px; padding:0; min-height:0;
+  background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.7);
+  border-radius:50%; font-size:1rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .3s;
+}
+.fractal-overlay.show-controls .fractal-close{opacity:1;}
+.support-widget{position:fixed; bottom:16px; right:16px; z-index:60;}
+.support-heart{
+  width:40px; height:40px; padding:0; min-height:0; border-radius:50%;
+  background:var(--panel-2); border:1px solid var(--border); color:var(--dusty);
+  font-size:1.1rem; display:flex; align-items:center; justify-content:center;
+}
+.support-heart:hover{border-color:var(--dusty); background:rgba(217,140,130,0.15);}
+.support-popup{
+  position:absolute; bottom:48px; right:0; display:none; align-items:center; gap:10px;
+  background:var(--panel); border:1px solid var(--border); border-radius:12px;
+  padding:10px 14px; white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+.support-popup.open{display:flex;}
+.support-popup .support-label{color:var(--text-dim); font-size:0.82rem;}
+.support-popup a{color:var(--wave); text-decoration:none; font-size:0.85rem;}
+.support-popup a:hover{text-decoration:underline;}
+.support-close{background:none; border:none; color:var(--text-dimmer); padding:2px; min-height:0; width:20px; height:20px;}
+@media (max-width:900px){ .support-widget{bottom:92px;} }
+.fractal-controls{
+  position:absolute; bottom:64px; left:50%; transform:translateX(-50%); z-index:2;
+  display:flex; gap:10px;
+  opacity:0; transition:opacity .3s; pointer-events:none;
+}
+.fractal-overlay.show-controls .fractal-controls{opacity:1; pointer-events:auto;}
+.fractal-zoom-btn{
+  width:40px; height:40px; padding:0; min-height:0;
+  background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.75);
+  border-radius:50%; font-size:1.1rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+}
+.fractal-zoom-btn:hover{border-color:var(--wave); color:var(--wave);}
+.fractal-mode-btn{width:auto; padding:0 12px; border-radius:20px; font-size:0.8rem; font-family:var(--mono);}
+.fractal-overlay.show-controls{cursor:default;}
+.fractal-hint{
+  position:absolute; bottom:22px; left:50%; transform:translateX(-50%); z-index:2;
+  color:rgba(255,255,255,0.5); font-size:0.78rem; letter-spacing:0.02em;
+  opacity:0; transition:opacity .3s; pointer-events:none;
+}
+.fractal-overlay.show-controls .fractal-hint{opacity:1;}
 
 .mini-player{
   display:none; position:fixed; left:0; right:0; bottom:0; z-index:50;
@@ -249,10 +330,216 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
     <section class="panel" id="genrePanel">
       <div class="panel-header-row">
         <h2 data-i18n="genreHeading">Choose a genre</h2>
-        <button id="toggleAllCategoriesBtn" class="btn-small" data-i18n="toggleAllBtn">⇕ Expand / collapse all</button>
+        <div class="btn-row" style="margin:0;">
+          <button id="openEditorBtn" class="btn-small" data-i18n="createCustomBtn">➕ Create custom genre</button>
+          <button id="toggleAllCategoriesBtn" class="btn-small" data-i18n="toggleAllBtn">⇕ Expand / collapse all</button>
+        </div>
       </div>
       <input type="text" id="genreSearchInput" class="genre-search" data-i18n-placeholder="genreSearchPlaceholder" placeholder="Search genres (e.g. "flamenco", "drone", "waltz"…)">
       <div class="genre-grid-wrapper" id="genreGrid"></div>
+    </section>
+
+    <section class="panel" id="genreEditorPanel" style="display:none;">
+      <div class="panel-header-row">
+        <h2 data-i18n="editorHeading">Custom genre editor</h2>
+        <button id="closeEditorBtn" class="btn-small">✕</button>
+      </div>
+      <p class="hint" data-i18n="editorHint">Pick a starting template, tweak whatever you like, then save. Your genre appears under "My Genres" and can be exported to share or keep.</p>
+
+      <div class="field-row">
+        <label data-i18n="templateLabel">Start from</label>
+        <select id="editorTemplate"></select>
+      </div>
+      <div class="field-row">
+        <label data-i18n="nameLabel">Name</label>
+        <input type="text" id="editorName" maxlength="40">
+      </div>
+      <div class="field-row">
+        <label data-i18n="descLabel">Description</label>
+        <input type="text" id="editorDescInput" maxlength="120">
+      </div>
+
+      <h3 class="editor-section-title" data-i18n="musicSectionLabel">Harmony & rhythm</h3>
+      <div class="field-row">
+        <label data-i18n="scaleLabel">Scale</label>
+        <select id="editorScale"></select>
+      </div>
+      <div class="field-row">
+        <label data-i18n="progressionLabel">Progression</label>
+        <select id="editorProgression"></select>
+      </div>
+      <div class="field-row">
+        <label data-i18n="meterLabel">Meter</label>
+        <select id="editorMeter">
+          <option value="4">4/4</option>
+          <option value="3">3/4</option>
+          <option value="5">5/4</option>
+          <option value="7">7/4</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label data-i18n="tempoRangeLabel">Tempo (min–max)</label>
+        <input type="number" id="editorTempoMin" min="30" max="140" value="60">
+        <input type="number" id="editorTempoMax" min="30" max="140" value="72">
+      </div>
+      <div class="field-row">
+        <label data-i18n="barsPerChordLabel">Bars per chord</label>
+        <input type="number" id="editorBarsPerChord" min="1" max="16" value="2">
+      </div>
+
+      <h3 class="editor-section-title" data-i18n="leadSectionLabel">Lead melody</h3>
+      <div class="field-row">
+        <label data-i18n="densityLabel">Density</label>
+        <input type="range" id="editorLeadDensity" min="0" max="1" step="0.02" value="0.3">
+        <span class="readout mono" id="editorLeadDensityReadout">30%</span>
+      </div>
+      <div class="field-row">
+        <label data-i18n="octaveLabel">Octave</label>
+        <input type="number" id="editorLeadOctave" min="3" max="7" value="5">
+      </div>
+      <div class="field-row">
+        <label data-i18n="waveLabel">Waveform</label>
+        <select id="editorLeadWave">
+          <option value="sine">Sine</option>
+          <option value="triangle">Triangle</option>
+          <option value="sawtooth">Sawtooth</option>
+          <option value="square">Square</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label class="switch"><input type="checkbox" id="editorLeadSwing"><span class="slider-toggle"></span></label>
+        <label data-i18n="swingLabel" style="min-width:auto;">Swing</label>
+      </div>
+
+      <h3 class="editor-section-title" data-i18n="padSectionLabel">Pad / chords</h3>
+      <div class="field-row">
+        <label data-i18n="attackReleaseLabel">Attack / Release</label>
+        <input type="number" id="editorPadAttack" min="0" max="5" step="0.05" value="1.0">
+        <input type="number" id="editorPadRelease" min="0" max="8" step="0.1" value="2.0">
+      </div>
+      <div class="field-row">
+        <label data-i18n="octaveLabel">Octave</label>
+        <input type="number" id="editorPadOctave" min="2" max="6" value="4">
+      </div>
+      <div class="field-row">
+        <label data-i18n="waveLabel">Waveform</label>
+        <select id="editorPadWave">
+          <option value="sine">Sine</option>
+          <option value="triangle">Triangle</option>
+          <option value="sawtooth">Sawtooth</option>
+          <option value="square">Square</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label class="switch"><input type="checkbox" id="editorPadSeventh"><span class="slider-toggle"></span></label>
+        <label data-i18n="seventhLabel" style="min-width:auto;">Seventh chords</label>
+      </div>
+
+      <h3 class="editor-section-title" data-i18n="bassSectionLabel">Bass</h3>
+      <div class="field-row">
+        <label data-i18n="octaveLabel">Octave</label>
+        <input type="number" id="editorBassOctave" min="1" max="4" value="2">
+      </div>
+      <div class="field-row">
+        <label data-i18n="patternLabel">Pattern</label>
+        <select id="editorBassPattern">
+          <option value="sustain">Sustain</option>
+          <option value="walking">Walking</option>
+          <option value="fourfloor">Four-on-the-floor</option>
+          <option value="bossa">Bossa</option>
+        </select>
+      </div>
+
+      <h3 class="editor-section-title" data-i18n="arpSectionLabel">Arpeggio</h3>
+      <div class="field-row">
+        <label class="switch"><input type="checkbox" id="editorArpEnabled"><span class="slider-toggle"></span></label>
+        <label data-i18n="enabledLabel" style="min-width:auto;">Enabled</label>
+      </div>
+      <div class="field-row">
+        <label data-i18n="patternLabel">Pattern</label>
+        <select id="editorArpPattern">
+          <option value="up">Up</option>
+          <option value="down">Down</option>
+          <option value="updown">Up-Down</option>
+          <option value="random">Random</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label data-i18n="stepsLabel">Notes per bar</label>
+        <input type="number" id="editorArpSteps" min="4" max="16" value="8">
+      </div>
+
+      <h3 class="editor-section-title" data-i18n="toneSectionLabel">Tone & space</h3>
+      <div class="field-row">
+        <label data-i18n="filterLabel">Filter (Hz)</label>
+        <input type="range" id="editorFilterCutoff" min="400" max="4000" step="50" value="2000">
+        <span class="readout mono" id="editorFilterReadout">2000 Hz</span>
+      </div>
+      <div class="field-row">
+        <label data-i18n="reverbLabel">Reverb</label>
+        <input type="range" id="editorReverbMix" min="0" max="1" step="0.02" value="0.4">
+        <span class="readout mono" id="editorReverbReadout">40%</span>
+      </div>
+      <div class="field-row">
+        <label data-i18n="textureLabel">Texture</label>
+        <select id="editorTexture">
+          <option value="">—</option>
+          <option value="vinyl">Vinyl</option>
+          <option value="wind">Wind</option>
+          <option value="ocean">Ocean</option>
+          <option value="breath">Breath</option>
+        </select>
+      </div>
+      <div class="field-row">
+        <label data-i18n="entrainRecLabel">Recommended band</label>
+        <select id="editorEntrainRec">
+          <option value="delta">Delta</option>
+          <option value="theta">Theta</option>
+          <option value="alpha">Alpha</option>
+          <option value="beta">Beta</option>
+          <option value="gamma">Gamma</option>
+        </select>
+      </div>
+
+      <button type="button" id="toggleAdvancedBtn" class="btn-small" data-i18n="advancedToggleLabel">Advanced ▾</button>
+      <div id="editorAdvanced" style="display:none; margin-top:14px;">
+        <div class="field-row">
+          <label data-i18n="detuneLabel">Detune (cents) lead / pad</label>
+          <input type="number" id="editorLeadDetune" min="0" max="20" value="0">
+          <input type="number" id="editorPadDetune" min="0" max="20" value="0">
+        </div>
+        <div class="field-row">
+          <label data-i18n="portamentoLabel">Portamento (sec)</label>
+          <input type="number" id="editorPortamento" min="0" max="1" step="0.02" value="0">
+        </div>
+        <div class="field-row">
+          <label data-i18n="vibratoLabel">Vibrato (Hz / cents)</label>
+          <input type="number" id="editorVibratoRate" min="0" max="10" step="0.5" value="0">
+          <input type="number" id="editorVibratoDepth" min="0" max="30" value="0">
+        </div>
+        <div class="field-row">
+          <label data-i18n="glitchLabel">Glitch (probability)</label>
+          <input type="range" id="editorGlitch" min="0" max="1" step="0.05" value="0">
+          <span class="readout mono" id="editorGlitchReadout">0%</span>
+        </div>
+        <div class="field-row">
+          <label class="switch"><input type="checkbox" id="editorCallResponse"><span class="slider-toggle"></span></label>
+          <label data-i18n="callResponseLabel" style="min-width:auto;">Call &amp; response</label>
+        </div>
+        <div class="field-row">
+          <label class="switch"><input type="checkbox" id="editorDelayEnabled"><span class="slider-toggle"></span></label>
+          <label data-i18n="delayLabel" style="min-width:auto;">Echo / delay</label>
+        </div>
+      </div>
+
+      <div id="editorError" class="disclaimer" style="display:none;"></div>
+      <div class="btn-row" style="margin-top:16px;">
+        <button type="button" id="testCustomGenreBtn" data-i18n="testBtn">▶ Test</button>
+        <button type="button" id="saveCustomGenreBtn" class="btn-accent" data-i18n="saveBtn">💾 Save</button>
+        <button type="button" id="exportGenrePackBtn" data-i18n="exportPackBtn">⬇ Export my genres</button>
+        <button type="button" id="importGenrePackBtn" data-i18n="importPackBtn">⬆ Import genres</button>
+        <input type="file" id="importGenrePackFile" accept="application/json" style="display:none;">
+      </div>
     </section>
 
     <div class="columns">
@@ -300,7 +587,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           </div>
           <div class="field-row">
             <label data-i18n="carrierLabel">Carrier frequency</label>
-            <input type="range" id="carrierSlider" min="100" max="500" value="210" step="1">
+            <input type="range" id="carrierSlider" min="100" max="1000" value="210" step="1">
             <span class="readout mono" id="carrierReadout">210 Hz</span>
           </div>
           <div class="preset-chips" id="solfeggioChips"></div>
@@ -325,6 +612,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           <div class="transport">
             <button id="playPauseBtn" class="btn-accent"><span id="playPauseIcon">▶</span> <span id="playPauseLabel" data-i18n="playBtn">Play</span></button>
             <button id="stopBtn" disabled>⏹ <span data-i18n="stopBtn">Stop</span></button>
+            <button id="openFractalBtn" title="Full-screen visualizer">⛶ <span data-i18n="fractalBtn">Full visualizer</span></button>
             <div class="volume-control">
               <label data-i18n="masterVolLabel">Volume</label>
               <input type="range" id="masterVolSlider" min="0" max="100" value="80">
@@ -358,6 +646,21 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           </div>
           <div id="exportProgress" class="hint mono" style="display:none;margin-top:10px;"></div>
         </section>
+
+        <section class="panel" id="coverArtPanel">
+          <h2 data-i18n="coverHeading">Cover art</h2>
+          <p class="hint" data-i18n="coverHint">Original generative art tied to your current seed and genre — a one-of-a-kind visual cover for this song, reproducible from the same seed.</p>
+          <div class="cover-preview-wrap">
+            <canvas id="coverCanvas" width="800" height="800"></canvas>
+            <div class="cover-placeholder" id="coverPlaceholder" data-i18n="coverPlaceholder">Press "Generate cover" to create one</div>
+          </div>
+          <div class="btn-row">
+            <button id="generateCoverBtn" class="btn-accent" data-i18n="generateCoverBtn">🎨 Generate cover</button>
+            <button id="coverModeBtn" class="fractal-mode-btn cover-mode-btn" data-mode="2d">2D</button>
+            <button id="exportCoverBtn" disabled data-i18n="exportCoverBtn">⬇ Export PNG</button>
+          </div>
+          <div id="coverProgress" class="hint mono" style="display:none;margin-top:10px;"></div>
+        </section>
       </div>
     </div>
   </main>
@@ -365,8 +668,31 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
   <footer>
     <p data-i18n="footerLicense">CC0 license · no telemetry · no external dependencies · 100% offline</p>
     <p data-i18n="footerNote">All music is generated algorithmically, in real time — original, with no samples and no copyrighted material.</p>
+    <p><span data-i18n="footerTradeFreePre">Trade-free philosophy ·</span> <a href="https://trom.tf" target="_blank" rel="noopener">TROM</a> <span data-i18n="footerTradeFreePost">· no ads, no tracking, no account</span></p>
   </footer>
 
+  <div class="support-widget" id="supportWidget">
+    <button class="support-heart" id="supportHeartBtn" aria-label="Support">♥</button>
+    <div class="support-popup" id="supportPopup">
+      <span class="support-label" data-i18n="supportLabel">Support:</span>
+      <a href="https://www.patreon.com/c/alexio_tf" target="_blank" rel="noopener">Patreon</a>
+      <a href="https://buymeacoffee.com/echo.of.the.strings" target="_blank" rel="noopener">Coffee</a>
+      <button class="support-close" id="supportCloseBtn" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="fractal-overlay" id="fractalOverlay">
+  <canvas id="fractalCanvas"></canvas>
+  <button id="closeFractalBtn" class="fractal-close" aria-label="Exit">✕</button>
+  <div class="fractal-controls" id="fractalControls">
+    <button id="fractalZoomOut" class="fractal-zoom-btn" aria-label="Zoom out">−</button>
+    <button id="fractalZoomReset" class="fractal-zoom-btn" aria-label="Reset zoom">⟲</button>
+    <button id="fractalZoomIn" class="fractal-zoom-btn" aria-label="Zoom in">+</button>
+    <button id="fractalModeBtn" class="fractal-zoom-btn fractal-mode-btn" aria-label="Toggle 2D/3D">2D</button>
+  </div>
+  <div class="fractal-hint" id="fractalHint" data-i18n="fractalHint">Click anywhere or press Esc to exit</div>
 </div>
 
 <div class="mini-player" id="miniPlayer">
@@ -424,6 +750,9 @@ const SCALES = {
   japaneseIn:       [0,1,5,7,8],
   wholeTone:        [0,2,4,6,8,10],
   bhairav:          [0,1,4,5,7,8,11],
+  nikriz:           [0,2,3,6,7,9,10],
+  hungarianMinor:   [0,2,3,6,7,8,11],
+  egyptianPenta:    [0,2,5,7,10],
 };
 
 const PROGRESSIONS = {
@@ -528,7 +857,7 @@ const GENRES = {
     desc:{ro:'Gamă Bhairav, dronă de tanpură — foarte lent, contemplativ.', en:'Bhairav scale, tanpura-like drone — very slow and contemplative.', fr:'Gamme Bhairav, bourdon façon tampoura — très lent et contemplatif.', it:'Scala Bhairav, bordone simile al tanpura — molto lento e contemplativo.', es:'Escala Bhairav, zumbido tipo tanpura — muy lento y contemplativo.', pt:'Escala Bhairav, zumbido tipo tanpura — muito lento e contemplativo.', de:'Bhairav-Tonleiter, tanpuraartiger Bordun — sehr langsam und kontemplativ.'},
     glyph:{freq:0.5, amp:7, jitter:2, wave:'sine'},
     scale:'bhairav', progression:'modalVamp', tempoRange:[42,52], barsPerChord:16,
-    lead:{use:true, density:0.16, octave:5, swing:false, wave:'sine', attack:0.02, release:0.8},
+    lead:{use:true, density:0.16, octave:5, swing:false, wave:'sine', attack:0.02, release:0.8, vibratoRate:5, vibratoDepth:10},
     pad:{attack:3.5, release:5.0, seventh:false, octave:3, wave:'sine'},
     bass:{octave:2, pattern:'sustain'},
     filterCutoff:1300, reverbMix:0.6, arp:false,
@@ -598,6 +927,39 @@ const GENRES = {
     pad:{attack:3.5, release:5.5, seventh:false, octave:4, wave:'sine', detune:7},
     bass:{octave:2, pattern:'sustain'},
     filterCutoff:2400, reverbMix:0.6, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  handpan: {
+    name:{ro:'Handpan Meditativ', en:'Meditative Handpan', fr:'Handpan Méditatif', it:'Handpan Meditativo', es:'Handpan Meditativo', pt:'Handpan Meditativo', de:'Meditatives Handpan'},
+    desc:{ro:'Rezonanță metalică caldă, sunet care se stinge lin — pace tangibilă, aproape palpabilă.', en:'Warm metallic resonance, softly decaying tone — tangible, almost palpable peace.', fr:'Résonance métallique chaude, un son qui s\'éteint doucement — une paix tangible, presque palpable.', it:'Risonanza metallica calda, un suono che si spegne dolcemente — una pace tangibile, quasi palpabile.', es:'Resonancia metálica cálida, un sonido que se apaga suavemente — una paz tangible, casi palpable.', pt:'Ressonância metálica quente, um som que se apaga suavemente — uma paz tangível, quase palpável.', de:'Warme metallische Resonanz, sanft verklingender Ton — greifbarer, fast spürbarer Frieden.'},
+    glyph:{freq:1.0, amp:8, jitter:2, wave:'sine'},
+    scale:'minorPenta', progression:'ambientModal', tempoRange:[56,68],
+    lead:{use:true, density:0.28, octave:5, swing:false, wave:'sine', attack:0.01, release:1.2, detune:8},
+    pad:{attack:2.2, release:3.5, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2000, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  theremin: {
+    name:{ro:'Theremin Ambiental', en:'Ambient Theremin', fr:'Thérémine Ambiante', it:'Theremin Ambientale', es:'Theremin Ambiental', pt:'Theremin Ambiente', de:'Ambient-Theremin'},
+    desc:{ro:'Alunecare continuă de ton, fără nicio treaptă fixă — o mână care desenează în aer.', en:'Continuous pitch glide with no fixed steps — a hand drawing shapes in the air.', fr:'Un glissement continu de hauteur, sans aucun palier fixe — une main qui dessine dans l\'air.', it:'Uno scivolamento continuo di intonazione, senza gradini fissi — una mano che disegna nell\'aria.', es:'Un deslizamiento continuo de tono, sin escalones fijos — una mano que dibuja en el aire.', pt:'Um deslizamento contínuo de tom, sem degraus fixos — uma mão que desenha no ar.', de:'Ein fortlaufendes Tonhöhengleiten ohne feste Stufen — eine Hand, die Formen in die Luft zeichnet.'},
+    glyph:{freq:1.3, amp:9, jitter:5, wave:'sine'},
+    scale:'minor', progression:'ambientModal', tempoRange:[56,68],
+    lead:{use:true, density:0.4, octave:5, swing:false, wave:'sine', attack:0.15, release:0.9, portamento:0.35},
+    pad:{attack:2.0, release:3.2, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1800, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'atmospheric',
+  },
+  egyptian: {
+    name:{ro:'Pentatonic Egiptean Suspendat', en:'Suspended Egyptian Pentatonic', fr:'Pentatonique Égyptien Suspendu', it:'Pentatonico Egiziano Sospeso', es:'Pentatónico Egipcio Suspendido', pt:'Pentatônico Egípcio Suspenso', de:'Schwebende Ägyptische Pentatonik'},
+    desc:{ro:'Nicio treaptă de rezolvare, doar plutire deschisă — o întrebare care rămâne, senin, fără răspuns.', en:'No resolving tone, only open floating — a question left gently unanswered.', fr:'Aucune tonique de résolution, juste une flottaison ouverte — une question laissée doucement sans réponse.', it:'Nessuna tonica risolutiva, solo un fluttuare aperto — una domanda lasciata dolcemente senza risposta.', es:'Ningún tono resolutivo, solo una flotación abierta — una pregunta dejada suavemente sin respuesta.', pt:'Nenhum tom resolutivo, apenas uma flutuação aberta — uma pergunta deixada suavemente sem resposta.', de:'Kein auflösender Ton, nur offenes Schweben — eine Frage, sanft unbeantwortet gelassen.'},
+    glyph:{freq:0.7, amp:8, jitter:0, wave:'sine'},
+    scale:'egyptianPenta', progression:'modalVamp', tempoRange:[54,64], barsPerChord:4,
+    lead:{use:true, density:0.22, octave:5, swing:false, wave:'sine'},
+    pad:{attack:2.5, release:4.0, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1700, reverbMix:0.5, arp:false,
     texture:null, recommendedEntrainment:'theta', category:'atmospheric',
   },
 
@@ -701,6 +1063,52 @@ const GENRES = {
     bass:{octave:2, pattern:'sustain'},
     filterCutoff:1500, padFilterCutoff:1000, reverbMix:0.45, arp:false,
     texture:null, recommendedEntrainment:'alpha', category:'electronic',
+  },
+  shoegaze: {
+    name:{ro:'Shoegaze Domol', en:'Gentle Shoegaze', fr:'Shoegaze Doux', it:'Shoegaze Dolce', es:'Shoegaze Suave', pt:'Shoegaze Suave', de:'Sanfter Shoegaze'},
+    desc:{ro:'Perete de reverb și acorduri dezacordate — ceață sonoră caldă, învăluitoare.', en:'A wall of reverb and detuned chords — warm, enveloping sonic haze.', fr:'Un mur de réverbération et d\'accords désaccordés — une brume sonore chaude et enveloppante.', it:'Un muro di riverbero e accordi stonati — una calda foschia sonora avvolgente.', es:'Un muro de reverberación y acordes desafinados — una cálida bruma sonora envolvente.', pt:'Um muro de reverberação e acordes desafinados — uma névoa sonora quente e envolvente.', de:'Eine Wand aus Hall und verstimmten Akkorden — warmer, umhüllender Klangnebel.'},
+    glyph:{freq:1.5, amp:11, jitter:5, wave:'sine'},
+    scale:'major', progression:'jazzy', tempoRange:[66,78],
+    lead:{use:true, density:0.26, octave:5, swing:false, wave:'triangle'},
+    pad:{attack:1.5, release:3.5, seventh:true, octave:4, wave:'sawtooth', detune:12},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1400, padFilterCutoff:1000, reverbMix:0.65, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'electronic',
+  },
+  chiptune: {
+    name:{ro:'Chiptune Calm', en:'Calm Chiptune', fr:'Chiptune Calme', it:'Chiptune Calmo', es:'Chiptune Tranquilo', pt:'Chiptune Calmo', de:'Ruhiges Chiptune'},
+    desc:{ro:'Unde pătrate din console retro, dar încetinite — nostalgie pixelată, blândă.', en:'Retro square-wave game tones, slowed right down — gentle, pixelated nostalgia.', fr:'Ondes carrées façon console rétro, mais ralenties — une nostalgie pixélisée et douce.', it:'Onde quadre da console retrò, ma rallentate — una nostalgia pixelata e dolce.', es:'Ondas cuadradas de consola retro, pero ralentizadas — una nostalgia pixelada y suave.', pt:'Ondas quadradas de console retrô, mas desaceleradas — uma nostalgia pixelada e suave.', de:'Retro-Rechteckwellen aus alten Spielkonsolen, stark verlangsamt — sanfte, pixelige Nostalgie.'},
+    glyph:{freq:3.5, amp:9, jitter:0, wave:'saw'},
+    scale:'major', progression:'popMajor', tempoRange:[60,72],
+    lead:{use:true, density:0.3, octave:5, swing:false, wave:'square'},
+    pad:{attack:0.05, release:0.8, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2000, padFilterCutoff:1200, reverbMix:0.35,
+    arp:true, arpPattern:'up', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'alpha', category:'electronic',
+  },
+  dubtechno: {
+    name:{ro:'Dub Techno', en:'Dub Techno', fr:'Dub Techno', it:'Dub Techno', es:'Dub Techno', pt:'Dub Techno', de:'Dub Techno'},
+    desc:{ro:'Puls pe fiecare timp, filtrat gros, ecou care se stinge încet — minimalism hipnotic, ceață caldă.', en:'A thick filtered four-on-the-floor pulse, slowly decaying echo — hypnotic minimalism, warm haze.', fr:'Une pulsation filtrée et épaisse à chaque temps, écho qui s\'éteint lentement — minimalisme hypnotique, brume chaude.', it:'Un impulso filtrato e denso su ogni battito, eco che si spegne lentamente — minimalismo ipnotico, foschia calda.', es:'Un pulso filtrado y denso en cada tiempo, eco que se apaga lentamente — minimalismo hipnótico, bruma cálida.', pt:'Um pulso filtrado e denso em cada tempo, eco que se apaga lentamente — minimalismo hipnótico, névoa quente.', de:'Ein dicht gefilterter Puls auf jedem Schlag, langsam verklingendes Echo — hypnotischer Minimalismus, warmer Dunst.'},
+    glyph:{freq:3.1, amp:8, jitter:3, wave:'sine'},
+    scale:'minor', progression:'ambientModal', tempoRange:[110,120], barsPerChord:4,
+    lead:{use:true, density:0.08, octave:6, swing:false, wave:'sine'},
+    pad:{attack:1.5, release:2.5, seventh:false, octave:4, wave:'sawtooth', detune:5},
+    bass:{octave:2, pattern:'fourfloor'},
+    filterCutoff:1600, padFilterCutoff:800, reverbMix:0.4,
+    delayMix:0.3, delayTime:0.42, delayFeedback:0.5, arp:false,
+    texture:null, recommendedEntrainment:'beta', category:'electronic',
+  },
+  glitchambient: {
+    name:{ro:'Glitch Ambiental Blând', en:'Gentle Glitch Ambient', fr:'Glitch Ambiant Doux', it:'Glitch Ambient Dolce', es:'Glitch Ambient Suave', pt:'Glitch Ambiente Suave', de:'Sanftes Glitch-Ambient'},
+    desc:{ro:'Bâlbâieli digitale fine peste un pat armonic cald — frumusețea imperfecțiunii calculate.', en:'Fine digital stutters over a warm harmonic bed — the beauty of calculated imperfection.', fr:'De fins bégaiements numériques sur un lit harmonique chaud — la beauté de l\'imperfection calculée.', it:'Fini balbettii digitali su un caldo letto armonico — la bellezza dell\'imperfezione calcolata.', es:'Finos tartamudeos digitales sobre un cálido lecho armónico — la belleza de la imperfección calculada.', pt:'Finas gagueiras digitais sobre um leito harmônico quente — a beleza da imperfeição calculada.', de:'Feines digitales Stottern über einem warmen harmonischen Klangbett — die Schönheit der berechneten Unvollkommenheit.'},
+    glyph:{freq:2.6, amp:9, jitter:7, wave:'sine'},
+    scale:'majorPenta', progression:'ambientModal', tempoRange:[60,72],
+    lead:{use:true, density:0.3, octave:5, swing:false, wave:'sine', glitch:0.35},
+    pad:{attack:1.8, release:3.0, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1800, reverbMix:0.5, arp:false,
+    texture:'vinyl', recommendedEntrainment:'alpha', category:'electronic',
   },
 
   celtic: {
@@ -868,6 +1276,75 @@ const GENRES = {
     filterCutoff:2500, reverbMix:0.35, arp:false,
     texture:null, recommendedEntrainment:'beta', category:'world',
   },
+  maqam: {
+    name:{ro:'Maqam Nikriz', en:'Nikriz Maqam', fr:'Maqam Nikriz', it:'Maqam Nikriz', es:'Maqam Nikriz', pt:'Maqam Nikriz', de:'Nikriz-Maqam'},
+    desc:{ro:'Gamă orientală cu cvartă mărită, dronă susținută — călătorie domoală spre răsărit.', en:'An Eastern scale with a raised fourth, sustained drone — a gentle journey eastward.', fr:'Une gamme orientale à quarte augmentée, bourdon soutenu — un doux voyage vers l\'orient.', it:'Una scala orientale con quarta aumentata, bordone sostenuto — un dolce viaggio verso oriente.', es:'Una escala oriental con cuarta aumentada, bordón sostenido — un suave viaje hacia oriente.', pt:'Uma escala oriental com quarta aumentada, zumbido sustentado — uma suave viagem ao oriente.', de:'Eine orientalische Tonleiter mit übermäßiger Quarte, anhaltender Bordun — eine sanfte Reise nach Osten.'},
+    glyph:{freq:2.2, amp:9, jitter:4, wave:'sine'},
+    scale:'nikriz', progression:'modalVamp', tempoRange:[58,70], barsPerChord:6,
+    lead:{use:true, density:0.32, octave:5, swing:false, wave:'sine', detune:6},
+    pad:{attack:2.5, release:4.0, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1700, reverbMix:0.45,
+    arp:true, arpPattern:'random', arpStepsPerBar:10,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  guqin: {
+    name:{ro:'Guqin Contemplativ', en:'Contemplative Guqin', fr:'Guqin Contemplatif', it:'Guqin Contemplativo', es:'Guqin Contemplativo', pt:'Guqin Contemplativo', de:'Kontemplatives Guqin'},
+    desc:{ro:'Pentatonic rarefiat, tonuri lungi ca de arcuș — grădină clasică chineză, tăcere.', en:'Sparse pentatonic tones, long bowed-like sustains — a classical Chinese garden, silence.', fr:'Tons pentatoniques épars, longues tenues façon archet — un jardin classique chinois, le silence.', it:'Toni pentatonici radi, lunghe tenute come d\'archetto — un giardino classico cinese, il silenzio.', es:'Tonos pentatónicos dispersos, largos sostenidos tipo arco — un jardín clásico chino, el silencio.', pt:'Tons pentatônicos esparsos, longos sustentos tipo arco — um jardim clássico chinês, o silêncio.', de:'Spärliche pentatonische Töne, lang gestrichene Klänge — ein klassischer chinesischer Garten, Stille.'},
+    glyph:{freq:0.8, amp:7, jitter:2, wave:'sine'},
+    scale:'majorPenta', progression:'modalVamp', tempoRange:[44,54], barsPerChord:8,
+    lead:{use:true, density:0.22, octave:5, swing:false, wave:'sine', attack:0.3, release:1.2, vibratoRate:4, vibratoDepth:6},
+    pad:{attack:3.0, release:4.5, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1600, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  kora: {
+    name:{ro:'Kora Vest-Africană', en:'West African Kora', fr:'Kora Ouest-Africaine', it:'Kora dell\'Africa Occidentale', es:'Kora de África Occidental', pt:'Kora da África Ocidental', de:'Westafrikanische Kora'},
+    desc:{ro:'Tipar ciclic și împletit, bas mergător constant — o roată sonoră care nu se oprește.', en:'A cyclical, interlocking pattern, steady walking bass — a sonic wheel that never stops turning.', fr:'Un motif cyclique et entrelacé, basse marchante constante — une roue sonore qui ne s\'arrête jamais.', it:'Un motivo ciclico e intrecciato, basso cammino costante — una ruota sonora che non si ferma mai.', es:'Un patrón cíclico y entrelazado, bajo caminante constante — una rueda sonora que nunca deja de girar.', pt:'Um padrão cíclico e entrelaçado, baixo caminhante constante — uma roda sonora que nunca para.', de:'Ein zyklisches, ineinandergreifendes Muster, stetiger Walking Bass — ein Klangrad, das nie stillsteht.'},
+    glyph:{freq:3.6, amp:8, jitter:3, wave:'sine'},
+    scale:'mixolydian', progression:'modalVamp', tempoRange:[84,96],
+    lead:{use:true, density:0.4, octave:5, swing:false, wave:'sine'},
+    pad:{attack:0.5, release:1.5, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:2300, reverbMix:0.35,
+    arp:true, arpPattern:'random', arpStepsPerBar:12,
+    texture:null, recommendedEntrainment:'alpha', category:'world',
+  },
+  danbau: {
+    name:{ro:'Đàn Bầu', en:'Đàn Bầu', fr:'Đàn Bầu', it:'Đàn Bầu', es:'Đàn Bầu', pt:'Đàn Bầu', de:'Đàn Bầu'},
+    desc:{ro:'Alunecări continue de ton, ca o voce cântată — monocord vietnamez, expresiv și plângător.', en:'Continuous pitch slides, almost sung — a Vietnamese monochord, expressive and plaintive.', fr:'Des glissements continus de hauteur, presque chantés — un monocorde vietnamien, expressif et plaintif.', it:'Scivolamenti continui di intonazione, quasi cantati — un monocordo vietnamita, espressivo e lamentoso.', es:'Deslizamientos continuos de tono, casi cantados — un monocordio vietnamita, expresivo y quejumbroso.', pt:'Deslizamentos contínuos de tom, quase cantados — um monocórdio vietnamita, expressivo e queixoso.', de:'Fortlaufende Tonhöhengleiten, fast gesungen — eine vietnamesische Monochord-Zither, ausdrucksvoll und klagend.'},
+    glyph:{freq:1.4, amp:9, jitter:6, wave:'sine'},
+    scale:'minorPenta', progression:'modalVamp', tempoRange:[50,62], barsPerChord:8,
+    lead:{use:true, density:0.24, octave:5, swing:false, wave:'sine', attack:0.1, release:0.8, portamento:0.28},
+    pad:{attack:3.0, release:4.5, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1500, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  duduk: {
+    name:{ro:'Duduk Armenian', en:'Armenian Duduk', fr:'Duduk Arménien', it:'Duduk Armeno', es:'Duduk Armenio', pt:'Duduk Armênio', de:'Armenische Duduk'},
+    desc:{ro:'Suflu cu ansă dublă, vibrato cald și plângător — un cântec care nu se termină niciodată de tot.', en:'Double-reed breath, warm plaintive vibrato — a song that never quite ends.', fr:'Souffle à anche double, vibrato chaud et plaintif — un chant qui ne finit jamais tout à fait.', it:'Fiato ad ancia doppia, vibrato caldo e lamentoso — un canto che non finisce mai del tutto.', es:'Aliento de lengüeta doble, vibrato cálido y quejumbroso — un canto que nunca termina del todo.', pt:'Sopro de palheta dupla, vibrato quente e queixoso — um canto que nunca termina de vez.', de:'Doppelrohrblatt-Atem, warmes, klagendes Vibrato — ein Lied, das nie ganz endet.'},
+    glyph:{freq:1.0, amp:7, jitter:3, wave:'sine'},
+    scale:'minor', progression:'modalVamp', tempoRange:[48,58], barsPerChord:8,
+    lead:{use:true, density:0.26, octave:5, swing:false, wave:'sine', attack:0.2, release:1.0, vibratoRate:5, vibratoDepth:12},
+    pad:{attack:3.2, release:4.8, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:1600, reverbMix:0.5, arp:false,
+    texture:null, recommendedEntrainment:'theta', category:'world',
+  },
+  hungarian: {
+    name:{ro:'Minor Maghiar', en:'Hungarian Minor', fr:'Mineur Hongrois', it:'Minore Ungherese', es:'Menor Húngaro', pt:'Menor Húngaro', de:'Ungarisch Moll'},
+    desc:{ro:'Cvartă mărită și septimă mare peste minor armonic — dramatism dansant, ca un csárdás domol.', en:'A raised fourth and major seventh over harmonic minor — dancing drama, like a slow csárdás.', fr:'Une quarte augmentée et une septième majeure sur mineur harmonique — un drame dansant, comme une csárdás lente.', it:'Una quarta aumentata e una settima maggiore sul minore armonico — un dramma danzante, come una csárdás lenta.', es:'Una cuarta aumentada y una séptima mayor sobre el menor armónico — un drama danzante, como una csárdás lenta.', pt:'Uma quarta aumentada e uma sétima maior sobre o menor harmônico — um drama dançante, como uma csárdás lenta.', de:'Übermäßige Quarte und große Septime über harmonisch Moll — tänzerisches Drama, wie ein langsamer Csárdás.'},
+    glyph:{freq:2.9, amp:10, jitter:2, wave:'sine'},
+    scale:'hungarianMinor', progression:'andalusian', tempoRange:[88,102],
+    lead:{use:true, density:0.42, octave:5, swing:true, wave:'triangle'},
+    pad:{attack:0.3, release:1.2, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:2200, reverbMix:0.32,
+    arp:true, arpPattern:'down', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'beta', category:'world',
+  },
 
   classical: {
     name:{ro:'Clasic Relaxant', en:'Relaxing Classical', fr:'Classique Relaxant', it:'Classico Rilassante', es:'Clásico Relajante', pt:'Clássico Relaxante', de:'Entspannende Klassik'},
@@ -946,6 +1423,18 @@ const GENRES = {
     filterCutoff:1400, reverbMix:0.65, arp:false,
     texture:null, recommendedEntrainment:'delta', category:'classical',
   },
+  musicbox: {
+    name:{ro:'Cutie Muzicală', en:'Music Box', fr:'Boîte à Musique', it:'Carillon', es:'Caja de Música', pt:'Caixa de Música', de:'Spieluhr'},
+    desc:{ro:'Clinchete înalte și clare, mecanism care se-nvârte domol — nostalgie de copilărie.', en:'High, clear chimes, a slowly turning mechanism — childhood nostalgia.', fr:'Des tintements aigus et clairs, un mécanisme qui tourne doucement — la nostalgie de l\'enfance.', it:'Tintinnii acuti e chiari, un meccanismo che gira lentamente — la nostalgia dell\'infanzia.', es:'Tintineos agudos y claros, un mecanismo que gira lentamente — la nostalgia de la infancia.', pt:'Tilintares agudos e claros, um mecanismo que gira lentamente — a nostalgia da infância.', de:'Helle, klare Glöckchentöne, ein sich langsam drehendes Uhrwerk — kindliche Nostalgie.'},
+    glyph:{freq:4.2, amp:6, jitter:0, wave:'sine'},
+    scale:'major', progression:'classical', tempoRange:[66,78],
+    lead:{use:true, density:0.34, octave:6, swing:false, wave:'sine', attack:0.005, release:0.7, detune:6},
+    pad:{attack:1.2, release:1.8, seventh:false, octave:5, wave:'sine'},
+    bass:{octave:3, pattern:'sustain'},
+    filterCutoff:3000, reverbMix:0.32,
+    arp:true, arpPattern:'up', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
   harpsolo: {
     name:{ro:'Harpă Solo Senină', en:'Serene Solo Harp', fr:'Harpe Solo Sereine', it:'Arpa Solo Serena', es:'Arpa Solo Serena', pt:'Harpa Solo Serena', de:'Heitere Solo-Harfe'},
     desc:{ro:'Pentatonic major, arpegii clare — un singur instrument, lumină caldă.', en:'Major pentatonic, clear arpeggios — a single instrument, warm light.', fr:'Pentatonique majeur, arpèges clairs — un seul instrument, une lumière chaude.', it:'Pentatonico maggiore, arpeggi limpidi — un solo strumento, una luce calda.', es:'Pentatónico mayor, arpegios claros — un solo instrumento, una luz cálida.', pt:'Pentatônico maior, arpejos claros — um único instrumento, uma luz quente.', de:'Dur-Pentatonik, klare Arpeggios — ein einzelnes Instrument, warmes Licht.'},
@@ -978,6 +1467,17 @@ const GENRES = {
     bass:{octave:3, pattern:'sustain'},
     filterCutoff:2000, reverbMix:0.55, arp:false,
     texture:null, recommendedEntrainment:'alpha', category:'classical',
+  },
+  tintinnabuli: {
+    name:{ro:'Tintinnabuli Sacru', en:'Sacred Tintinnabuli', fr:'Tintinnabuli Sacré', it:'Tintinnabuli Sacro', es:'Tintinnabuli Sagrado', pt:'Tintinnabuli Sagrado', de:'Heiliges Tintinnabuli'},
+    desc:{ro:'Triade rare ca niște clopote, spațiu imens între note — liniște aproape nemișcată.', en:'Sparse bell-like triads, vast space between notes — an almost motionless stillness.', fr:'Triades rares comme des cloches, un vaste espace entre les notes — une immobilité presque totale.', it:'Triadi rare come campane, ampio spazio tra le note — una quiete quasi immobile.', es:'Tríadas escasas como campanas, amplio espacio entre notas — una quietud casi inmóvil.', pt:'Tríades esparsas como sinos, amplo espaço entre as notas — uma quietude quase imóvel.', de:'Spärliche, glockenartige Dreiklänge, weiter Raum zwischen den Tönen — fast regungslose Stille.'},
+    glyph:{freq:0.3, amp:6, jitter:0, wave:'sine'},
+    scale:'minor', progression:'modalVamp', tempoRange:[36,46], barsPerChord:16,
+    lead:{use:true, density:0.08, octave:5, swing:false, wave:'sine', attack:1.5, release:3.0},
+    pad:{attack:3.5, release:5.5, seventh:false, octave:3, wave:'sine'},
+    bass:{octave:2, pattern:'sustain'},
+    filterCutoff:2200, reverbMix:0.65, arp:false,
+    texture:null, recommendedEntrainment:'delta', category:'classical',
   },
 
   lofi: {
@@ -1035,6 +1535,18 @@ const GENRES = {
     filterCutoff:1300, padFilterCutoff:1000, reverbMix:0.4, arp:false,
     texture:'vinyl', recommendedEntrainment:'alpha', category:'groove',
   },
+  fingerstyle: {
+    name:{ro:'Fingerstyle Acustic', en:'Acoustic Fingerstyle', fr:'Fingerstyle Acoustique', it:'Fingerstyle Acustico', es:'Fingerstyle Acústico', pt:'Fingerstyle Acústico', de:'Akustisches Fingerstyle'},
+    desc:{ro:'Chitară ciupită cu degetele, bas alternant — intimitate caldă, de cameră.', en:'Fingerpicked acoustic guitar, alternating bass — warm, close-up intimacy.', fr:'Guitare acoustique jouée aux doigts, basse alternée — une intimité chaude et rapprochée.', it:'Chitarra acustica suonata con le dita, basso alternato — un\'intimità calda e ravvicinata.', es:'Guitarra acústica puntéada, bajo alterno — una intimidad cálida y cercana.', pt:'Violão dedilhado, baixo alternado — uma intimidade quente e próxima.', de:'Gezupfte Akustikgitarre, alternierender Bass — warme, nahe Intimität.'},
+    glyph:{freq:2.5, amp:8, jitter:2, wave:'sine'},
+    scale:'major', progression:'popMajor', tempoRange:[78,92],
+    lead:{use:true, density:0.48, octave:5, swing:false, wave:'triangle', attack:0.008, release:0.5},
+    pad:{attack:0.15, release:0.9, seventh:false, octave:4, wave:'triangle'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:2400, reverbMix:0.28,
+    arp:true, arpPattern:'updown', arpStepsPerBar:8,
+    texture:null, recommendedEntrainment:'alpha', category:'groove',
+  },
   neosoul: {
     name:{ro:'Neo-Soul Cald', en:'Warm Neo-Soul', fr:'Neo-Soul Chaleureux', it:'Neo-Soul Caldo', es:'Neo-Soul Cálido', pt:'Neo-Soul Quente', de:'Warmer Neo-Soul'},
     desc:{ro:'Acorduri jazzy dorice, groove relaxat — catifea sufletească.', en:'Jazzy dorian chords, relaxed groove — soulful velvet.', fr:'Accords jazzy doriens, groove détendu — un velours plein d\'âme.', it:'Accordi jazzy dorici, groove rilassato — un velluto pieno d\'anima.', es:'Acordes jazzy dóricos, groove relajado — un terciopelo lleno de alma.', pt:'Acordes jazzy dóricos, groove relaxado — um veludo cheio de alma.', de:'Jazzige dorische Akkorde, entspannter Groove — seelenvoller Samt.'},
@@ -1044,6 +1556,17 @@ const GENRES = {
     pad:{attack:0.2, release:1.4, seventh:true, octave:4, wave:'sine'},
     bass:{octave:2, pattern:'sustain'},
     filterCutoff:1800, reverbMix:0.3, arp:false,
+    texture:null, recommendedEntrainment:'alpha', category:'groove',
+  },
+  slideguitar: {
+    name:{ro:'Slide Guitar Blues', en:'Slide Guitar Blues', fr:'Slide Guitar Blues', it:'Slide Guitar Blues', es:'Slide Guitar Blues', pt:'Slide Guitar Blues', de:'Slide-Gitarren-Blues'},
+    desc:{ro:'Alunecare scurtă și murdară pe gamă blues, fraze care se cheamă și-și răspund.', en:'A short, dirty slide over the blues scale, phrases calling and answering each other.', fr:'Un glissando court et rugueux sur la gamme blues, des phrases qui s\'appellent et se répondent.', it:'Uno scivolamento breve e sporco sulla scala blues, frasi che si chiamano e si rispondono.', es:'Un deslizamiento corto y sucio sobre la escala de blues, frases que se llaman y se responden.', pt:'Um deslizamento curto e sujo sobre a escala de blues, frases que se chamam e respondem.', de:'Ein kurzes, schmutziges Gleiten über die Blues-Tonleiter, Phrasen, die sich rufen und antworten.'},
+    glyph:{freq:2.3, amp:9, jitter:4, wave:'sine'},
+    scale:'blues', progression:'classical', tempoRange:[66,80],
+    lead:{use:true, density:0.34, octave:5, swing:true, wave:'triangle', portamento:0.12, callResponse:true, callResponsePhrase:2},
+    pad:{attack:0.15, release:1.3, seventh:false, octave:4, wave:'sine'},
+    bass:{octave:2, pattern:'walking'},
+    filterCutoff:2000, reverbMix:0.3, arp:false,
     texture:null, recommendedEntrainment:'alpha', category:'groove',
   },
   oddjazz: {
@@ -1102,6 +1625,22 @@ const CATEGORIES = {
 };
 const GENRE_ORDER = Object.keys(GENRES);
 
+// Genuri create de utilizator prin editorul de gen propriu. Traiesc doar
+// in memorie pe durata sesiunii (nu localStorage), dar pot fi exportate/
+// importate ca fisier JSON pentru persistenta si distribuire.
+let customGenres = {};
+function customGenreOrder(){ return Object.keys(customGenres).filter(function(k){ return k !== '__previewTest__'; }); }
+function getGenre(key){ return GENRES[key] || customGenres[key]; }
+function isCustomGenre(key){ return !GENRES[key] && !!customGenres[key]; }
+function genreName(g){
+  if (typeof g.name === 'string') return g.name;
+  return g.name[currentLang] || g.name.en || Object.values(g.name)[0];
+}
+function genreDesc(g){
+  if (typeof g.desc === 'string') return g.desc;
+  return g.desc[currentLang] || g.desc.en || Object.values(g.desc)[0];
+}
+
 const BRAINWAVE_PRESETS = {
   delta:{hz:2,  label:{ro:'Delta', en:'Delta', fr:'Delta', it:'Delta', es:'Delta', pt:'Delta', de:'Delta'}, desc:{ro:'somn profund · 0.5–4 Hz', en:'deep sleep · 0.5–4 Hz', fr:'sommeil profond · 0,5–4 Hz', it:'sonno profondo · 0,5–4 Hz', es:'sueño profundo · 0,5–4 Hz', pt:'sono profundo · 0,5–4 Hz', de:'Tiefschlaf · 0,5–4 Hz'}},
   theta:{hz:6,  label:{ro:'Theta', en:'Theta', fr:'Theta', it:'Theta', es:'Theta', pt:'Theta', de:'Theta'}, desc:{ro:'meditație profundă · 4–8 Hz', en:'deep meditation · 4–8 Hz', fr:'méditation profonde · 4–8 Hz', it:'meditazione profonda · 4–8 Hz', es:'meditación profunda · 4–8 Hz', pt:'meditação profunda · 4–8 Hz', de:'tiefe Meditation · 4–8 Hz'}},
@@ -1128,7 +1667,7 @@ const SOLFEGGIO_PRESETS = [
       partitură (listă de evenimente cu timp/frecvență/durată)
    ====================================================================== */
 function createCompositionState(seed, genreKey, tempo, rootMidiOverride){
-  const genre = GENRES[genreKey];
+  const genre = getGenre(genreKey);
   const rng = mulberry32(seed);
   const rootMidi = (rootMidiOverride != null) ? rootMidiOverride : (60 + Math.floor(rng() * 12));
   return {
@@ -1200,18 +1739,35 @@ function generateChunk(state, durationSec){
 
     // ---- LEAD ----
     if (genre.lead.use){
+      let leadOctaveThisBar = genre.lead.octave;
+      let leadDensityThisBar = genre.lead.density;
+      if (genre.lead.callResponse){
+        const phraseLen = genre.lead.callResponsePhrase || 2;
+        const phase = Math.floor(bar / phraseLen) % 2;
+        if (phase === 1){ leadOctaveThisBar = genre.lead.octave - 1; leadDensityThisBar = genre.lead.density * 0.7; }
+      }
       for (let s = 0; s < stepsPerBar; s++){
-        if (rng() < genre.lead.density){
+        if (rng() < leadDensityThisBar){
           const idx = pickWeightedIndex(rng, scaleIntervals.length, chord.degreeIdxs, 2.2);
           const interval = scaleIntervals[idx];
-          let midiNote = pitchMidi(state.rootMidi, genre.lead.octave, interval);
+          let midiNote = pitchMidi(state.rootMidi, leadOctaveThisBar, interval);
           if (rng() < 0.12) midiNote += (rng() < 0.5 ? -12 : 12);
           const freq = midiToFreq(midiNote);
-          const durOptions = genre.lead.density > 0.4 ? [1,1,2,2,4] : [2,4,4,8];
+          const durOptions = leadDensityThisBar > 0.4 ? [1,1,2,2,4] : [2,4,4,8];
           const mult = durOptions[Math.floor(rng()*durOptions.length)];
           let t = localBarStart + s*stepDur;
           if (genre.lead.swing && (s % 2 === 1)) t += stepDur*0.18;
-          events.lead.push({ time:t, freq:freq, dur: stepDur*mult*0.88 });
+          const dur = stepDur*mult*0.88;
+          if (genre.lead.glitch && rng() < genre.lead.glitch){
+            const reps = 2 + Math.floor(rng()*3);
+            const subDur = (dur/reps)*0.7;
+            for (let r = 0; r < reps; r++){
+              const jitterFreq = freq * (1 + (rng()-0.5)*0.02);
+              events.lead.push({ time: t + r*(dur/reps), freq: jitterFreq, dur: subDur });
+            }
+          } else {
+            events.lead.push({ time:t, freq:freq, dur: dur });
+          }
         }
       }
     }
@@ -1256,8 +1812,27 @@ function triggerNote(ctx, dest, freq, startTime, duration, opts){
 
   const osc = ctx.createOscillator();
   osc.type = wave;
-  osc.frequency.setValueAtTime(freq, startTime);
+  if (opts.slideFrom != null && opts.slideTime > 0){
+    const slideEnd = startTime + Math.min(opts.slideTime, duration*0.9);
+    osc.frequency.setValueAtTime(Math.max(opts.slideFrom,1), startTime);
+    osc.frequency.exponentialRampToValueAtTime(Math.max(freq,1), slideEnd);
+  } else {
+    osc.frequency.setValueAtTime(freq, startTime);
+  }
   if (opts.detune) osc.detune.setValueAtTime(opts.detune, startTime);
+
+  let vibratoLFO = null;
+  if (opts.vibratoRate && opts.vibratoDepth){
+    vibratoLFO = ctx.createOscillator();
+    vibratoLFO.type = 'sine';
+    vibratoLFO.frequency.setValueAtTime(opts.vibratoRate, startTime);
+    const vibratoGain = ctx.createGain();
+    vibratoGain.gain.setValueAtTime(opts.vibratoDepth, startTime);
+    vibratoLFO.connect(vibratoGain);
+    vibratoGain.connect(osc.detune);
+    vibratoLFO.start(startTime);
+    vibratoLFO.stop(startTime + duration + 0.1);
+  }
 
   const env = ctx.createGain();
   env.gain.setValueAtTime(0, startTime);
@@ -1390,8 +1965,19 @@ function scheduleEvents(ctx, bus, events, baseTime, genre){
   events.bass.forEach(function(e){
     oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave:'sine', attack:0.02, release:0.25, gain:0.2, filterCutoff:Math.min(padCutoff,900) }));
   });
+  let prevLeadFreq = null;
   events.lead.forEach(function(e){
-    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.lead.wave||'triangle', attack:leadAttack, release:leadRelease, gain:0.14, filterCutoff:leadCutoff }));
+    const leadOpts = { wave: genre.lead.wave||'triangle', attack:leadAttack, release:leadRelease, gain:0.14, filterCutoff:leadCutoff };
+    if (genre.lead.portamento && prevLeadFreq != null){
+      leadOpts.slideFrom = prevLeadFreq;
+      leadOpts.slideTime = genre.lead.portamento;
+    }
+    if (genre.lead.vibratoRate && genre.lead.vibratoDepth){
+      leadOpts.vibratoRate = genre.lead.vibratoRate;
+      leadOpts.vibratoDepth = genre.lead.vibratoDepth;
+    }
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, leadOpts));
+    prevLeadFreq = e.freq;
     if (genre.lead.detune){
       oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.lead.wave||'triangle', attack:leadAttack, release:leadRelease, gain:0.08, filterCutoff:leadCutoff, detune:genre.lead.detune }));
     }
@@ -1467,6 +2053,7 @@ let stopTimeoutId = null;
 
 function ensureAudioContext(){
   if (!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+  if (audioCtx.state === 'suspended'){ audioCtx.resume(); }
   return audioCtx;
 }
 
@@ -1488,22 +2075,23 @@ function getCurrentSettings(){
 function stopAll(){
   if (continuousTimer){ clearInterval(continuousTimer); continuousTimer=null; }
   if (stopTimeoutId){ clearTimeout(stopTimeoutId); stopTimeoutId=null; }
-  if (audioCtx){
+  if (audioCtx && masterGain){
     const now = audioCtx.currentTime;
-    if (masterGain){
-      try{
-        masterGain.gain.cancelScheduledValues(now);
-        masterGain.gain.setValueAtTime(masterGain.gain.value, now);
-        masterGain.gain.linearRampToValueAtTime(0.0001, now+0.12);
-      }catch(e){}
-    }
-    activeOscillators.forEach(function(o){ try{ o.stop(now+0.13); }catch(e){} });
-    if (entrainmentLayer){ try{ entrainmentLayer.stop(now+0.13); }catch(e){} }
-    if (textureLayer){ try{ textureLayer.stop(now+0.13); }catch(e){} }
-    const ctxToClose = audioCtx;
-    setTimeout(function(){ try{ ctxToClose.close(); }catch(e){} }, 300);
+    try{
+      masterGain.gain.cancelScheduledValues(now);
+      masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+      masterGain.gain.linearRampToValueAtTime(0.0001, now+0.08);
+    }catch(e){}
+    activeOscillators.forEach(function(o){ try{ o.stop(now+0.1); }catch(e){} });
+    if (entrainmentLayer){ try{ entrainmentLayer.stop(now+0.1); }catch(e){} }
+    if (textureLayer){ try{ textureLayer.stop(now+0.1); }catch(e){} }
+    // Nu inchid si nu recreez AudioContext-ul: il pastrez viu si doar il deconectez.
+    // Inchiderea + recrearea imediata (varianta veche) lasa 2 contexte active simultan
+    // pentru cateva sute de ms, ceea ce producea exact suprapunerea/distorsiunea observata
+    // la schimbarea rapida intre genuri.
+    try{ masterGain.disconnect(); }catch(e){}
   }
-  audioCtx=null; masterGain=null; limiterNode=null; analyserL=null; analyserR=null;
+  masterGain=null; limiterNode=null; analyserL=null; analyserR=null;
   entrainmentLayer=null; textureLayer=null; activeOscillators=[];
   isPlaying=false; isPaused=false;
   updateTransportUI();
@@ -1528,7 +2116,7 @@ function startPlayback(){
   splitter.connect(analyserL,0);
   splitter.connect(analyserR,1);
 
-  const genre = GENRES[settings.genreKey];
+  const genre = getGenre(settings.genreKey);
   const musicBusInput = buildMusicGraph(ctx, masterGain, genre);
 
   if (genre.texture){
@@ -1551,13 +2139,26 @@ function startPlayback(){
     compState.elapsedTime += chunk.duration;
   }
 
+  // Programare pe bucati mici (nu toata durata dintr-o data): pentru genuri dense
+  // (arpegii rapide, barsPerChord mare), generarea + programarea intregii durate
+  // sincron putea insemna mii de oscilatoare create dintr-o singura lovitura,
+  // suficient cat sa blocheze thread-ul principal si sa produca exact fenomenul
+  // "se aude ceva, apoi se oprește" observat la Synthwave/Kosmische.
+  const CHUNK_SEC = 45;
   if (settings.duration === 'continuous'){
     pieceDurationSec = Infinity;
-    scheduleNextChunk(240);
-    continuousTimer = setInterval(function(){ if (isPlaying) scheduleNextChunk(240); }, 150000);
+    scheduleNextChunk(CHUNK_SEC);
+    continuousTimer = setInterval(function(){ if (isPlaying) scheduleNextChunk(CHUNK_SEC); }, CHUNK_SEC*1000*0.6);
   } else {
     pieceDurationSec = parseInt(settings.duration,10);
-    scheduleNextChunk(pieceDurationSec);
+    scheduleNextChunk(Math.min(CHUNK_SEC, pieceDurationSec));
+    if (pieceDurationSec > CHUNK_SEC){
+      continuousTimer = setInterval(function(){
+        if (!isPlaying) return;
+        if (compState.elapsedTime >= pieceDurationSec - 0.5){ clearInterval(continuousTimer); continuousTimer=null; return; }
+        scheduleNextChunk(Math.min(CHUNK_SEC, pieceDurationSec - compState.elapsedTime));
+      }, CHUNK_SEC*1000*0.6);
+    }
     const fadeStart = playStartCtxTime + pieceDurationSec - 2.5;
     if (fadeStart > ctx.currentTime){
       masterGain.gain.setValueAtTime(settings.masterVol, fadeStart);
@@ -1626,7 +2227,7 @@ async function exportWav(){
   const oLimiter = createLimiter(offlineCtx);
   oMasterGain.connect(oLimiter); oLimiter.connect(offlineCtx.destination);
 
-  const genre = GENRES[settings.genreKey];
+  const genre = getGenre(settings.genreKey);
   const musicBusInput = buildMusicGraph(offlineCtx, oMasterGain, genre);
   if (genre.texture){
     const tex = createTexture(offlineCtx, genre.texture, genre.texture==='vinyl'?0.02:0.035);
@@ -1663,7 +2264,7 @@ function exportSettingsJson(){
 }
 
 function applyImportedSettings(data){
-  if (data.genreKey && GENRES[data.genreKey]) selectGenre(data.genreKey);
+  if (data.genreKey && getGenre(data.genreKey)) selectGenre(data.genreKey);
   if (data.seed!=null) document.getElementById('seedInput').value = data.seed;
   if (data.tempo!=null) document.getElementById('tempoSlider').value = data.tempo;
   if (data.duration!=null) document.getElementById('durationSelect').value = data.duration;
@@ -1753,6 +2354,64 @@ const I18N = {
     exporting:'Se exportă…', exportDone:'Descărcare pornită.', exportError:'Eroare la export.', importError:'Fișier de setări invalid.',
     footerLicense:'Licență CC0 · fără telemetrie · fără dependențe externe · 100% offline',
     footerNote:'Toate melodiile sunt generate algoritmic, în timp real — original, fără mostre și fără materiale protejate prin drepturi de autor.',
+    fractalBtn:'⛶ Vizualizator complet', closeFractalBtn:'✕ Ieșire', fractalHint:'Apasă oriunde sau Esc pentru a ieși',
+    coverHeading:'Copertă', coverHint:'Artă generativă originală, legată de sămânța și genul curent — o copertă vizuală unică pentru această melodie, reproductibilă din aceeași sămânță.',
+    coverPlaceholder:'Apasă "Generează copertă" pentru a crea una', generateCoverBtn:'🎨 Generează copertă', exportCoverBtn:'⬇ Exportă PNG',
+    generatingCover:'Se generează…', coverError:'Eroare la generare.',
+    supportLabel:'Sprijină:', footerTradeFreePre:'Filozofie trade-free ·', footerTradeFreePost:'· fără reclame, fără urmărire, fără cont',
+    createCustomBtn:'➕ Creează gen propriu',
+    editorHeading:'Editor de gen propriu',
+    editorHint:'Alege un șablon de la care pornești, modifică ce vrei, apoi salvează. Genul tău apare sub „Genurile mele" și poate fi exportat pentru a-l păstra sau distribui.',
+    templateLabel:'Pornește de la',
+    nameLabel:'Nume',
+    descLabel:'Descriere',
+    musicSectionLabel:'Armonie & ritm',
+    scaleLabel:'Gamă',
+    progressionLabel:'Progresie',
+    meterLabel:'Metru',
+    tempoRangeLabel:'Tempo (min–max)',
+    barsPerChordLabel:'Măsuri per acord',
+    leadSectionLabel:'Melodie',
+    densityLabel:'Densitate',
+    octaveLabel:'Octavă',
+    waveLabel:'Formă de undă',
+    swingLabel:'Swing',
+    padSectionLabel:'Pad / acorduri',
+    attackReleaseLabel:'Atac / Stingere',
+    seventhLabel:'Acorduri de septimă',
+    bassSectionLabel:'Bas',
+    patternLabel:'Tipar',
+    arpSectionLabel:'Arpegiu',
+    enabledLabel:'Activ',
+    stepsLabel:'Note per măsură',
+    toneSectionLabel:'Timbru & spațiu',
+    filterLabel:'Filtru (Hz)',
+    reverbLabel:'Reverb',
+    textureLabel:'Textură',
+    entrainRecLabel:'Bandă recomandată',
+    advancedToggleLabel:'Avansat ▾',
+    detuneLabel:'Dezacordaj (cenți) melodie / pad',
+    portamentoLabel:'Portamento (secunde)',
+    vibratoLabel:'Vibrato (Hz / cenți)',
+    glitchLabel:'Glitch (probabilitate)',
+    callResponseLabel:'Chemare-răspuns',
+    delayLabel:'Ecou / delay',
+    testBtn:'▶ Testează',
+    saveBtn:'💾 Salvează',
+    exportPackBtn:'⬇ Exportă genurile mele',
+    importPackBtn:'⬆ Importă genuri',
+    myGenresCategory:'Genurile Mele',
+    deleteGenreBtn:'Șterge',
+    deleteConfirm:'Ștergi acest gen? Nu poate fi refăcut.',
+    blankTemplateOpt:'— fără șablon (gol) —',
+    errNameRequired:'Dă-i un nume genului tău.',
+    errTempoRange:'Tempo minim și maxim trebuie să fie valide și diferite.',
+    errInvalidScale:'Gamă invalidă.',
+    errInvalidProgression:'Progresie invalidă.',
+    errDensityRange:'Densitatea trebuie să fie între 0 și 1.',
+    errFilterRange:'Filtrul trebuie să fie de cel puțin 100 Hz.',
+    noCustomGenres:'Nu ai încă niciun gen propriu de exportat.',
+    importedCount:'Importate {n} genuri.',
   },
   en:{
     title:'Borderless Melodies',
@@ -1774,6 +2433,64 @@ const I18N = {
     exporting:'Exporting…', exportDone:'Download started.', exportError:'Export failed.', importError:'Invalid settings file.',
     footerLicense:'CC0 license · no telemetry · no external dependencies · 100% offline',
     footerNote:'All music is generated algorithmically, in real time — original, with no samples and no copyrighted material.',
+    fractalBtn:'⛶ Full visualizer', closeFractalBtn:'✕ Exit', fractalHint:'Click anywhere or press Esc to exit',
+    coverHeading:'Cover art', coverHint:'Original generative art tied to your current seed and genre — a one-of-a-kind visual cover for this song, reproducible from the same seed.',
+    coverPlaceholder:'Press "Generate cover" to create one', generateCoverBtn:'🎨 Generate cover', exportCoverBtn:'⬇ Export PNG',
+    generatingCover:'Generating…', coverError:'Generation failed.',
+    supportLabel:'Support:', footerTradeFreePre:'Trade-free philosophy ·', footerTradeFreePost:'· no ads, no tracking, no account',
+    createCustomBtn:'➕ Create custom genre',
+    editorHeading:'Custom genre editor',
+    editorHint:'Pick a starting template, tweak whatever you like, then save. Your genre appears under "My Genres" and can be exported to keep or share.',
+    templateLabel:'Start from',
+    nameLabel:'Name',
+    descLabel:'Description',
+    musicSectionLabel:'Harmony & rhythm',
+    scaleLabel:'Scale',
+    progressionLabel:'Progression',
+    meterLabel:'Meter',
+    tempoRangeLabel:'Tempo (min–max)',
+    barsPerChordLabel:'Bars per chord',
+    leadSectionLabel:'Lead melody',
+    densityLabel:'Density',
+    octaveLabel:'Octave',
+    waveLabel:'Waveform',
+    swingLabel:'Swing',
+    padSectionLabel:'Pad / chords',
+    attackReleaseLabel:'Attack / Release',
+    seventhLabel:'Seventh chords',
+    bassSectionLabel:'Bass',
+    patternLabel:'Pattern',
+    arpSectionLabel:'Arpeggio',
+    enabledLabel:'Enabled',
+    stepsLabel:'Notes per bar',
+    toneSectionLabel:'Tone & space',
+    filterLabel:'Filter (Hz)',
+    reverbLabel:'Reverb',
+    textureLabel:'Texture',
+    entrainRecLabel:'Recommended band',
+    advancedToggleLabel:'Advanced ▾',
+    detuneLabel:'Detune (cents) lead / pad',
+    portamentoLabel:'Portamento (sec)',
+    vibratoLabel:'Vibrato (Hz / cents)',
+    glitchLabel:'Glitch (probability)',
+    callResponseLabel:'Call & response',
+    delayLabel:'Echo / delay',
+    testBtn:'▶ Test',
+    saveBtn:'💾 Save',
+    exportPackBtn:'⬇ Export my genres',
+    importPackBtn:'⬆ Import genres',
+    myGenresCategory:'My Genres',
+    deleteGenreBtn:'Delete',
+    deleteConfirm:'Delete this genre? This cannot be undone.',
+    blankTemplateOpt:'— no template (blank) —',
+    errNameRequired:'Give your genre a name.',
+    errTempoRange:'Min and max tempo must be valid and different.',
+    errInvalidScale:'Invalid scale.',
+    errInvalidProgression:'Invalid progression.',
+    errDensityRange:'Density must be between 0 and 1.',
+    errFilterRange:'Filter must be at least 100 Hz.',
+    noCustomGenres:'You don\'t have any custom genres to export yet.',
+    importedCount:'Imported {n} genres.',
   },
   fr:{
     title:'Mélodies sans frontières',
@@ -1818,6 +2535,64 @@ const I18N = {
     importError:'Fichier de réglages invalide.',
     footerLicense:'Licence CC0 · aucune télémétrie · aucune dépendance externe · 100 % hors ligne',
     footerNote:'Toute la musique est générée algorithmiquement, en temps réel — originale, sans échantillons ni matériel protégé par des droits d\'auteur.',
+    fractalBtn:'⛶ Visualiseur plein écran', closeFractalBtn:'✕ Quitter', fractalHint:'Cliquez n\'importe où ou appuyez sur Échap pour quitter',
+    coverHeading:'Pochette', coverHint:'Art génératif original lié à votre graine et votre genre actuels — une pochette visuelle unique pour ce morceau, reproductible à partir de la même graine.',
+    coverPlaceholder:'Appuyez sur « Générer une pochette » pour en créer une', generateCoverBtn:'🎨 Générer une pochette', exportCoverBtn:'⬇ Exporter en PNG',
+    generatingCover:'Génération…', coverError:'Échec de la génération.',
+    supportLabel:'Soutenir :', footerTradeFreePre:'Philosophie trade-free ·', footerTradeFreePost:'· sans publicité, sans suivi, sans compte',
+    createCustomBtn:'➕ Créer un genre personnalisé',
+    editorHeading:'Éditeur de genre personnalisé',
+    editorHint:'Choisissez un modèle de départ, ajustez ce que vous voulez, puis enregistrez. Votre genre apparaît sous « Mes genres » et peut être exporté pour le garder ou le partager.',
+    templateLabel:'Partir de',
+    nameLabel:'Nom',
+    descLabel:'Description',
+    musicSectionLabel:'Harmonie & rythme',
+    scaleLabel:'Gamme',
+    progressionLabel:'Progression',
+    meterLabel:'Mesure',
+    tempoRangeLabel:'Tempo (min–max)',
+    barsPerChordLabel:'Mesures par accord',
+    leadSectionLabel:'Mélodie',
+    densityLabel:'Densité',
+    octaveLabel:'Octave',
+    waveLabel:'Forme d\'onde',
+    swingLabel:'Swing',
+    padSectionLabel:'Nappe / accords',
+    attackReleaseLabel:'Attaque / Extinction',
+    seventhLabel:'Accords de septième',
+    bassSectionLabel:'Basse',
+    patternLabel:'Motif',
+    arpSectionLabel:'Arpège',
+    enabledLabel:'Activé',
+    stepsLabel:'Notes par mesure',
+    toneSectionLabel:'Timbre & espace',
+    filterLabel:'Filtre (Hz)',
+    reverbLabel:'Réverbération',
+    textureLabel:'Texture',
+    entrainRecLabel:'Bande recommandée',
+    advancedToggleLabel:'Avancé ▾',
+    detuneLabel:'Désaccordage (cents) mélodie / nappe',
+    portamentoLabel:'Portamento (secondes)',
+    vibratoLabel:'Vibrato (Hz / cents)',
+    glitchLabel:'Glitch (probabilité)',
+    callResponseLabel:'Appel-réponse',
+    delayLabel:'Écho / delay',
+    testBtn:'▶ Tester',
+    saveBtn:'💾 Enregistrer',
+    exportPackBtn:'⬇ Exporter mes genres',
+    importPackBtn:'⬆ Importer des genres',
+    myGenresCategory:'Mes Genres',
+    deleteGenreBtn:'Supprimer',
+    deleteConfirm:'Supprimer ce genre ? Cette action est irréversible.',
+    blankTemplateOpt:'— sans modèle (vierge) —',
+    errNameRequired:'Donnez un nom à votre genre.',
+    errTempoRange:'Le tempo min et max doivent être valides et différents.',
+    errInvalidScale:'Gamme invalide.',
+    errInvalidProgression:'Progression invalide.',
+    errDensityRange:'La densité doit être comprise entre 0 et 1.',
+    errFilterRange:'Le filtre doit être d\'au moins 100 Hz.',
+    noCustomGenres:'Vous n\'avez encore aucun genre personnalisé à exporter.',
+    importedCount:'{n} genres importés.',
   },
   it:{
     title:'Melodie senza frontiere',
@@ -1862,6 +2637,64 @@ const I18N = {
     importError:'File di impostazioni non valido.',
     footerLicense:'Licenza CC0 · nessuna telemetria · nessuna dipendenza esterna · 100% offline',
     footerNote:'Tutta la musica è generata algoritmicamente, in tempo reale — originale, senza campioni né materiale protetto da copyright.',
+    fractalBtn:'⛶ Visualizzatore a schermo intero', closeFractalBtn:'✕ Esci', fractalHint:'Clicca ovunque o premi Esc per uscire',
+    coverHeading:'Copertina', coverHint:'Arte generativa originale legata al tuo seme e genere attuali — una copertina visiva unica per questo brano, riproducibile dallo stesso seme.',
+    coverPlaceholder:'Premi "Genera copertina" per crearne una', generateCoverBtn:'🎨 Genera copertina', exportCoverBtn:'⬇ Esporta PNG',
+    generatingCover:'Generazione…', coverError:'Generazione fallita.',
+    supportLabel:'Sostieni:', footerTradeFreePre:'Filosofia trade-free ·', footerTradeFreePost:'· senza pubblicità, senza tracciamento, senza account',
+    createCustomBtn:'➕ Crea genere personalizzato',
+    editorHeading:'Editor di genere personalizzato',
+    editorHint:'Scegli un modello di partenza, modifica ciò che vuoi, poi salva. Il tuo genere appare sotto "I miei generi" e può essere esportato per conservarlo o condividerlo.',
+    templateLabel:'Parti da',
+    nameLabel:'Nome',
+    descLabel:'Descrizione',
+    musicSectionLabel:'Armonia & ritmo',
+    scaleLabel:'Scala',
+    progressionLabel:'Progressione',
+    meterLabel:'Metro',
+    tempoRangeLabel:'Tempo (min–max)',
+    barsPerChordLabel:'Battute per accordo',
+    leadSectionLabel:'Melodia',
+    densityLabel:'Densità',
+    octaveLabel:'Ottava',
+    waveLabel:'Forma d\'onda',
+    swingLabel:'Swing',
+    padSectionLabel:'Pad / accordi',
+    attackReleaseLabel:'Attacco / Rilascio',
+    seventhLabel:'Accordi di settima',
+    bassSectionLabel:'Basso',
+    patternLabel:'Motivo',
+    arpSectionLabel:'Arpeggio',
+    enabledLabel:'Attivo',
+    stepsLabel:'Note per battuta',
+    toneSectionLabel:'Timbro & spazio',
+    filterLabel:'Filtro (Hz)',
+    reverbLabel:'Riverbero',
+    textureLabel:'Texture',
+    entrainRecLabel:'Banda consigliata',
+    advancedToggleLabel:'Avanzato ▾',
+    detuneLabel:'Stonatura (cent) melodia / pad',
+    portamentoLabel:'Portamento (secondi)',
+    vibratoLabel:'Vibrato (Hz / cent)',
+    glitchLabel:'Glitch (probabilità)',
+    callResponseLabel:'Chiamata e risposta',
+    delayLabel:'Eco / delay',
+    testBtn:'▶ Prova',
+    saveBtn:'💾 Salva',
+    exportPackBtn:'⬇ Esporta i miei generi',
+    importPackBtn:'⬆ Importa generi',
+    myGenresCategory:'I Miei Generi',
+    deleteGenreBtn:'Elimina',
+    deleteConfirm:'Eliminare questo genere? Non può essere annullato.',
+    blankTemplateOpt:'— nessun modello (vuoto) —',
+    errNameRequired:'Dai un nome al tuo genere.',
+    errTempoRange:'Il tempo min e max devono essere validi e diversi.',
+    errInvalidScale:'Scala non valida.',
+    errInvalidProgression:'Progressione non valida.',
+    errDensityRange:'La densità deve essere tra 0 e 1.',
+    errFilterRange:'Il filtro deve essere di almeno 100 Hz.',
+    noCustomGenres:'Non hai ancora generi personalizzati da esportare.',
+    importedCount:'{n} generi importati.',
   },
   es:{
     title:'Melodías sin fronteras',
@@ -1906,6 +2739,64 @@ const I18N = {
     importError:'Archivo de ajustes no válido.',
     footerLicense:'Licencia CC0 · sin telemetría · sin dependencias externas · 100 % sin conexión',
     footerNote:'Toda la música se genera algorítmicamente, en tiempo real — original, sin muestras ni material protegido por derechos de autor.',
+    fractalBtn:'⛶ Visualizador de pantalla completa', closeFractalBtn:'✕ Salir', fractalHint:'Haz clic en cualquier lugar o pulsa Esc para salir',
+    coverHeading:'Portada', coverHint:'Arte generativo original vinculado a tu semilla y género actuales — una portada visual única para esta canción, reproducible desde la misma semilla.',
+    coverPlaceholder:'Pulsa "Generar portada" para crear una', generateCoverBtn:'🎨 Generar portada', exportCoverBtn:'⬇ Exportar PNG',
+    generatingCover:'Generando…', coverError:'Error de generación.',
+    supportLabel:'Apoya:', footerTradeFreePre:'Filosofía trade-free ·', footerTradeFreePost:'· sin anuncios, sin seguimiento, sin cuenta',
+    createCustomBtn:'➕ Crear género personalizado',
+    editorHeading:'Editor de género personalizado',
+    editorHint:'Elige una plantilla de inicio, ajusta lo que quieras y luego guarda. Tu género aparece en "Mis géneros" y puede exportarse para guardarlo o compartirlo.',
+    templateLabel:'Partir de',
+    nameLabel:'Nombre',
+    descLabel:'Descripción',
+    musicSectionLabel:'Armonía & ritmo',
+    scaleLabel:'Escala',
+    progressionLabel:'Progresión',
+    meterLabel:'Compás',
+    tempoRangeLabel:'Tempo (mín–máx)',
+    barsPerChordLabel:'Compases por acorde',
+    leadSectionLabel:'Melodía',
+    densityLabel:'Densidad',
+    octaveLabel:'Octava',
+    waveLabel:'Forma de onda',
+    swingLabel:'Swing',
+    padSectionLabel:'Pad / acordes',
+    attackReleaseLabel:'Ataque / Liberación',
+    seventhLabel:'Acordes de séptima',
+    bassSectionLabel:'Bajo',
+    patternLabel:'Patrón',
+    arpSectionLabel:'Arpegio',
+    enabledLabel:'Activado',
+    stepsLabel:'Notas por compás',
+    toneSectionLabel:'Timbre & espacio',
+    filterLabel:'Filtro (Hz)',
+    reverbLabel:'Reverberación',
+    textureLabel:'Textura',
+    entrainRecLabel:'Banda recomendada',
+    advancedToggleLabel:'Avanzado ▾',
+    detuneLabel:'Desafinación (cents) melodía / pad',
+    portamentoLabel:'Portamento (segundos)',
+    vibratoLabel:'Vibrato (Hz / cents)',
+    glitchLabel:'Glitch (probabilidad)',
+    callResponseLabel:'Llamada y respuesta',
+    delayLabel:'Eco / delay',
+    testBtn:'▶ Probar',
+    saveBtn:'💾 Guardar',
+    exportPackBtn:'⬇ Exportar mis géneros',
+    importPackBtn:'⬆ Importar géneros',
+    myGenresCategory:'Mis Géneros',
+    deleteGenreBtn:'Eliminar',
+    deleteConfirm:'¿Eliminar este género? No se puede deshacer.',
+    blankTemplateOpt:'— sin plantilla (en blanco) —',
+    errNameRequired:'Dale un nombre a tu género.',
+    errTempoRange:'El tempo mín y máx deben ser válidos y diferentes.',
+    errInvalidScale:'Escala no válida.',
+    errInvalidProgression:'Progresión no válida.',
+    errDensityRange:'La densidad debe estar entre 0 y 1.',
+    errFilterRange:'El filtro debe ser de al menos 100 Hz.',
+    noCustomGenres:'Aún no tienes géneros personalizados para exportar.',
+    importedCount:'{n} géneros importados.',
   },
   pt:{
     title:'Melodias sem fronteiras',
@@ -1950,6 +2841,64 @@ const I18N = {
     importError:'Ficheiro de configurações inválido.',
     footerLicense:'Licença CC0 · sem telemetria · sem dependências externas · 100% offline',
     footerNote:'Toda a música é gerada algoritmicamente, em tempo real — original, sem amostras e sem material protegido por direitos autorais.',
+    fractalBtn:'⛶ Visualizador de tela cheia', closeFractalBtn:'✕ Sair', fractalHint:'Clique em qualquer lugar ou pressione Esc para sair',
+    coverHeading:'Capa', coverHint:'Arte generativa original ligada à sua semente e gênero atuais — uma capa visual única para esta música, reproduzível a partir da mesma semente.',
+    coverPlaceholder:'Prima "Gerar capa" para criar uma', generateCoverBtn:'🎨 Gerar capa', exportCoverBtn:'⬇ Exportar PNG',
+    generatingCover:'A gerar…', coverError:'Falha na geração.',
+    supportLabel:'Apoie:', footerTradeFreePre:'Filosofia trade-free ·', footerTradeFreePost:'· sem anúncios, sem rastreamento, sem conta',
+    createCustomBtn:'➕ Criar gênero personalizado',
+    editorHeading:'Editor de gênero personalizado',
+    editorHint:'Escolha um modelo de partida, ajuste o que quiser e depois guarde. O seu gênero aparece em "Meus gêneros" e pode ser exportado para guardar ou partilhar.',
+    templateLabel:'Partir de',
+    nameLabel:'Nome',
+    descLabel:'Descrição',
+    musicSectionLabel:'Harmonia & ritmo',
+    scaleLabel:'Escala',
+    progressionLabel:'Progressão',
+    meterLabel:'Compasso',
+    tempoRangeLabel:'Tempo (mín–máx)',
+    barsPerChordLabel:'Compassos por acorde',
+    leadSectionLabel:'Melodia',
+    densityLabel:'Densidade',
+    octaveLabel:'Oitava',
+    waveLabel:'Forma de onda',
+    swingLabel:'Swing',
+    padSectionLabel:'Pad / acordes',
+    attackReleaseLabel:'Ataque / Liberação',
+    seventhLabel:'Acordes de sétima',
+    bassSectionLabel:'Baixo',
+    patternLabel:'Padrão',
+    arpSectionLabel:'Arpejo',
+    enabledLabel:'Ativado',
+    stepsLabel:'Notas por compasso',
+    toneSectionLabel:'Timbre & espaço',
+    filterLabel:'Filtro (Hz)',
+    reverbLabel:'Reverberação',
+    textureLabel:'Textura',
+    entrainRecLabel:'Banda recomendada',
+    advancedToggleLabel:'Avançado ▾',
+    detuneLabel:'Desafinação (cents) melodia / pad',
+    portamentoLabel:'Portamento (segundos)',
+    vibratoLabel:'Vibrato (Hz / cents)',
+    glitchLabel:'Glitch (probabilidade)',
+    callResponseLabel:'Chamada e resposta',
+    delayLabel:'Eco / delay',
+    testBtn:'▶ Testar',
+    saveBtn:'💾 Guardar',
+    exportPackBtn:'⬇ Exportar meus gêneros',
+    importPackBtn:'⬆ Importar gêneros',
+    myGenresCategory:'Meus Gêneros',
+    deleteGenreBtn:'Excluir',
+    deleteConfirm:'Excluir este gênero? Não pode ser desfeito.',
+    blankTemplateOpt:'— sem modelo (em branco) —',
+    errNameRequired:'Dê um nome ao seu gênero.',
+    errTempoRange:'O tempo mín e máx devem ser válidos e diferentes.',
+    errInvalidScale:'Escala inválida.',
+    errInvalidProgression:'Progressão inválida.',
+    errDensityRange:'A densidade deve estar entre 0 e 1.',
+    errFilterRange:'O filtro deve ser de pelo menos 100 Hz.',
+    noCustomGenres:'Ainda não tem gêneros personalizados para exportar.',
+    importedCount:'{n} gêneros importados.',
   },
   de:{
     title:'Melodien ohne Grenzen',
@@ -1994,6 +2943,64 @@ const I18N = {
     importError:'Ungültige Einstellungsdatei.',
     footerLicense:'CC0-Lizenz · keine Telemetrie · keine externen Abhängigkeiten · 100 % offline',
     footerNote:'Die gesamte Musik wird algorithmisch in Echtzeit erzeugt — originell, ohne Samples und ohne urheberrechtlich geschütztes Material.',
+    fractalBtn:'⛶ Vollbild-Visualisierer', closeFractalBtn:'✕ Beenden', fractalHint:'Klicken Sie irgendwo oder drücken Sie Esc zum Beenden',
+    coverHeading:'Cover', coverHint:'Originale generative Kunst, verknüpft mit Ihrem aktuellen Startwert und Genre — ein einzigartiges visuelles Cover für diesen Song, reproduzierbar aus demselben Startwert.',
+    coverPlaceholder:'Drücken Sie „Cover erstellen", um eines zu erzeugen', generateCoverBtn:'🎨 Cover erstellen', exportCoverBtn:'⬇ PNG exportieren',
+    generatingCover:'Wird erzeugt…', coverError:'Erzeugung fehlgeschlagen.',
+    supportLabel:'Unterstützen:', footerTradeFreePre:'Trade-free-Philosophie ·', footerTradeFreePost:'· keine Werbung, kein Tracking, kein Konto',
+    createCustomBtn:'➕ Eigenes Genre erstellen',
+    editorHeading:'Editor für eigene Genres',
+    editorHint:'Wählen Sie eine Startvorlage, passen Sie an, was Sie möchten, und speichern Sie dann. Ihr Genre erscheint unter „Meine Genres" und kann zum Aufbewahren oder Teilen exportiert werden.',
+    templateLabel:'Ausgehen von',
+    nameLabel:'Name',
+    descLabel:'Beschreibung',
+    musicSectionLabel:'Harmonie & Rhythmus',
+    scaleLabel:'Tonleiter',
+    progressionLabel:'Fortschreitung',
+    meterLabel:'Takt',
+    tempoRangeLabel:'Tempo (Min–Max)',
+    barsPerChordLabel:'Takte pro Akkord',
+    leadSectionLabel:'Melodie',
+    densityLabel:'Dichte',
+    octaveLabel:'Oktave',
+    waveLabel:'Wellenform',
+    swingLabel:'Swing',
+    padSectionLabel:'Pad / Akkorde',
+    attackReleaseLabel:'Attack / Release',
+    seventhLabel:'Septakkorde',
+    bassSectionLabel:'Bass',
+    patternLabel:'Muster',
+    arpSectionLabel:'Arpeggio',
+    enabledLabel:'Aktiviert',
+    stepsLabel:'Noten pro Takt',
+    toneSectionLabel:'Klangfarbe & Raum',
+    filterLabel:'Filter (Hz)',
+    reverbLabel:'Hall',
+    textureLabel:'Textur',
+    entrainRecLabel:'Empfohlenes Band',
+    advancedToggleLabel:'Erweitert ▾',
+    detuneLabel:'Verstimmung (Cent) Melodie / Pad',
+    portamentoLabel:'Portamento (Sekunden)',
+    vibratoLabel:'Vibrato (Hz / Cent)',
+    glitchLabel:'Glitch (Wahrscheinlichkeit)',
+    callResponseLabel:'Ruf und Antwort',
+    delayLabel:'Echo / Delay',
+    testBtn:'▶ Testen',
+    saveBtn:'💾 Speichern',
+    exportPackBtn:'⬇ Meine Genres exportieren',
+    importPackBtn:'⬆ Genres importieren',
+    myGenresCategory:'Meine Genres',
+    deleteGenreBtn:'Löschen',
+    deleteConfirm:'Dieses Genre löschen? Das kann nicht rückgängig gemacht werden.',
+    blankTemplateOpt:'— keine Vorlage (leer) —',
+    errNameRequired:'Geben Sie Ihrem Genre einen Namen.',
+    errTempoRange:'Min- und Max-Tempo müssen gültig und unterschiedlich sein.',
+    errInvalidScale:'Ungültige Tonleiter.',
+    errInvalidProgression:'Ungültige Fortschreitung.',
+    errDensityRange:'Die Dichte muss zwischen 0 und 1 liegen.',
+    errFilterRange:'Der Filter muss mindestens 100 Hz betragen.',
+    noCustomGenres:'Sie haben noch keine eigenen Genres zum Exportieren.',
+    importedCount:'{n} Genres importiert.',
   }
 };
 let currentLang = 'en';
@@ -2034,12 +3041,15 @@ function renderGenreCards(){
   grid.innerHTML = '';
   const query = genreSearchQuery.trim().toLowerCase();
   let anyMatch = false;
-  CATEGORY_ORDER.forEach(function(catKey){
-    const catGenres = GENRE_ORDER.filter(function(key){
-      if (GENRES[key].category !== catKey) return false;
+  const hasCustom = customGenreOrder().length > 0;
+  const allCats = hasCustom ? CATEGORY_ORDER.concat(['custom']) : CATEGORY_ORDER;
+  allCats.forEach(function(catKey){
+    const isCustomCat = catKey === 'custom';
+    const keysInCat = isCustomCat ? customGenreOrder() : GENRE_ORDER.filter(function(key){ return GENRES[key].category === catKey; });
+    const catGenres = keysInCat.filter(function(key){
       if (!query) return true;
-      const g = GENRES[key];
-      return (g.name[currentLang]+' '+g.desc[currentLang]).toLowerCase().indexOf(query) !== -1;
+      const g = getGenre(key);
+      return (genreName(g)+' '+genreDesc(g)).toLowerCase().indexOf(query) !== -1;
     });
     if (query && catGenres.length === 0) return;
     if (catGenres.length) anyMatch = true;
@@ -2048,7 +3058,8 @@ function renderGenreCards(){
     const header = document.createElement('button');
     header.type = 'button';
     header.className = 'category-header' + (isOpen ? ' open' : '');
-    header.innerHTML = '<span class="category-chevron">▸</span><span class="category-title">'+CATEGORIES[catKey][currentLang]+'</span><span class="category-count">'+catGenres.length+'</span>';
+    const catLabel = isCustomCat ? t('myGenresCategory') : CATEGORIES[catKey][currentLang];
+    header.innerHTML = '<span class="category-chevron">▸</span><span class="category-title">'+catLabel+'</span><span class="category-count">'+catGenres.length+'</span>';
     header.addEventListener('click', function(){
       if (expandedCategories.has(catKey)) expandedCategories.delete(catKey);
       else expandedCategories.add(catKey);
@@ -2060,11 +3071,27 @@ function renderGenreCards(){
       const inner = document.createElement('div');
       inner.className = 'genre-grid';
       catGenres.forEach(function(key){
-        const g = GENRES[key];
-        const card = document.createElement('button');
+        const g = getGenre(key);
+        const card = document.createElement('div');
         card.className = 'genre-card' + (state.genreKey===key ? ' active' : '');
-        card.innerHTML = genreGlyphSVG(g.glyph) + '<h3>'+g.name[currentLang]+'</h3><p>'+g.desc[currentLang]+'</p>';
-        card.addEventListener('click', function(){ selectGenre(key); });
+        const selectBtn = document.createElement('button');
+        selectBtn.type = 'button';
+        selectBtn.className = 'genre-card-select';
+        selectBtn.innerHTML = genreGlyphSVG(g.glyph) + '<h3>'+genreName(g)+'</h3><p>'+genreDesc(g)+'</p>';
+        selectBtn.addEventListener('click', function(){ selectGenre(key); });
+        card.appendChild(selectBtn);
+        if (isCustomCat){
+          const delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'genre-card-delete';
+          delBtn.textContent = '×';
+          delBtn.setAttribute('aria-label', t('deleteGenreBtn'));
+          delBtn.addEventListener('click', function(e){
+            e.stopPropagation();
+            if (confirm(t('deleteConfirm'))) deleteCustomGenre(key);
+          });
+          card.appendChild(delBtn);
+        }
         inner.appendChild(card);
       });
       grid.appendChild(inner);
@@ -2081,7 +3108,7 @@ function renderGenreCards(){
 
 function selectGenre(key){
   state.genreKey = key;
-  const g = GENRES[key];
+  const g = getGenre(key);
   expandedCategories.add(g.category);
   const tempoSlider = document.getElementById('tempoSlider');
   tempoSlider.min = g.tempoRange[0]; tempoSlider.max = g.tempoRange[1];
@@ -2155,7 +3182,7 @@ function updateTransportUI(){
   const miniBtn = document.getElementById('miniPlayPauseBtn');
   const miniStop = document.getElementById('miniStopBtn');
   const miniGenre = document.getElementById('miniPlayerGenre');
-  if (miniGenre) miniGenre.textContent = GENRES[state.genreKey].name[currentLang];
+  if (miniGenre) miniGenre.textContent = genreName(getGenre(state.genreKey));
   if (isPlaying){
     icon.textContent='⏸'; label.textContent=t('pauseBtn'); stopBtn.disabled=false; status.textContent=t('statusPlaying');
     if (miniBtn){ miniBtn.textContent='⏸'; miniStop.disabled=false; }
@@ -2177,6 +3204,755 @@ function rebuildEntrainmentLive(){
     entrainmentLayer.output.connect(masterGain);
   }
 }
+
+/* ======================================================================
+   12b. EDITOR DE GEN PROPRIU
+   ====================================================================== */
+function scaleDisplayName(key){
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, function(c){ return c.toUpperCase(); });
+}
+function progressionDisplayName(key){
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, function(c){ return c.toUpperCase(); });
+}
+
+function populateEditorDropdowns(){
+  const templateSel = document.getElementById('editorTemplate');
+  templateSel.innerHTML = '';
+  const blankOpt = document.createElement('option');
+  blankOpt.value = ''; blankOpt.textContent = t('blankTemplateOpt');
+  templateSel.appendChild(blankOpt);
+  GENRE_ORDER.forEach(function(key){
+    const opt = document.createElement('option');
+    opt.value = key; opt.textContent = genreName(GENRES[key]);
+    templateSel.appendChild(opt);
+  });
+
+  const scaleSel = document.getElementById('editorScale');
+  if (!scaleSel.dataset.filled){
+    Object.keys(SCALES).forEach(function(key){
+      const opt = document.createElement('option');
+      opt.value = key; opt.textContent = scaleDisplayName(key);
+      scaleSel.appendChild(opt);
+    });
+    scaleSel.dataset.filled = '1';
+  }
+  const progSel = document.getElementById('editorProgression');
+  if (!progSel.dataset.filled){
+    Object.keys(PROGRESSIONS).forEach(function(key){
+      const opt = document.createElement('option');
+      opt.value = key; opt.textContent = progressionDisplayName(key);
+      progSel.appendChild(opt);
+    });
+    progSel.dataset.filled = '1';
+  }
+}
+
+function loadTemplateIntoEditor(key){
+  const g = key ? getGenre(key) : null;
+  const el = document.getElementById.bind(document);
+  const defaults = {
+    name:'', desc:'', scale:'majorPenta', progression:'ambientModal', meter:4,
+    tempoMin:60, tempoMax:72, barsPerChord:2,
+    leadDensity:0.3, leadOctave:5, leadWave:'sine', leadSwing:false,
+    padAttack:1.0, padRelease:2.0, padOctave:4, padWave:'sine', padSeventh:false,
+    bassOctave:2, bassPattern:'sustain',
+    arpEnabled:false, arpPattern:'up', arpSteps:8,
+    filterCutoff:2000, reverbMix:0.4, texture:'', entrainRec:'alpha',
+    leadDetune:0, padDetune:0, portamento:0, vibratoRate:0, vibratoDepth:0, glitch:0,
+    callResponse:false, delayEnabled:false,
+  };
+  const v = g ? {
+    name: genreName(g) + (isCustomGenre(key) ? '' : ' — ' + t('nameLabel')),
+    desc: genreDesc(g),
+    scale: g.scale, progression: g.progression, meter: g.meter||4,
+    tempoMin: g.tempoRange[0], tempoMax: g.tempoRange[1], barsPerChord: g.barsPerChord||2,
+    leadDensity: g.lead.density, leadOctave: g.lead.octave, leadWave: g.lead.wave||'triangle', leadSwing: !!g.lead.swing,
+    padAttack: g.pad.attack, padRelease: g.pad.release, padOctave: g.pad.octave||4, padWave: g.pad.wave||'sine', padSeventh: !!g.pad.seventh,
+    bassOctave: g.bass.octave, bassPattern: g.bass.pattern || (g.bass.walking ? 'walking' : 'sustain'),
+    arpEnabled: !!g.arp, arpPattern: g.arpPattern||'up', arpSteps: g.arpStepsPerBar||8,
+    filterCutoff: g.filterCutoff, reverbMix: g.reverbMix, texture: g.texture||'', entrainRec: g.recommendedEntrainment,
+    leadDetune: g.lead.detune||0, padDetune: g.pad.detune||0, portamento: g.lead.portamento||0,
+    vibratoRate: g.lead.vibratoRate||0, vibratoDepth: g.lead.vibratoDepth||0, glitch: g.lead.glitch||0,
+    callResponse: !!g.lead.callResponse, delayEnabled: !!g.delayMix,
+  } : defaults;
+
+  el('editorName').value = v.name;
+  el('editorDescInput').value = v.desc;
+  el('editorScale').value = v.scale;
+  el('editorProgression').value = v.progression;
+  el('editorMeter').value = String(v.meter);
+  el('editorTempoMin').value = v.tempoMin;
+  el('editorTempoMax').value = v.tempoMax;
+  el('editorBarsPerChord').value = v.barsPerChord;
+  el('editorLeadDensity').value = v.leadDensity;
+  el('editorLeadOctave').value = v.leadOctave;
+  el('editorLeadWave').value = v.leadWave;
+  el('editorLeadSwing').checked = v.leadSwing;
+  el('editorPadAttack').value = v.padAttack;
+  el('editorPadRelease').value = v.padRelease;
+  el('editorPadOctave').value = v.padOctave;
+  el('editorPadWave').value = v.padWave;
+  el('editorPadSeventh').checked = v.padSeventh;
+  el('editorBassOctave').value = v.bassOctave;
+  el('editorBassPattern').value = v.bassPattern;
+  el('editorArpEnabled').checked = v.arpEnabled;
+  el('editorArpPattern').value = v.arpPattern;
+  el('editorArpSteps').value = v.arpSteps;
+  el('editorFilterCutoff').value = v.filterCutoff;
+  el('editorReverbMix').value = v.reverbMix;
+  el('editorTexture').value = v.texture;
+  el('editorEntrainRec').value = v.entrainRec;
+  el('editorLeadDetune').value = v.leadDetune;
+  el('editorPadDetune').value = v.padDetune;
+  el('editorPortamento').value = v.portamento;
+  el('editorVibratoRate').value = v.vibratoRate;
+  el('editorVibratoDepth').value = v.vibratoDepth;
+  el('editorGlitch').value = v.glitch;
+  el('editorCallResponse').checked = v.callResponse;
+  el('editorDelayEnabled').checked = v.delayEnabled;
+  refreshEditorReadouts();
+}
+
+function refreshEditorReadouts(){
+  document.getElementById('editorLeadDensityReadout').textContent = Math.round(document.getElementById('editorLeadDensity').value*100)+'%';
+  document.getElementById('editorFilterReadout').textContent = document.getElementById('editorFilterCutoff').value+' Hz';
+  document.getElementById('editorReverbReadout').textContent = Math.round(document.getElementById('editorReverbMix').value*100)+'%';
+  document.getElementById('editorGlitchReadout').textContent = Math.round(document.getElementById('editorGlitch').value*100)+'%';
+}
+
+function readEditorForm(){
+  const el = document.getElementById.bind(document);
+  const name = el('editorName').value.trim();
+  const desc = el('editorDescInput').value.trim();
+  const tempoMin = parseInt(el('editorTempoMin').value,10);
+  const tempoMax = parseInt(el('editorTempoMax').value,10);
+  const leadWave = el('editorLeadWave').value;
+  const cfg = {
+    name: name, desc: desc,
+    glyph: { freq:2.0, amp:8, jitter:2, wave: leadWave==='sawtooth' ? 'saw' : 'sine' },
+    scale: el('editorScale').value,
+    progression: el('editorProgression').value,
+    meter: parseInt(el('editorMeter').value,10),
+    tempoRange: [Math.min(tempoMin,tempoMax), Math.max(tempoMin,tempoMax)],
+    barsPerChord: parseInt(el('editorBarsPerChord').value,10) || 2,
+    lead: {
+      use:true,
+      density: parseFloat(el('editorLeadDensity').value),
+      octave: parseInt(el('editorLeadOctave').value,10),
+      wave: leadWave,
+      swing: el('editorLeadSwing').checked,
+    },
+    pad: {
+      attack: parseFloat(el('editorPadAttack').value),
+      release: parseFloat(el('editorPadRelease').value),
+      seventh: el('editorPadSeventh').checked,
+      octave: parseInt(el('editorPadOctave').value,10),
+      wave: el('editorPadWave').value,
+    },
+    bass: {
+      octave: parseInt(el('editorBassOctave').value,10),
+      pattern: el('editorBassPattern').value,
+    },
+    filterCutoff: parseFloat(el('editorFilterCutoff').value),
+    reverbMix: parseFloat(el('editorReverbMix').value),
+    arp: el('editorArpEnabled').checked,
+    arpPattern: el('editorArpPattern').value,
+    arpStepsPerBar: parseInt(el('editorArpSteps').value,10) || 8,
+    texture: el('editorTexture').value || null,
+    recommendedEntrainment: el('editorEntrainRec').value,
+    category: 'custom',
+  };
+  const leadDetune = parseFloat(el('editorLeadDetune').value);
+  if (leadDetune > 0) cfg.lead.detune = leadDetune;
+  const padDetune = parseFloat(el('editorPadDetune').value);
+  if (padDetune > 0) cfg.pad.detune = padDetune;
+  const portamento = parseFloat(el('editorPortamento').value);
+  if (portamento > 0) cfg.lead.portamento = portamento;
+  const vibratoRate = parseFloat(el('editorVibratoRate').value);
+  const vibratoDepth = parseFloat(el('editorVibratoDepth').value);
+  if (vibratoRate > 0 && vibratoDepth > 0){ cfg.lead.vibratoRate = vibratoRate; cfg.lead.vibratoDepth = vibratoDepth; }
+  const glitch = parseFloat(el('editorGlitch').value);
+  if (glitch > 0) cfg.lead.glitch = glitch;
+  if (el('editorCallResponse').checked) cfg.lead.callResponse = true;
+  if (el('editorDelayEnabled').checked){ cfg.delayMix = 0.3; cfg.delayTime = 0.375; cfg.delayFeedback = 0.4; }
+  return cfg;
+}
+
+function validateGenreConfig(cfg){
+  if (!cfg.name || cfg.name.length < 1) return t('errNameRequired');
+  if (!isFinite(cfg.tempoRange[0]) || !isFinite(cfg.tempoRange[1]) || cfg.tempoRange[0] === cfg.tempoRange[1]) return t('errTempoRange');
+  if (!SCALES[cfg.scale]) return t('errInvalidScale');
+  if (!PROGRESSIONS[cfg.progression]) return t('errInvalidProgression');
+  if (!isFinite(cfg.lead.density) || cfg.lead.density < 0 || cfg.lead.density > 1) return t('errDensityRange');
+  if (!isFinite(cfg.filterCutoff) || cfg.filterCutoff < 100) return t('errFilterRange');
+  return null;
+}
+
+function slugifyGenreName(name){
+  const base = name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,30) || 'gen';
+  return 'custom_' + base + '_' + Date.now().toString(36).slice(-4);
+}
+
+function openGenreEditor(){
+  populateEditorDropdowns();
+  document.getElementById('editorTemplate').value = '';
+  loadTemplateIntoEditor(null);
+  document.getElementById('editorError').style.display = 'none';
+  document.getElementById('genreEditorPanel').style.display = 'block';
+  document.getElementById('genreEditorPanel').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function closeGenreEditor(){
+  document.getElementById('genreEditorPanel').style.display = 'none';
+}
+
+function showEditorError(msg){
+  const errEl = document.getElementById('editorError');
+  errEl.textContent = msg; errEl.style.display = 'block';
+}
+
+function saveCustomGenre(){
+  const cfg = readEditorForm();
+  const err = validateGenreConfig(cfg);
+  if (err){ showEditorError(err); return; }
+  document.getElementById('editorError').style.display = 'none';
+  const key = slugifyGenreName(cfg.name);
+  customGenres[key] = cfg;
+  renderGenreCards();
+  selectGenre(key);
+  closeGenreEditor();
+}
+
+function deleteCustomGenre(key){
+  delete customGenres[key];
+  if (state.genreKey === key){ selectGenre('ambient'); }
+  renderGenreCards();
+}
+
+function testCustomGenre(){
+  const cfg = readEditorForm();
+  const err = validateGenreConfig(cfg);
+  if (err){ showEditorError(err); return; }
+  document.getElementById('editorError').style.display = 'none';
+  customGenres['__previewTest__'] = cfg;
+  state.genreKey = '__previewTest__';
+  startPlayback();
+  updateTransportUI();
+}
+
+function exportGenrePack(){
+  const keys = customGenreOrder();
+  if (keys.length === 0){ alert(t('noCustomGenres')); return; }
+  const data = {};
+  keys.forEach(function(k){ data[k] = customGenres[k]; });
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'melodii-fara-frontiere-genuri-proprii.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+}
+
+function importGenrePack(data){
+  let count = 0;
+  Object.keys(data).forEach(function(key){
+    const g = data[key];
+    if (g && g.scale && SCALES[g.scale] && g.progression && PROGRESSIONS[g.progression] && g.lead && g.pad && g.bass){
+      const safeKey = (key.indexOf('custom_')===0) ? key : slugifyGenreName(genreName(g)||key);
+      g.category = 'custom';
+      customGenres[safeKey] = g;
+      count++;
+    }
+  });
+  renderGenreCards();
+  return count;
+}
+
+/* ======================================================================
+   14. VIZUALIZATOR FRACTAL FULLSCREEN
+   Lucrare originală proprie, inspirată de genul artei generative cu
+   atractori de tip "flame": un joc al haosului (chaos game) peste un set
+   de transformări afine + variații neliniare generice (trigonometrie/
+   coordonate polare — tehnici matematice standard, nu cod preluat de
+   nicăieri), cu morfare continuă între "genomuri" generate aleator prin
+   RNG-ul propriu al aplicației. Nicio secvență/parametru nu e copiată —
+   fiecare rulare produce un atractor nou, unic.
+   ====================================================================== */
+const FRACTAL_VARIATIONS = {
+  linear:     function(x,y){ return [x,y]; },
+  sinusoidal: function(x,y){ return [Math.sin(x), Math.sin(y)]; },
+  spherical:  function(x,y){ const r2 = x*x+y*y+1e-6; return [x/r2, y/r2]; },
+  swirl:      function(x,y){ const r2=x*x+y*y; const s=Math.sin(r2), c=Math.cos(r2); return [x*s-y*c, x*c+y*s]; },
+  horseshoe:  function(x,y){ const r=Math.sqrt(x*x+y*y)+1e-6; return [(x-y)*(x+y)/r, 2*x*y/r]; },
+  polar:      function(x,y){ const th=Math.atan2(y,x), r=Math.sqrt(x*x+y*y); return [th/Math.PI, r-1]; },
+  heart:      function(x,y){ const r=Math.sqrt(x*x+y*y), th=Math.atan2(x,y); return [r*Math.sin(th*r), -r*Math.cos(th*r)]; },
+  disc:       function(x,y){ const r=Math.sqrt(x*x+y*y)*Math.PI, th=Math.atan2(y,x)/Math.PI; return [th*Math.sin(r), th*Math.cos(r)]; },
+};
+const FRACTAL_VARIATION_NAMES = Object.keys(FRACTAL_VARIATIONS);
+const FRACTAL_POINT_COUNT = 3500;
+
+// --- Extensie 3D (transformari afine cu 12 coeficienti + variatii neliniare
+// generice extinse la 3 dimensiuni + rotatie + proiectie perspectiva
+// standard — aceeasi familie matematica de "joc al haosului", doar cu o
+// dimensiune in plus) ---
+const FRACTAL_VARIATIONS_3D = {
+  linear:     function(x,y,z){ return [x,y,z]; },
+  sinusoidal: function(x,y,z){ return [Math.sin(x), Math.sin(y), Math.sin(z)]; },
+  spherical:  function(x,y,z){ const r2 = x*x+y*y+z*z+1e-6; return [x/r2, y/r2, z/r2]; },
+  swirl:      function(x,y,z){ const r2=x*x+y*y+z*z; const s=Math.sin(r2), c=Math.cos(r2); return [x*s-y*c, x*c+y*s, z]; },
+};
+const FRACTAL_VARIATION_NAMES_3D = Object.keys(FRACTAL_VARIATIONS_3D);
+
+function randomFractalGenome3D(rng, nFns){
+  const fns = [];
+  for (let i=0;i<nFns;i++){
+    fns.push({
+      a: rng()*1.4-0.7, b: rng()*1.4-0.7, c: rng()*1.4-0.7, j: rng()*0.4-0.2,
+      d: rng()*1.4-0.7, e: rng()*1.4-0.7, f: rng()*1.4-0.7, k: rng()*0.4-0.2,
+      g: rng()*1.4-0.7, h: rng()*1.4-0.7, i: rng()*1.4-0.7, l: rng()*0.4-0.2,
+      weight: 0.3+rng()*0.7,
+      variation: FRACTAL_VARIATION_NAMES_3D[Math.floor(rng()*FRACTAL_VARIATION_NAMES_3D.length)],
+      hue: rng()*360,
+    });
+  }
+  return fns;
+}
+function lerpFractalGenome3D(ga, gb, t){
+  return ga.map(function(fa, idx){
+    const fb = gb[idx];
+    return {
+      a: fa.a+(fb.a-fa.a)*t, b: fa.b+(fb.b-fa.b)*t, c: fa.c+(fb.c-fa.c)*t, j: fa.j+(fb.j-fa.j)*t,
+      d: fa.d+(fb.d-fa.d)*t, e: fa.e+(fb.e-fa.e)*t, f: fa.f+(fb.f-fa.f)*t, k: fa.k+(fb.k-fa.k)*t,
+      g: fa.g+(fb.g-fa.g)*t, h: fa.h+(fb.h-fa.h)*t, i: fa.i+(fb.i-fa.i)*t, l: fa.l+(fb.l-fa.l)*t,
+      weight: fa.weight+(fb.weight-fa.weight)*t,
+      variation: t<0.5 ? fa.variation : fb.variation,
+      hue: fa.hue+(fb.hue-fa.hue)*t,
+    };
+  });
+}
+function rotateY3D(x,y,z,angle){
+  const c = Math.cos(angle), s = Math.sin(angle);
+  return [x*c+z*s, y, -x*s+z*c];
+}
+function project3D(x,y,z,camDist){
+  const denom = camDist+z;
+  const safeDenom = Math.abs(denom) < 0.2 ? (denom<0?-0.2:0.2) : denom;
+  const factor = camDist/safeDenom;
+  return [x*factor, y*factor, factor];
+}
+function sampleUniformSphere(rng){
+  const theta = rng()*Math.PI*2;
+  const phi = Math.acos(rng()*2-1);
+  const r = Math.cbrt(rng());
+  return [r*Math.sin(phi)*Math.cos(theta), r*Math.sin(phi)*Math.sin(theta), r*Math.cos(phi)];
+}
+
+function randomFractalGenome(rng, nFns){
+  const fns = [];
+  for (let i=0;i<nFns;i++){
+    fns.push({
+      a: rng()*1.6-0.8, b: rng()*1.6-0.8, c: rng()*0.6-0.3,
+      d: rng()*1.6-0.8, e: rng()*1.6-0.8, f: rng()*0.6-0.3,
+      weight: 0.3 + rng()*0.7,
+      variation: FRACTAL_VARIATION_NAMES[Math.floor(rng()*FRACTAL_VARIATION_NAMES.length)],
+      hue: rng()*360,
+    });
+  }
+  return fns;
+}
+function lerpFractalGenome(ga, gb, t){
+  return ga.map(function(fa, i){
+    const fb = gb[i];
+    return {
+      a: fa.a+(fb.a-fa.a)*t, b: fa.b+(fb.b-fa.b)*t, c: fa.c+(fb.c-fa.c)*t,
+      d: fa.d+(fb.d-fa.d)*t, e: fa.e+(fb.e-fa.e)*t, f: fa.f+(fb.f-fa.f)*t,
+      weight: fa.weight+(fb.weight-fa.weight)*t,
+      variation: t < 0.5 ? fa.variation : fb.variation,
+      hue: fa.hue+(fb.hue-fa.hue)*t,
+    };
+  });
+}
+function pickWeightedFractalFn(fns, rng){
+  const total = fns.reduce(function(s,f){ return s+f.weight; }, 0);
+  let r = rng()*total;
+  for (let i=0;i<fns.length;i++){ r -= fns[i].weight; if (r<=0) return fns[i]; }
+  return fns[fns.length-1];
+}
+
+let fractalOpen = false;
+let fractalRAF = null;
+let fractalPoints = [];
+let fractalRng = null;
+let fractalGenomeA = null, fractalGenomeB = null;
+let fractalTransitionStart = 0, fractalTransitionDur = 18000;
+let fractalCamCenterX = 0, fractalCamCenterY = 0, fractalCamScale = 1;
+let fractalUserZoom = 1;
+let fractalMode = '2d';
+let fractalRotationAngle = 0;
+let fractalHueDrift = 0;
+let fractalHideControlsTimeout = null;
+let fractalAudioBuf = null;
+
+function initFractalPoints(){
+  fractalPoints = [];
+  if (fractalMode === '3d'){
+    for (let i=0;i<FRACTAL_POINT_COUNT;i++){
+      const s = sampleUniformSphere(fractalRng);
+      fractalPoints.push({ x:s[0], y:s[1], z:s[2] });
+    }
+  } else {
+    for (let i=0;i<FRACTAL_POINT_COUNT;i++){
+      const angle = fractalRng()*Math.PI*2;
+      const radius = Math.sqrt(fractalRng());
+      fractalPoints.push({ x: Math.cos(angle)*radius, y: Math.sin(angle)*radius });
+    }
+  }
+}
+function newFractalTarget(){
+  if (fractalMode === '3d'){
+    fractalGenomeA = fractalGenomeB || randomFractalGenome3D(fractalRng, 3+Math.floor(fractalRng()*4));
+    fractalGenomeB = randomFractalGenome3D(fractalRng, fractalGenomeA.length);
+  } else {
+    fractalGenomeA = fractalGenomeB || randomFractalGenome(fractalRng, 3+Math.floor(fractalRng()*4));
+    fractalGenomeB = randomFractalGenome(fractalRng, fractalGenomeA.length);
+  }
+  fractalTransitionStart = performance.now();
+  fractalTransitionDur = 14000 + fractalRng()*10000;
+}
+function getFractalAudioEnergy(){
+  if (!(isPlaying && analyserL)) return 0;
+  try{
+    if (!fractalAudioBuf || fractalAudioBuf.length !== analyserL.frequencyBinCount){
+      fractalAudioBuf = new Uint8Array(analyserL.frequencyBinCount);
+    }
+    analyserL.getByteTimeDomainData(fractalAudioBuf);
+    let sum = 0, count = 0;
+    for (let i=0;i<fractalAudioBuf.length;i+=8){ const v=(fractalAudioBuf[i]-128)/128; sum += v*v; count++; }
+    return Math.min(1, Math.sqrt(sum/count)*3.5);
+  }catch(e){ return 0; }
+}
+
+function drawFractalFrame(){
+  fractalRAF = requestAnimationFrame(drawFractalFrame);
+  const canvas = document.getElementById('fractalCanvas');
+  const ctx2d = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  if (!W || !H) return;
+
+  let t = (performance.now() - fractalTransitionStart) / fractalTransitionDur;
+  if (t >= 1){ newFractalTarget(); t = 0; }
+  const tClamped = Math.min(1,Math.max(0,t));
+  const is3D = fractalMode === '3d';
+  const genome = is3D ? lerpFractalGenome3D(fractalGenomeA, fractalGenomeB, tClamped) : lerpFractalGenome(fractalGenomeA, fractalGenomeB, tClamped);
+
+  const energy = getFractalAudioEnergy();
+  fractalHueDrift += 0.05 + energy*0.15;
+  if (is3D) fractalRotationAngle += 0.0018 + energy*0.0035;
+
+  ctx2d.globalCompositeOperation = 'source-over';
+  ctx2d.fillStyle = 'rgba(5,5,10,0.09)';
+  ctx2d.fillRect(0,0,W,H);
+  ctx2d.globalCompositeOperation = 'lighter';
+
+  let sx=0, sy=0, sx2=0, sy2=0;
+  const n = fractalPoints.length;
+  const baseAlpha = 0.35 + energy*0.35;
+
+  for (let i=0;i<n;i++){
+    const p = fractalPoints[i];
+    const fn = pickWeightedFractalFn(genome, fractalRng);
+    let finalX, finalY, depthAlpha = 1;
+
+    if (is3D){
+      let x = fn.a*p.x+fn.b*p.y+fn.c*p.z+fn.j;
+      let y = fn.d*p.x+fn.e*p.y+fn.f*p.z+fn.k;
+      let z = fn.g*p.x+fn.h*p.y+fn.i*p.z+fn.l;
+      const out = FRACTAL_VARIATIONS_3D[fn.variation](x,y,z);
+      x=out[0]; y=out[1]; z=out[2];
+      if (!isFinite(x)||!isFinite(y)||!isFinite(z)||Math.abs(x)>1e4||Math.abs(y)>1e4||Math.abs(z)>1e4){
+        x=(fractalRng()*2-1)*0.5; y=(fractalRng()*2-1)*0.5; z=(fractalRng()*2-1)*0.5;
+      }
+      p.x=x; p.y=y; p.z=z;
+      const rotated = rotateY3D(x,y,z,fractalRotationAngle);
+      const proj = project3D(rotated[0], rotated[1], rotated[2], 4);
+      finalX = proj[0]; finalY = proj[1];
+      depthAlpha = Math.min(1, Math.max(0.15, proj[2]/2));
+    } else {
+      let x = fn.a*p.x + fn.b*p.y + fn.c;
+      let y = fn.d*p.x + fn.e*p.y + fn.f;
+      const out = FRACTAL_VARIATIONS[fn.variation](x,y);
+      x = out[0]; y = out[1];
+      if (!isFinite(x) || !isFinite(y) || Math.abs(x) > 1e4 || Math.abs(y) > 1e4){
+        x = (fractalRng()*2-1)*0.5; y = (fractalRng()*2-1)*0.5;
+      }
+      p.x = x; p.y = y;
+      finalX = x; finalY = y;
+    }
+
+    sx += finalX; sy += finalY; sx2 += finalX*finalX; sy2 += finalY*finalY;
+    const sxp = (finalX - fractalCamCenterX) * fractalCamScale * fractalUserZoom + W/2;
+    const syp = (finalY - fractalCamCenterY) * fractalCamScale * fractalUserZoom + H/2;
+    if (sxp >= -2 && sxp <= W+2 && syp >= -2 && syp <= H+2){
+      const hue = (fn.hue + fractalHueDrift) % 360;
+      ctx2d.fillStyle = 'hsla('+hue.toFixed(0)+',85%,60%,'+(baseAlpha*depthAlpha).toFixed(2)+')';
+      ctx2d.fillRect(sxp, syp, 1.6, 1.6);
+    }
+  }
+
+  const meanX = sx/n, meanY = sy/n;
+  const varX = Math.max(1e-4, sx2/n - meanX*meanX);
+  const varY = Math.max(1e-4, sy2/n - meanY*meanY);
+  const spread = Math.sqrt(varX+varY) || 1;
+  const targetScale = Math.min(W,H) * 0.42 / (spread*2.2);
+  fractalCamCenterX += (meanX - fractalCamCenterX) * 0.02;
+  fractalCamCenterY += (meanY - fractalCamCenterY) * 0.02;
+  fractalCamScale += (targetScale - fractalCamScale) * 0.015;
+  if (!isFinite(fractalCamScale) || fractalCamScale <= 0) fractalCamScale = 1;
+}
+
+function resizeFractalCanvas(){
+  const canvas = document.getElementById('fractalCanvas');
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  canvas.width = window.innerWidth*dpr;
+  canvas.height = window.innerHeight*dpr;
+}
+
+function showFractalControlsBriefly(){
+  const overlay = document.getElementById('fractalOverlay');
+  overlay.classList.add('show-controls');
+  if (fractalHideControlsTimeout) clearTimeout(fractalHideControlsTimeout);
+  fractalHideControlsTimeout = setTimeout(function(){ overlay.classList.remove('show-controls'); }, 2600);
+}
+
+function switchFractalMode(newMode){
+  if (fractalMode === newMode || !fractalOpen) { fractalMode = newMode; return; }
+  fractalMode = newMode;
+  fractalRotationAngle = 0;
+  initFractalPoints();
+  fractalGenomeB = null;
+  newFractalTarget();
+  fractalCamCenterX = 0; fractalCamCenterY = 0;
+  fractalCamScale = Math.min(window.innerWidth, window.innerHeight)*0.2;
+}
+
+function openFractalVisualizer(){
+  const overlay = document.getElementById('fractalOverlay');
+  overlay.classList.add('open');
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  resizeFractalCanvas();
+  fractalRng = mulberry32((Date.now() % 4294967296) >>> 0);
+  initFractalPoints();
+  fractalGenomeB = null;
+  newFractalTarget();
+  fractalCamCenterX = 0; fractalCamCenterY = 0;
+  fractalCamScale = Math.min(window.innerWidth, window.innerHeight)*0.2;
+  fractalUserZoom = 1;
+  fractalOpen = true;
+  if (fractalRAF) cancelAnimationFrame(fractalRAF);
+  drawFractalFrame();
+  const el = document.documentElement;
+  const reqFs = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
+  if (reqFs){ try{ reqFs.call(el); }catch(e){} }
+  showFractalControlsBriefly();
+}
+
+function closeFractalVisualizer(){
+  const overlay = document.getElementById('fractalOverlay');
+  overlay.classList.remove('open', 'show-controls');
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  fractalOpen = false;
+  if (fractalRAF){ cancelAnimationFrame(fractalRAF); fractalRAF = null; }
+  if (document.fullscreenElement || document.webkitFullscreenElement){
+    const exitFs = document.exitFullscreen || document.webkitExitFullscreen;
+    if (exitFs){ try{ exitFs.call(document); }catch(e){} }
+  }
+}
+
+function fractalApplyZoomFactor(factor){
+  fractalUserZoom = Math.min(10000, Math.max(0.001, fractalUserZoom*factor));
+}
+function fractalZoomIn(){ fractalApplyZoomFactor(1.2); }
+function fractalZoomOut(){ fractalApplyZoomFactor(1/1.2); }
+function fractalZoomReset(){ fractalUserZoom = 1; }
+
+/* ======================================================================
+   14b. COPERTĂ GENERATIVĂ (imagine originală, legată de sămânță + gen)
+   Lucrare proprie: reutilizează aceleași variații neliniare generice ca
+   vizualizatorul fullscreen, dar randate o singură dată, static, cu
+   tehnica standard "flame" (acumulare densitate+culoare într-o histogramă,
+   scalare logaritmică, corecție gamma) — posibilă doar pentru o randare
+   unică (nu în timp real), deci calitate mult mai bogată. Nicio imagine
+   sau model AI extern nu e folosit; totul e generat matematic, local.
+   ====================================================================== */
+const CATEGORY_HUE_ANCHOR = { atmospheric:190, electronic:280, world:25, classical:45, groove:330, custom:210 };
+
+function hslToRgb(h, s, l){
+  h = h/360;
+  let r, g, b;
+  if (s === 0){ r = g = b = l; }
+  else {
+    const hue2rgb = function(p,q,tt){
+      if (tt<0) tt+=1; if (tt>1) tt-=1;
+      if (tt<1/6) return p+(q-p)*6*tt;
+      if (tt<1/2) return q;
+      if (tt<2/3) return p+(q-p)*(2/3-tt)*6;
+      return p;
+    };
+    const q = l<0.5 ? l*(1+s) : l+s-l*s;
+    const p = 2*l-q;
+    r = hue2rgb(p,q,h+1/3); g = hue2rgb(p,q,h); b = hue2rgb(p,q,h-1/3);
+  }
+  return [r*255, g*255, b*255];
+}
+
+function generateCoverArtImageData(seed, genreKey, size, mode){
+  const rng = mulberry32(seed);
+  const genre = getGenre(genreKey);
+  const hueAnchor = CATEGORY_HUE_ANCHOR[genre && genre.category] || 200;
+  const is3D = mode === '3d';
+  const nFns = 4 + Math.floor(rng()*3);
+  const fns = [];
+  for (let i=0;i<nFns;i++){
+    if (is3D){
+      fns.push({
+        a: rng()*1.4-0.7, b: rng()*1.4-0.7, c: rng()*1.4-0.7, j: rng()*0.35-0.175,
+        d: rng()*1.4-0.7, e: rng()*1.4-0.7, f: rng()*1.4-0.7, k: rng()*0.35-0.175,
+        g: rng()*1.4-0.7, h: rng()*1.4-0.7, i: rng()*1.4-0.7, l: rng()*0.35-0.175,
+        weight: 0.3+rng()*0.7,
+        variation: FRACTAL_VARIATION_NAMES_3D[Math.floor(rng()*FRACTAL_VARIATION_NAMES_3D.length)],
+        hue: (hueAnchor + (rng()*110-55) + 360) % 360,
+      });
+    } else {
+      fns.push({
+        a: rng()*1.6-0.8, b: rng()*1.6-0.8, c: rng()*0.5-0.25,
+        d: rng()*1.6-0.8, e: rng()*1.6-0.8, f: rng()*0.5-0.25,
+        weight: 0.3+rng()*0.7,
+        variation: FRACTAL_VARIATION_NAMES[Math.floor(rng()*FRACTAL_VARIATION_NAMES.length)],
+        hue: (hueAnchor + (rng()*110-55) + 360) % 360,
+      });
+    }
+  }
+  const rotationAngle = is3D ? rng()*Math.PI*2 : 0;
+  const W = size, H = size;
+  const density = new Float64Array(W*H);
+  const colR = new Float64Array(W*H), colG = new Float64Array(W*H), colB = new Float64Array(W*H);
+
+  let x = rng()*2-1, y = rng()*2-1, z = rng()*2-1;
+
+  function step(){
+    const fn = pickWeightedFractalFn(fns, rng);
+    if (is3D){
+      let nx = fn.a*x+fn.b*y+fn.c*z+fn.j;
+      let ny = fn.d*x+fn.e*y+fn.f*z+fn.k;
+      let nz = fn.g*x+fn.h*y+fn.i*z+fn.l;
+      const out = FRACTAL_VARIATIONS_3D[fn.variation](nx,ny,nz);
+      nx=out[0]; ny=out[1]; nz=out[2];
+      if (!isFinite(nx)||!isFinite(ny)||!isFinite(nz)||Math.abs(nx)>1e4||Math.abs(ny)>1e4||Math.abs(nz)>1e4){
+        nx=rng()*2-1; ny=rng()*2-1; nz=rng()*2-1;
+      }
+      x=nx; y=ny; z=nz;
+      const rotated = rotateY3D(x,y,z,rotationAngle);
+      const proj = project3D(rotated[0], rotated[1], rotated[2], 4);
+      return { px: proj[0], py: proj[1], depthAlpha: Math.min(1, Math.max(0.15, proj[2]/2)), fn: fn };
+    } else {
+      let nx = fn.a*x+fn.b*y+fn.c, ny = fn.d*x+fn.e*y+fn.f;
+      const out = FRACTAL_VARIATIONS[fn.variation](nx,ny);
+      nx = out[0]; ny = out[1];
+      if (!isFinite(nx)||!isFinite(ny)||Math.abs(nx)>1e4||Math.abs(ny)>1e4){ nx=rng()*2-1; ny=rng()*2-1; }
+      x=nx; y=ny;
+      return { px: x, py: y, depthAlpha: 1, fn: fn };
+    }
+  }
+
+  let minX=Infinity, maxX=-Infinity, minY=Infinity, maxY=-Infinity;
+  for (let i=0;i<5000;i++){
+    const r = step();
+    if (i>20){ minX=Math.min(minX,r.px); maxX=Math.max(maxX,r.px); minY=Math.min(minY,r.py); maxY=Math.max(maxY,r.py); }
+  }
+  if (!isFinite(minX) || !isFinite(maxX)){ minX=-1; maxX=1; minY=-1; maxY=1; }
+  const rangeX = Math.max(maxX-minX, 0.1), rangeY = Math.max(maxY-minY, 0.1);
+  const cx = (minX+maxX)/2, cy = (minY+maxY)/2;
+  const scale = Math.min(W,H)*0.85 / Math.max(rangeX,rangeY);
+
+  const ITER = Math.min(800000, size*size*1.5);
+  for (let i=0;i<ITER;i++){
+    const r = step();
+    if (i<20) continue;
+    const px = Math.floor((r.px-cx)*scale + W/2);
+    const py = Math.floor((r.py-cy)*scale + H/2);
+    if (px<0||px>=W||py<0||py>=H) continue;
+    const idx = py*W+px;
+    const rgb = hslToRgb(r.fn.hue, 0.75, 0.55);
+    density[idx] += r.depthAlpha; colR[idx] += rgb[0]*r.depthAlpha; colG[idx] += rgb[1]*r.depthAlpha; colB[idx] += rgb[2]*r.depthAlpha;
+  }
+
+  let maxDensity = 0;
+  for (let i=0;i<density.length;i++) if (density[i]>maxDensity) maxDensity = density[i];
+  const logMax = Math.log(1+maxDensity) || 1;
+  const bg = [11,14,20]; // var(--bg) #0B0E14, ca fundalul sa se contopeasca cu restul aplicatiei
+  const imgData = new Uint8ClampedArray(W*H*4);
+  for (let i=0;i<W*H;i++){
+    const cxp = i % W, cyp = Math.floor(i/W);
+    const vigDx = (cxp/W - 0.5), vigDy = (cyp/H - 0.5);
+    const vignette = 1 - Math.min(1, Math.sqrt(vigDx*vigDx+vigDy*vigDy)*1.55)*0.5;
+    if (density[i] <= 0){
+      imgData[i*4+0]=bg[0]; imgData[i*4+1]=bg[1]; imgData[i*4+2]=bg[2]; imgData[i*4+3]=255;
+      continue;
+    }
+    const alpha = Math.log(1+density[i])/logMax;
+    const gammaAlpha = Math.pow(alpha, 0.42);
+    const rAvg = colR[i]/density[i], gAvg = colG[i]/density[i], bAvg = colB[i]/density[i];
+    const rr = Math.min(255, rAvg*gammaAlpha*1.4*vignette + bg[0]*(1-gammaAlpha));
+    const gg = Math.min(255, gAvg*gammaAlpha*1.4*vignette + bg[1]*(1-gammaAlpha));
+    const bb = Math.min(255, bAvg*gammaAlpha*1.4*vignette + bg[2]*(1-gammaAlpha));
+    imgData[i*4+0]=rr; imgData[i*4+1]=gg; imgData[i*4+2]=bb; imgData[i*4+3]=255;
+  }
+  return imgData;
+}
+
+function renderCoverArt(){
+  const settings = getCurrentSettings();
+  const canvas = document.getElementById('coverCanvas');
+  const ctx2d = canvas.getContext('2d');
+  const size = canvas.width;
+  const mode = document.getElementById('coverModeBtn').dataset.mode || '2d';
+  const raw = generateCoverArtImageData(settings.seed, settings.genreKey, size, mode);
+  const imgData = new ImageData(raw, size, size);
+  ctx2d.putImageData(imgData, 0, 0);
+
+  // scrim jos + text (nume gen + samanta), pentru un aspect autentic de "coperta"
+  const grad = ctx2d.createLinearGradient(0, size*0.68, 0, size);
+  grad.addColorStop(0, 'rgba(5,6,9,0)');
+  grad.addColorStop(1, 'rgba(5,6,9,0.82)');
+  ctx2d.fillStyle = grad;
+  ctx2d.fillRect(0, size*0.68, size, size*0.32);
+
+  const genre = getGenre(settings.genreKey);
+  ctx2d.textBaseline = 'alphabetic';
+  ctx2d.fillStyle = 'rgba(237,234,227,0.95)';
+  ctx2d.font = '600 '+Math.round(size*0.052)+'px Georgia, "Cormorant Garamond", serif';
+  ctx2d.fillText(genreName(genre), size*0.055, size*0.90);
+  ctx2d.fillStyle = 'rgba(237,234,227,0.55)';
+  ctx2d.font = Math.round(size*0.024)+'px monospace';
+  ctx2d.fillText(t('seedLabel')+' '+settings.seed, size*0.055, size*0.955);
+
+  document.getElementById('coverPlaceholder').classList.add('hidden');
+  document.getElementById('exportCoverBtn').disabled = false;
+}
+
+function exportCoverArt(){
+  const canvas = document.getElementById('coverCanvas');
+  canvas.toBlob(function(blob){
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'melodii-fara-frontiere-coperta-seed'+document.getElementById('seedInput').value+'.png';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+  }, 'image/png');
+}
+
 
 /* ======================================================================
    12. INITIALIZARE
@@ -2208,11 +3984,13 @@ document.addEventListener('DOMContentLoaded', function(){
     genreSearchQuery = this.value;
     const q = genreSearchQuery.trim().toLowerCase();
     if (q){
-      CATEGORY_ORDER.forEach(function(catKey){
-        const hasMatch = GENRE_ORDER.some(function(key){
-          if (GENRES[key].category !== catKey) return false;
-          const g = GENRES[key];
-          return (g.name[currentLang]+' '+g.desc[currentLang]).toLowerCase().indexOf(q) !== -1;
+      const hasCustom = customGenreOrder().length > 0;
+      const allCats = hasCustom ? CATEGORY_ORDER.concat(['custom']) : CATEGORY_ORDER;
+      allCats.forEach(function(catKey){
+        const keysInCat = catKey==='custom' ? customGenreOrder() : GENRE_ORDER.filter(function(key){ return GENRES[key].category === catKey; });
+        const hasMatch = keysInCat.some(function(key){
+          const g = getGenre(key);
+          return (genreName(g)+' '+genreDesc(g)).toLowerCase().indexOf(q) !== -1;
         });
         if (hasMatch) expandedCategories.add(catKey);
       });
@@ -2290,6 +4068,137 @@ document.addEventListener('DOMContentLoaded', function(){
     setTimeout(function(){ progressEl.style.display='none'; btn.disabled=false; }, 2500);
   });
   document.getElementById('exportJsonBtn').addEventListener('click', exportSettingsJson);
+
+  document.getElementById('generateCoverBtn').addEventListener('click', function(){
+    const btn = this;
+    const progressEl = document.getElementById('coverProgress');
+    btn.disabled = true;
+    progressEl.style.display = 'block';
+    progressEl.textContent = t('generatingCover');
+    setTimeout(function(){
+      try{
+        renderCoverArt();
+        progressEl.style.display = 'none';
+      }catch(err){
+        progressEl.textContent = t('coverError');
+      }
+      btn.disabled = false;
+    }, 30);
+  });
+  document.getElementById('exportCoverBtn').addEventListener('click', exportCoverArt);
+  document.getElementById('coverModeBtn').addEventListener('click', function(){
+    const newMode = this.dataset.mode === '2d' ? '3d' : '2d';
+    this.dataset.mode = newMode;
+    this.textContent = newMode.toUpperCase();
+  });
+
+  document.getElementById('openFractalBtn').addEventListener('click', openFractalVisualizer);
+  document.getElementById('closeFractalBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    closeFractalVisualizer();
+  });
+  document.getElementById('fractalOverlay').addEventListener('click', closeFractalVisualizer);
+  document.getElementById('fractalOverlay').addEventListener('mousemove', showFractalControlsBriefly);
+  document.getElementById('fractalOverlay').addEventListener('touchstart', showFractalControlsBriefly, {passive:true});
+
+  document.getElementById('fractalOverlay').addEventListener('wheel', function(e){
+    e.preventDefault();
+    fractalApplyZoomFactor(Math.pow(1.001, -e.deltaY));
+    showFractalControlsBriefly();
+  }, {passive:false});
+
+  let fractalPinchStartDist = null, fractalPinchStartZoom = 1;
+  function fractalTouchDist(touches){
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx*dx+dy*dy);
+  }
+  document.getElementById('fractalOverlay').addEventListener('touchstart', function(e){
+    if (e.touches.length === 2){
+      fractalPinchStartDist = fractalTouchDist(e.touches);
+      fractalPinchStartZoom = fractalUserZoom;
+    }
+  }, {passive:true});
+  document.getElementById('fractalOverlay').addEventListener('touchmove', function(e){
+    if (e.touches.length === 2 && fractalPinchStartDist){
+      e.preventDefault();
+      const ratio = fractalTouchDist(e.touches) / fractalPinchStartDist;
+      fractalUserZoom = Math.min(10000, Math.max(0.001, fractalPinchStartZoom*ratio));
+    }
+  }, {passive:false});
+  document.getElementById('fractalOverlay').addEventListener('touchend', function(e){
+    if (e.touches.length < 2) fractalPinchStartDist = null;
+  }, {passive:true});
+  document.getElementById('fractalZoomIn').addEventListener('click', function(e){ e.stopPropagation(); fractalZoomIn(); showFractalControlsBriefly(); });
+  document.getElementById('fractalZoomOut').addEventListener('click', function(e){ e.stopPropagation(); fractalZoomOut(); showFractalControlsBriefly(); });
+  document.getElementById('fractalZoomReset').addEventListener('click', function(e){ e.stopPropagation(); fractalZoomReset(); showFractalControlsBriefly(); });
+  document.getElementById('fractalModeBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    const newMode = fractalMode === '2d' ? '3d' : '2d';
+    switchFractalMode(newMode);
+    this.textContent = newMode.toUpperCase();
+    showFractalControlsBriefly();
+  });
+  document.addEventListener('keydown', function(e){
+    if (!fractalOpen) return;
+    if (e.key === '+' || e.key === '=') fractalZoomIn();
+    else if (e.key === '-' || e.key === '_') fractalZoomOut();
+    else if (e.key === '0') fractalZoomReset();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && fractalOpen) closeFractalVisualizer();
+  });
+  window.addEventListener('resize', function(){ if (fractalOpen) resizeFractalCanvas(); });
+  document.addEventListener('fullscreenchange', function(){
+    if (!document.fullscreenElement && fractalOpen) closeFractalVisualizer();
+  });
+  document.addEventListener('webkitfullscreenchange', function(){
+    if (!document.webkitFullscreenElement && fractalOpen) closeFractalVisualizer();
+  });
+
+  document.getElementById('openEditorBtn').addEventListener('click', openGenreEditor);
+  document.getElementById('closeEditorBtn').addEventListener('click', closeGenreEditor);
+  document.getElementById('editorTemplate').addEventListener('change', function(){ loadTemplateIntoEditor(this.value || null); });
+  document.getElementById('toggleAdvancedBtn').addEventListener('click', function(){
+    const adv = document.getElementById('editorAdvanced');
+    adv.style.display = (adv.style.display === 'none') ? 'block' : 'none';
+  });
+  ['editorLeadDensity','editorFilterCutoff','editorReverbMix','editorGlitch'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', refreshEditorReadouts);
+  });
+  document.getElementById('testCustomGenreBtn').addEventListener('click', testCustomGenre);
+  document.getElementById('saveCustomGenreBtn').addEventListener('click', saveCustomGenre);
+  document.getElementById('exportGenrePackBtn').addEventListener('click', exportGenrePack);
+
+  document.getElementById('supportHeartBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    document.getElementById('supportPopup').classList.toggle('open');
+  });
+  document.getElementById('supportCloseBtn').addEventListener('click', function(e){
+    e.stopPropagation();
+    document.getElementById('supportPopup').classList.remove('open');
+  });
+  document.addEventListener('click', function(e){
+    const widget = document.getElementById('supportWidget');
+    if (!widget.contains(e.target)) document.getElementById('supportPopup').classList.remove('open');
+  });
+  document.getElementById('importGenrePackBtn').addEventListener('click', function(){
+    document.getElementById('importGenrePackFile').click();
+  });
+  document.getElementById('importGenrePackFile').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        const data = JSON.parse(ev.target.result);
+        const count = importGenrePack(data);
+        alert(t('importedCount').replace('{n}', count));
+      }catch(err){ alert(t('importError')); }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
   document.getElementById('importJsonBtn').addEventListener('click', function(){
     document.getElementById('importJsonFile').click();
   });
