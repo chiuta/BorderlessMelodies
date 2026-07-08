@@ -2406,6 +2406,24 @@ let isPaused = false;
 let stopTimeoutId = null;
 let scheduleMoreAudioFn = null; // reparare mobil: reincarca programarea dupa suspendare in fundal
 let audioUnlocked = false;
+let silentUnlockAudioEl = null;
+
+function createSilentWavDataUri(){
+  // WAV minimal (8kHz, mono, 8-bit, ~0.1s de liniște) - construit direct in
+  // memorie, fara niciun fisier extern. Scopul nu e sunetul in sine (e tacere),
+  // ci existenta unui element <audio> activ pe pagina.
+  const numSamples = 800;
+  const buf = new ArrayBuffer(44 + numSamples);
+  const view = new DataView(buf);
+  function writeStr(offset, str){ for (let i=0;i<str.length;i++) view.setUint8(offset+i, str.charCodeAt(i)); }
+  writeStr(0,'RIFF'); view.setUint32(4, 36+numSamples, true); writeStr(8,'WAVE');
+  writeStr(12,'fmt '); view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,1,true);
+  view.setUint32(24,8000,true); view.setUint32(28,8000,true); view.setUint16(32,1,true); view.setUint16(34,8,true);
+  writeStr(36,'data'); view.setUint32(40,numSamples,true);
+  for (let i=0;i<numSamples;i++) view.setUint8(44+i, 128); // 128 = liniște, in PCM 8-bit unsigned
+  const blob = new Blob([buf], {type:'audio/wav'});
+  return URL.createObjectURL(blob);
+}
 
 function ensureAudioContext(){
   if (!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
@@ -2421,6 +2439,27 @@ function ensureAudioContext(){
       const b = audioCtx.createBuffer(1, 1, 22050);
       const s = audioCtx.createBufferSource();
       s.buffer = b; s.connect(audioCtx.destination); s.start(0);
+    }catch(e){}
+    // Al doilea truc, separat: pe iOS, cu întrerupătorul fizic pe silențios,
+    // Web Audio API (oscilatoare pure, fără element <audio>) poate să nu se
+    // audă DELOC — bug WebKit documentat (#237322) — deși desktop-ul (fără
+    // acest întrerupător) merge normal. Un <audio> silențios, în buclă,
+    // "convinge" iOS că pagina redă media, deblocând și Web Audio de sub
+    // controlul întrerupătorului fizic.
+    try{
+      if (!silentUnlockAudioEl){
+        silentUnlockAudioEl = document.createElement('audio');
+        silentUnlockAudioEl.setAttribute('playsinline','');
+        silentUnlockAudioEl.setAttribute('x-webkit-airplay','deny');
+        silentUnlockAudioEl.loop = true;
+        silentUnlockAudioEl.src = createSilentWavDataUri();
+        silentUnlockAudioEl.volume = 0.01;
+        // Nu-l adaug in DOM - o referinta JS vie (variabila de mai sus) e
+        // suficienta ca sa nu fie curatat de garbage collector, si evit orice
+        // interactiune teoretica intre display:none si elementele media.
+      }
+      const p = silentUnlockAudioEl.play();
+      if (p && p.catch) p.catch(function(){});
     }catch(e){}
   }
   return audioCtx;
@@ -4941,11 +4980,12 @@ document.addEventListener('DOMContentLoaded', function(){
   refreshReadouts();
   initVisualizerLoop();
 
-  document.getElementById('playPauseBtn').addEventListener('click', function(){
+  function togglePlayPause(){
     if (isPlaying){ pausePlayback(); }
     else if (isPaused){ resumePlayback(); }
     else { startPlayback(); }
-  });
+  }
+  document.getElementById('playPauseBtn').addEventListener('click', togglePlayPause);
   document.getElementById('stopBtn').addEventListener('click', function(){ stopAll(true); });
   document.getElementById('ringGongBtn').addEventListener('click', function(){
     const freq = compState ? midiToFreq(compState.rootMidi - 24) : 87.31;
@@ -4981,10 +5021,8 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     renderGenreCards();
   });
-  document.getElementById('miniPlayPauseBtn').addEventListener('click', function(){
-    document.getElementById('playPauseBtn').click();
-  });
-  document.getElementById('miniStopBtn').addEventListener('click', stopAll);
+  document.getElementById('miniPlayPauseBtn').addEventListener('click', togglePlayPause);
+  document.getElementById('miniStopBtn').addEventListener('click', function(){ stopAll(true); });
 
   document.getElementById('tempoSlider').addEventListener('input', refreshReadouts);
   document.getElementById('varietyIntensitySlider').addEventListener('input', refreshReadouts);
@@ -5284,7 +5322,7 @@ document.addEventListener('DOMContentLoaded', function(){
       const tag = document.activeElement.tagName;
       if (tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA'||tag==='BUTTON') return;
       e.preventDefault();
-      document.getElementById('playPauseBtn').click();
+      togglePlayPause();
     }
   });
 });
