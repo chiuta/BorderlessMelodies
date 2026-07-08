@@ -2029,7 +2029,13 @@ function triggerNote(ctx, dest, freq, startTime, duration, opts){
   } else {
     osc.connect(env);
   }
-  env.connect(dest);
+  if (opts.pan != null && ctx.createStereoPanner){
+    const panner = ctx.createStereoPanner();
+    panner.pan.setValueAtTime(opts.pan, startTime);
+    env.connect(panner); panner.connect(dest);
+  } else {
+    env.connect(dest);
+  }
   osc.start(startTime);
   osc.stop(startTime + duration + 0.08);
   return osc;
@@ -2212,8 +2218,17 @@ function createImpulseResponse(ctx, duration, decay){
   const impulse = ctx.createBuffer(2, length, rate);
   for (let ch = 0; ch < 2; ch++){
     const data = impulse.getChannelData(ch);
+    let smoothed = 0;
     for (let i = 0; i < length; i++){
-      data[i] = (Math.random()*2-1) * Math.pow(1 - i/length, decay);
+      const raw = Math.random()*2-1;
+      const progress = i/length;
+      // Filtru IIR simplu (un pol), tot mai inchis spre finalul cozii - imita
+      // amortizarea naturala a frecventelor inalte din spatii acustice reale.
+      // Fara asta, zgomotul alb pur suna "sfaraitor"/metalic, mai ales chiar
+      // la inceputul cozii, unde energia de frecventa inalta e maxima.
+      const alpha = 0.5 - progress*0.35;
+      smoothed = smoothed + alpha*(raw - smoothed);
+      data[i] = smoothed * Math.pow(1 - progress, decay);
     }
   }
   return impulse;
@@ -2264,6 +2279,35 @@ function createTexture(ctx, type, gainValue){
   };
 }
 
+function isLikelySmallSpeakerDevice(){
+  // Aproximare rezonabila pentru "telefon, probabil difuzor incorporat mic"
+  // (nu sniffing de user-agent, care e fragil): ecran ingust + suport atingere.
+  const smallScreen = Math.min(window.innerWidth||1024, window.innerHeight||768) < 700;
+  const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints||0) > 0;
+  return smallScreen && hasTouch;
+}
+
+function createMasterToneShaping(ctx, smallSpeaker){
+  // Modelare tonala usoara pe magistrala principala, inainte de limiter:
+  // difuzoarele mici (telefoane) au adesea o rezonanta proprie in jurul a
+  // 3-5kHz, care accentueaza perceptia de sunet "ascutit"/"strident" - mai
+  // ales cu voci si arpegii bogate in armonice. O taiere blanda, nu o
+  // sunetul intreg, doar varful care contribuie la asprime.
+  const presenceDip = ctx.createBiquadFilter();
+  presenceDip.type = 'peaking';
+  presenceDip.frequency.setValueAtTime(3800, ctx.currentTime);
+  presenceDip.Q.value = 1.1;
+  presenceDip.gain.setValueAtTime(smallSpeaker ? -5 : -2.5, ctx.currentTime);
+
+  const airShelf = ctx.createBiquadFilter();
+  airShelf.type = 'highshelf';
+  airShelf.frequency.setValueAtTime(8500, ctx.currentTime);
+  airShelf.gain.setValueAtTime(smallSpeaker ? -7 : -4, ctx.currentTime);
+
+  presenceDip.connect(airShelf);
+  return { input: presenceDip, output: airShelf };
+}
+
 function createLimiter(ctx){
   const comp = ctx.createDynamicsCompressor();
   const now = ctx.currentTime;
@@ -2306,10 +2350,16 @@ function scheduleEvents(ctx, bus, events, baseTime, genre, filterEnvelope, voice
   const leadAttack = genre.lead.attack != null ? genre.lead.attack : 0.015;
   const leadRelease = genre.lead.release != null ? genre.lead.release : 0.22;
   events.pad.forEach(function(e){
-    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.pad.wave||'sine', attack:genre.pad.attack, release:genre.pad.release, gain:0.1, filterCutoff:padCutoff }));
-    if (genre.pad.detune){
-      oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.pad.wave||'sine', attack:genre.pad.attack, release:genre.pad.release, gain:0.06, filterCutoff:padCutoff, detune:genre.pad.detune }));
-    }
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.pad.wave||'sine', attack:genre.pad.attack, release:genre.pad.release, gain:0.1, filterCutoff:padCutoff, pan:-0.22 }));
+    // Dublare usor dezacordata, universala: un pad pe un singur oscilator
+    // sună subțire/steril. Câteva cenți de dezacordaj între două oscilatoare
+    // care cântă aceeași notă creează o căldură tip "chorus" - una din cele
+    // mai eficiente tehnici pentru un sunet plăcut, muzical. Genurile care
+    // specifică deja propria valoare (pentru un efect mai pronunțat, intenționat)
+    // o păstrează; restul primesc o valoare implicită discretă. Panoramarea
+    // usoara (stanga/dreapta) adaugă și lățime stereo, nu doar căldură.
+    const padDetuneAmt = genre.pad.detune || 6;
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.pad.wave||'sine', attack:genre.pad.attack, release:genre.pad.release, gain:0.06, filterCutoff:padCutoff, detune:padDetuneAmt, pan:0.22 }));
   });
   events.bass.forEach(function(e){
     oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave:'sine', attack:0.02, release:0.25, gain:0.2, filterCutoff:Math.min(padCutoff,900) }));
@@ -2331,8 +2381,8 @@ function scheduleEvents(ctx, bus, events, baseTime, genre, filterEnvelope, voice
       oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave: genre.lead.wave||'triangle', attack:leadAttack, release:leadRelease, gain:0.08, filterCutoff:leadCutoff, detune:genre.lead.detune }));
     }
   });
-  events.arp.forEach(function(e){
-    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave:'triangle', attack:0.008, release:0.12, gain:0.09, filterCutoff:leadCutoff }));
+  events.arp.forEach(function(e, i){
+    oscList.push(triggerNote(ctx, bus, e.freq, baseTime+e.time, e.dur, { wave:'triangle', attack:0.018, release:0.14, gain:0.09, filterCutoff:leadCutoff, pan:(i%2===0)?-0.18:0.18 }));
   });
   if (voiceMix){
     events.voice.forEach(function(e){
@@ -2409,16 +2459,22 @@ let audioUnlocked = false;
 let silentUnlockAudioEl = null;
 
 function createSilentWavDataUri(){
-  // WAV minimal (8kHz, mono, 8-bit, ~0.1s de liniște) - construit direct in
-  // memorie, fara niciun fisier extern. Scopul nu e sunetul in sine (e tacere),
-  // ci existenta unui element <audio> activ pe pagina.
-  const numSamples = 800;
+  // WAV minimal (8kHz, mono, 8-bit, liniște) - construit direct in memorie,
+  // fara niciun fisier extern. Durata e deliberat lunga (4s, nu o fractiune
+  // de secunda): o bucla foarte scurta s-ar relua de multe ori pe secunda,
+  // iar reluarea frecventa a unui element <audio> separat, concurent cu
+  // motorul de sinteza Web Audio, poate crea exact genul de fasait de fond
+  // raportat - fie din discontinuitati la punctul de reluare, fie din
+  // contentie de procesor pe un telefon. La 4 secunde, bucla se reia rar.
+  const durationSec = 4;
+  const sampleRate = 8000;
+  const numSamples = durationSec * sampleRate;
   const buf = new ArrayBuffer(44 + numSamples);
   const view = new DataView(buf);
   function writeStr(offset, str){ for (let i=0;i<str.length;i++) view.setUint8(offset+i, str.charCodeAt(i)); }
   writeStr(0,'RIFF'); view.setUint32(4, 36+numSamples, true); writeStr(8,'WAVE');
   writeStr(12,'fmt '); view.setUint32(16,16,true); view.setUint16(20,1,true); view.setUint16(22,1,true);
-  view.setUint32(24,8000,true); view.setUint32(28,8000,true); view.setUint16(32,1,true); view.setUint16(34,8,true);
+  view.setUint32(24,sampleRate,true); view.setUint32(28,sampleRate,true); view.setUint16(32,1,true); view.setUint16(34,8,true);
   writeStr(36,'data'); view.setUint32(40,numSamples,true);
   for (let i=0;i<numSamples;i++) view.setUint8(44+i, 128); // 128 = liniște, in PCM 8-bit unsigned
   const blob = new Blob([buf], {type:'audio/wav'});
@@ -2541,8 +2597,10 @@ function startPlayback(){
 
   masterGain = ctx.createGain();
   masterGain.gain.value = settings.masterVol;
+  const toneShaping = createMasterToneShaping(ctx, isLikelySmallSpeakerDevice());
   limiterNode = createLimiter(ctx);
-  masterGain.connect(limiterNode);
+  masterGain.connect(toneShaping.input);
+  toneShaping.output.connect(limiterNode);
   limiterNode.connect(ctx.destination);
 
   const splitter = ctx.createChannelSplitter(2);
@@ -2974,7 +3032,8 @@ async function exportWav(){
   const offlineCtx = new OfflineAudioContext(2, Math.ceil(sampleRate*(durSec+1)), sampleRate);
   const oMasterGain = offlineCtx.createGain(); oMasterGain.gain.value = settings.masterVol;
   const oLimiter = createLimiter(offlineCtx);
-  oMasterGain.connect(oLimiter); oLimiter.connect(offlineCtx.destination);
+  const oToneShaping = createMasterToneShaping(offlineCtx, false);
+  oMasterGain.connect(oToneShaping.input); oToneShaping.output.connect(oLimiter); oLimiter.connect(offlineCtx.destination);
 
   const genre = getGenre(settings.genreKey);
   const musicBusInput = buildMusicGraph(offlineCtx, oMasterGain, genre);
@@ -3890,7 +3949,7 @@ function renderGenreCards(){
         selectBtn.type = 'button';
         selectBtn.className = 'genre-card-select';
         selectBtn.innerHTML = genreGlyphSVG(g.glyph) + '<h3>'+escapeHtml(genreName(g))+'</h3><p>'+escapeHtml(genreDesc(g))+'</p>';
-        selectBtn.addEventListener('click', function(){ selectGenre(key); });
+        selectBtn.addEventListener('click', function(){ handleGenreCardClick(key); });
         card.appendChild(selectBtn);
         if (isCustomCat){
           const delBtn = document.createElement('button');
@@ -3916,6 +3975,25 @@ function renderGenreCards(){
     empty.textContent = t('genreNoResults');
     grid.appendChild(empty);
   }
+}
+
+function handleGenreCardClick(key){
+  // Click pe un gen: pornește automat redarea. Click pe alt gen: oprește
+  // redarea curentă și pornește noul gen. Click pe genul care CÂNTĂ deja:
+  // oprește redarea (comutator). selectGenre() în sine rămâne neschimbată,
+  // pentru celelalte fluxuri care o folosesc (import setări, salvarea unui
+  // gen personalizat, revenirea la implicit după ștergere) - acolo un
+  // comportament de "comutare" ar fi confuz, nu ceea ce se așteaptă.
+  const wasThisGenreActive = (isPlaying || isPaused) && state.genreKey === key;
+  const wasPlayingSomethingElse = isPlaying || isPaused;
+  selectGenre(key);
+  if (wasThisGenreActive){
+    stopAll(true);
+  } else if (!wasPlayingSomethingElse){
+    startPlayback();
+  }
+  // dacă altceva cânta deja (gen diferit), selectGenre() a restartat deja
+  // intern cu noul gen - nu mai pornesc a doua oară.
 }
 
 function selectGenre(key){
