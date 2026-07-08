@@ -2216,9 +2216,18 @@ function createImpulseResponse(ctx, duration, decay){
   const rate = ctx.sampleRate;
   const length = Math.max(1, Math.floor(rate*duration));
   const impulse = ctx.createBuffer(2, length, rate);
+  // Rata de declin per eșantion, calculată O SINGURĂ dată (nu Math.pow la
+  // fiecare eșantion - zeci de mii de apeluri Math.pow blocau perceptibil
+  // thread-ul principal pe procesoare mobile mai slabe, chiar la pornirea
+  // redării - cauza probabilă a întreruperilor raportate pe mobil). Un
+  // declin exponențial per eșantion (înmulțire simplă) e și mai ieftin de
+  // calculat, și mai aproape de cum se sting cu adevărat reverberațiile
+  // acustice reale (Sabine: declin liniar în dB = exponențial în amplitudine).
+  const decayPerSample = Math.pow(0.0005, 1/length);
   for (let ch = 0; ch < 2; ch++){
     const data = impulse.getChannelData(ch);
     let smoothed = 0;
+    let env = 1;
     for (let i = 0; i < length; i++){
       const raw = Math.random()*2-1;
       const progress = i/length;
@@ -2228,7 +2237,8 @@ function createImpulseResponse(ctx, duration, decay){
       // la inceputul cozii, unde energia de frecventa inalta e maxima.
       const alpha = 0.5 - progress*0.35;
       smoothed = smoothed + alpha*(raw - smoothed);
-      data[i] = smoothed * Math.pow(1 - progress, decay);
+      data[i] = smoothed * env;
+      env *= decayPerSample;
     }
   }
   return impulse;
@@ -2323,7 +2333,28 @@ function buildMusicGraph(ctx, dest, genre){
   const dry = ctx.createGain(); dry.gain.value = 1;
   const wet = ctx.createGain(); wet.gain.value = genre.reverbMix;
   const convolver = ctx.createConvolver();
-  convolver.buffer = createImpulseResponse(ctx, 2.8, 2.6);
+  // La exportul offline (WAV/FLAC), randarea trebuie sa aiba impulsul gata
+  // INAINTE de startRendering() - nu exista nicio fereastra de gest de
+  // utilizator de respectat acolo, deci il calculez sincron, ca inainte.
+  // Doar la redarea LIVE amân calculul cu un setTimeout(0), ca sa nu
+  // întârzie DELOC programarea primelor note (vezi motivul mai jos).
+  const isOffline = (typeof OfflineAudioContext !== 'undefined' && ctx instanceof OfflineAudioContext) ||
+                     (typeof webkitOfflineAudioContext !== 'undefined' && ctx instanceof webkitOfflineAudioContext);
+  if (isOffline){
+    convolver.buffer = createImpulseResponse(ctx, 2.1, 2.6);
+  } else {
+    // Generarea impulsului de reverb (peste 100.000 de eșantioane, chiar și
+    // optimizată algoritmic) e amânată, ca să NU întârzie DELOC programarea
+    // primelor note. Reverb-ul "prinde viață" cu o întârziere imperceptibilă
+    // (câteva zeci de ms) - nesesizabilă, pentru că efectul devine audibil
+    // abia după ce sunetul uscat începe să se stingă. Fără asta, calculul
+    // putea bloca sincron thread-ul principal chiar în fereastra critică
+    // gest-utilizator -> sunet, mai ales pe telefoane mai slabe - cauza
+    // probabilă a întreruperilor raportate.
+    setTimeout(function(){
+      try{ convolver.buffer = createImpulseResponse(ctx, 2.1, 2.6); }catch(e){}
+    }, 0);
+  }
   dry.connect(dest);
   dry.connect(convolver);
   convolver.connect(wet);
