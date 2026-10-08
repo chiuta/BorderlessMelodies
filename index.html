@@ -307,7 +307,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
   <div class="topbar">
     <span class="badge">v1.0 · offline · CC0</span>
     <div class="lang-toggle">
-      <button data-lang-btn="en" class="active">EN</button>
+      <button data-lang-btn="en" class="active" aria-pressed="true">EN</button>
       <button data-lang-btn="ro">RO</button>
       <button data-lang-btn="fr">FR</button>
       <button data-lang-btn="it">IT</button>
@@ -337,7 +337,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           <button id="toggleAllCategoriesBtn" class="btn-small" data-i18n="toggleAllBtn">⇕ Expand / collapse all</button>
         </div>
       </div>
-      <input type="text" id="genreSearchInput" class="genre-search" data-i18n-placeholder="genreSearchPlaceholder" placeholder="Search genres (e.g. "flamenco", "drone", "waltz"…)">
+      <input type="text" id="genreSearchInput" class="genre-search" data-i18n-placeholder="genreSearchPlaceholder" aria-label="Search genres" placeholder="Search genres (e.g. &quot;flamenco&quot;, &quot;drone&quot;, &quot;waltz&quot;…)">
       <div class="genre-grid-wrapper" id="genreGrid"></div>
     </section>
 
@@ -349,29 +349,29 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
       <p class="hint" data-i18n="editorHint">Pick a starting template, tweak whatever you like, then save. Your genre appears under "My Genres" and can be exported to share or keep.</p>
 
       <div class="field-row">
-        <label data-i18n="templateLabel">Start from</label>
+        <label for="editorTemplate" data-i18n="templateLabel">Start from</label>
         <select id="editorTemplate"></select>
       </div>
       <div class="field-row">
-        <label data-i18n="nameLabel">Name</label>
+        <label for="editorName" data-i18n="nameLabel">Name</label>
         <input type="text" id="editorName" maxlength="40">
       </div>
       <div class="field-row">
-        <label data-i18n="descLabel">Description</label>
+        <label for="editorDescInput" data-i18n="descLabel">Description</label>
         <input type="text" id="editorDescInput" maxlength="120">
       </div>
 
       <h3 class="editor-section-title" data-i18n="musicSectionLabel">Harmony & rhythm</h3>
       <div class="field-row">
-        <label data-i18n="scaleLabel">Scale</label>
+        <label for="editorScale" data-i18n="scaleLabel">Scale</label>
         <select id="editorScale"></select>
       </div>
       <div class="field-row">
-        <label data-i18n="progressionLabel">Progression</label>
+        <label for="editorProgression" data-i18n="progressionLabel">Progression</label>
         <select id="editorProgression"></select>
       </div>
       <div class="field-row">
-        <label data-i18n="meterLabel">Meter</label>
+        <label for="editorMeter" data-i18n="meterLabel">Meter</label>
         <select id="editorMeter">
           <option value="4">4/4</option>
           <option value="3">3/4</option>
@@ -380,27 +380,27 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         </select>
       </div>
       <div class="field-row">
-        <label data-i18n="tempoRangeLabel">Tempo (min–max)</label>
+        <label for="editorTempoMin" data-i18n="tempoRangeLabel">Tempo (min–max)</label>
         <input type="number" id="editorTempoMin" min="30" max="140" value="60">
         <input type="number" id="editorTempoMax" min="30" max="140" value="72">
       </div>
       <div class="field-row">
-        <label data-i18n="barsPerChordLabel">Bars per chord</label>
+        <label for="editorBarsPerChord" data-i18n="barsPerChordLabel">Bars per chord</label>
         <input type="number" id="editorBarsPerChord" min="1" max="16" value="2">
       </div>
 
       <h3 class="editor-section-title" data-i18n="leadSectionLabel">Lead melody</h3>
       <div class="field-row">
-        <label data-i18n="densityLabel">Density</label>
+        <label for="editorLeadDensity" data-i18n="densityLabel">Density</label>
         <input type="range" id="editorLeadDensity" min="0" max="1" step="0.02" value="0.3">
         <span class="readout mono" id="editorLeadDensityReadout">30%</span>
       </div>
       <div class="field-row">
-        <label data-i18n="octaveLabel">Octave</label>
+        <label for="editorLeadOctave" data-i18n="octaveLabel">Octave</label>
         <input type="number" id="editorLeadOctave" min="3" max="7" value="5">
       </div>
       <div class="field-row">
-        <label data-i18n="waveLabel">Waveform</label>
+        <label for="editorLeadWave" data-i18n="waveLabel">Waveform</label>
         <select id="editorLeadWave">
           <option value="sine">Sine</option>
           <option value="triangle">Triangle</option>
@@ -415,16 +415,16 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 
       <h3 class="editor-section-title" data-i18n="padSectionLabel">Pad / chords</h3>
       <div class="field-row">
-        <label data-i18n="attackReleaseLabel">Attack / Release</label>
+        <label for="editorPadAttack" data-i18n="attackReleaseLabel">Attack / Release</label>
         <input type="number" id="editorPadAttack" min="0" max="5" step="0.05" value="1.0">
         <input type="number" id="editorPadRelease" min="0" max="8" step="0.1" value="2.0">
       </div>
       <div class="field-row">
-        <label data-i18n="octaveLabel">Octave</label>
+        <label for="editorPadOctave" data-i18n="octaveLabel">Octave</label>
         <input type="number" id="editorPadOctave" min="2" max="6" value="4">
       </div>
       <div class="field-row">
-        <label data-i18n="waveLabel">Waveform</label>
+        <label for="editorPadWave" data-i18n="waveLabel">Waveform</label>
         <select id="editorPadWave">
           <option value="sine">Sine</option>
           <option value="triangle">Triangle</option>
@@ -439,11 +439,11 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 
       <h3 class="editor-section-title" data-i18n="bassSectionLabel">Bass</h3>
       <div class="field-row">
-        <label data-i18n="octaveLabel">Octave</label>
+        <label for="editorBassOctave" data-i18n="octaveLabel">Octave</label>
         <input type="number" id="editorBassOctave" min="1" max="4" value="2">
       </div>
       <div class="field-row">
-        <label data-i18n="patternLabel">Pattern</label>
+        <label for="editorBassPattern" data-i18n="patternLabel">Pattern</label>
         <select id="editorBassPattern">
           <option value="sustain">Sustain</option>
           <option value="walking">Walking</option>
@@ -458,7 +458,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         <label data-i18n="enabledLabel" style="min-width:auto;">Enabled</label>
       </div>
       <div class="field-row">
-        <label data-i18n="patternLabel">Pattern</label>
+        <label for="editorArpPattern" data-i18n="patternLabel">Pattern</label>
         <select id="editorArpPattern">
           <option value="up">Up</option>
           <option value="down">Down</option>
@@ -467,23 +467,23 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         </select>
       </div>
       <div class="field-row">
-        <label data-i18n="stepsLabel">Notes per bar</label>
+        <label for="editorArpSteps" data-i18n="stepsLabel">Notes per bar</label>
         <input type="number" id="editorArpSteps" min="4" max="16" value="8">
       </div>
 
       <h3 class="editor-section-title" data-i18n="toneSectionLabel">Tone & space</h3>
       <div class="field-row">
-        <label data-i18n="filterLabel">Filter (Hz)</label>
+        <label for="editorFilterCutoff" data-i18n="filterLabel">Filter (Hz)</label>
         <input type="range" id="editorFilterCutoff" min="400" max="4000" step="50" value="2000">
         <span class="readout mono" id="editorFilterReadout">2000 Hz</span>
       </div>
       <div class="field-row">
-        <label data-i18n="reverbLabel">Reverb</label>
+        <label for="editorReverbMix" data-i18n="reverbLabel">Reverb</label>
         <input type="range" id="editorReverbMix" min="0" max="1" step="0.02" value="0.4">
         <span class="readout mono" id="editorReverbReadout">40%</span>
       </div>
       <div class="field-row">
-        <label data-i18n="textureLabel">Texture</label>
+        <label for="editorTexture" data-i18n="textureLabel">Texture</label>
         <select id="editorTexture">
           <option value="">—</option>
           <option value="vinyl">Vinyl</option>
@@ -493,7 +493,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         </select>
       </div>
       <div class="field-row">
-        <label data-i18n="entrainRecLabel">Recommended band</label>
+        <label for="editorEntrainRec" data-i18n="entrainRecLabel">Recommended band</label>
         <select id="editorEntrainRec">
           <option value="delta">Delta</option>
           <option value="theta">Theta</option>
@@ -506,21 +506,21 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
       <button type="button" id="toggleAdvancedBtn" class="btn-small" data-i18n="advancedToggleLabel">Advanced ▾</button>
       <div id="editorAdvanced" style="display:none; margin-top:14px;">
         <div class="field-row">
-          <label data-i18n="detuneLabel">Detune (cents) lead / pad</label>
+          <label for="editorLeadDetune" data-i18n="detuneLabel">Detune (cents) lead / pad</label>
           <input type="number" id="editorLeadDetune" min="0" max="20" value="0">
           <input type="number" id="editorPadDetune" min="0" max="20" value="0">
         </div>
         <div class="field-row">
-          <label data-i18n="portamentoLabel">Portamento (sec)</label>
+          <label for="editorPortamento" data-i18n="portamentoLabel">Portamento (sec)</label>
           <input type="number" id="editorPortamento" min="0" max="1" step="0.02" value="0">
         </div>
         <div class="field-row">
-          <label data-i18n="vibratoLabel">Vibrato (Hz / cents)</label>
+          <label for="editorVibratoRate" data-i18n="vibratoLabel">Vibrato (Hz / cents)</label>
           <input type="number" id="editorVibratoRate" min="0" max="10" step="0.5" value="0">
           <input type="number" id="editorVibratoDepth" min="0" max="30" value="0">
         </div>
         <div class="field-row">
-          <label data-i18n="glitchLabel">Glitch (probability)</label>
+          <label for="editorGlitch" data-i18n="glitchLabel">Glitch (probability)</label>
           <input type="range" id="editorGlitch" min="0" max="1" step="0.05" value="0">
           <span class="readout mono" id="editorGlitchReadout">0%</span>
         </div>
@@ -549,23 +549,23 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         <section class="panel" id="compositionPanel">
           <h2 data-i18n="compHeading">Composition</h2>
           <div class="field-row">
-            <label data-i18n="seedLabel">Seed</label>
+            <label for="seedInput" data-i18n="seedLabel">Seed</label>
             <input type="number" id="seedInput" value="1" min="0" max="999999">
             <button id="randomSeedBtn" data-i18n="randomBtn">🎲 Randomize</button>
           </div>
           <div class="field-row">
-            <label data-i18n="tempoLabel">Tempo</label>
+            <label for="tempoSlider" data-i18n="tempoLabel">Tempo</label>
             <input type="range" id="tempoSlider" min="40" max="130" value="70">
             <span class="readout mono" id="tempoReadout">70 BPM</span>
           </div>
           <div class="field-row">
-            <label data-i18n="varietyLabel">Variety &amp; arc</label>
+            <label for="varietyIntensitySlider" data-i18n="varietyLabel">Variety &amp; arc</label>
             <input type="range" id="varietyIntensitySlider" min="0" max="100" value="55">
             <span class="readout mono" id="varietyIntensityReadout">55%</span>
           </div>
           <p class="hint" data-i18n="varietyHint">Gently varies density and brightness over the piece's length — an evolving arc instead of one static loop. 0% keeps the classic constant behavior.</p>
           <div class="field-row">
-            <label data-i18n="durationLabel">Duration</label>
+            <label for="durationSelect" data-i18n="durationLabel">Duration</label>
             <select id="durationSelect">
               <option value="120">2 min</option>
               <option value="300" selected>5 min</option>
@@ -594,19 +594,19 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             </div>
           </div>
           <div class="field-row">
-            <label data-i18n="carrierLabel">Carrier frequency</label>
+            <label for="carrierSlider" data-i18n="carrierLabel">Carrier frequency</label>
             <input type="range" id="carrierSlider" min="100" max="1000" value="210" step="1">
             <span class="readout mono" id="carrierReadout">210 Hz</span>
           </div>
           <div class="preset-chips" id="solfeggioChips"></div>
           <div class="field-row" id="beatFieldRow">
-            <label data-i18n="beatLabel">Beat frequency</label>
+            <label for="beatSlider" data-i18n="beatLabel">Beat frequency</label>
             <input type="range" id="beatSlider" min="0.5" max="40" value="6" step="0.5">
             <span class="readout mono" id="beatReadout">6 Hz</span>
           </div>
           <div class="preset-chips" id="brainwaveChips"></div>
           <div class="field-row">
-            <label data-i18n="mixLabel">Mix</label>
+            <label for="entrainMixSlider" data-i18n="mixLabel">Mix</label>
             <input type="range" id="entrainMixSlider" min="0" max="100" value="35">
             <span class="readout mono" id="entrainMixReadout">35%</span>
           </div>
@@ -620,7 +620,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           </div>
           <p class="hint" data-i18n="voiceHint">A procedurally synthesized wordless vocal layer (formant synthesis) — soft syllables like "ah", "oh", "mmm" that change each time, woven over any genre. No recordings, no samples.</p>
           <div class="field-row">
-            <label data-i18n="voiceCharacterLabel">Character</label>
+            <label for="voiceCharacterSelect" data-i18n="voiceCharacterLabel">Character</label>
             <select id="voiceCharacterSelect">
               <option value="childFemale" data-i18n="voice_childFemale">Child (girl)</option>
               <option value="childMale" data-i18n="voice_childMale">Child (boy)</option>
@@ -636,12 +636,12 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             </select>
           </div>
           <div class="field-row">
-            <label data-i18n="voiceDensityLabel">Presence</label>
+            <label for="voiceDensitySlider" data-i18n="voiceDensityLabel">Presence</label>
             <input type="range" id="voiceDensitySlider" min="0" max="100" value="30">
             <span class="readout mono" id="voiceDensityReadout">30%</span>
           </div>
           <div class="field-row">
-            <label data-i18n="voiceMixLabel">Volume</label>
+            <label for="voiceMixSlider" data-i18n="voiceMixLabel">Volume</label>
             <input type="range" id="voiceMixSlider" min="0" max="100" value="55">
             <span class="readout mono" id="voiceMixReadout">55%</span>
           </div>
@@ -673,7 +673,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             <button id="stopBtn" disabled>⏹ <span data-i18n="stopBtn">Stop</span></button>
             <button id="openFractalBtn" title="Full-screen visualizer">⛶ <span data-i18n="fractalBtn">Full visualizer</span></button>
             <div class="volume-control">
-              <label data-i18n="masterVolLabel">Volume</label>
+              <label for="masterVolSlider" data-i18n="masterVolLabel">Volume</label>
               <input type="range" id="masterVolSlider" min="0" max="100" value="80">
             </div>
           </div>
@@ -686,7 +686,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         <section class="panel" id="exportPanel">
           <h2 data-i18n="exportHeading">Export</h2>
           <div class="field-row">
-            <label data-i18n="exportDurLabel">Export length</label>
+            <label for="exportDurationSelect" data-i18n="exportDurLabel">Export length</label>
             <select id="exportDurationSelect">
               <option value="60">1 min</option>
               <option value="180" selected>3 min</option>
@@ -698,7 +698,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             <span class="readout mono" id="exportSizeEstimate">~31 MB</span>
           </div>
           <div class="field-row">
-            <label data-i18n="audioFormatLabel">Audio format</label>
+            <label for="audioFormatSelect" data-i18n="audioFormatLabel">Audio format</label>
             <select id="audioFormatSelect">
               <option value="wav">WAV (uncompressed)</option>
               <option value="flac">FLAC (lossless, ~50% smaller)</option>
@@ -738,7 +738,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           <p class="hint" data-i18n="videoHint">Records the fractal visualizer together with the currently playing audio into a video file — open formats only (WebM: VP8/VP9 + Opus), fully offline.</p>
           <p class="hint" data-i18n="videoRealtimeNote">⏱ Recording happens in real time — a 20-minute video takes 20 real minutes. Keep this tab open and active.</p>
           <div class="field-row">
-            <label data-i18n="videoResLabel">Resolution</label>
+            <label for="videoResSelect" data-i18n="videoResLabel">Resolution</label>
             <select id="videoResSelect">
               <option value="640">640 × 640</option>
               <option value="1080" selected>1080 × 1080</option>
@@ -747,7 +747,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             </select>
           </div>
           <div class="field-row">
-            <label data-i18n="videoDurLabel">Duration</label>
+            <label for="videoDurSelect" data-i18n="videoDurLabel">Duration</label>
             <select id="videoDurSelect">
               <option value="10">10s</option>
               <option value="15" selected>15s</option>
@@ -3110,12 +3110,13 @@ function exportSettingsJson(){
 }
 
 function applyImportedSettings(data){
+  if (!data || typeof data !== 'object') throw new Error('invalid settings');
   if (data.genreKey && getGenre(data.genreKey)) selectGenre(data.genreKey);
   if (data.seed!=null) document.getElementById('seedInput').value = data.seed;
   if (data.tempo!=null) document.getElementById('tempoSlider').value = data.tempo;
-  if (data.duration!=null) document.getElementById('durationSelect').value = data.duration;
+  if (data.duration!=null && Array.prototype.some.call(document.getElementById('durationSelect').options, function(o){ return o.value===String(data.duration); })) document.getElementById('durationSelect').value = data.duration;
   if (data.entrainEnabled!=null) document.getElementById('entrainToggle').checked = data.entrainEnabled;
-  if (data.entrainMode){ state.entrainMode = data.entrainMode; updateModeButtons(); }
+  if (data.entrainMode && ['pure','binaural','isochronic'].indexOf(data.entrainMode) !== -1){ state.entrainMode = data.entrainMode; updateModeButtons(); }
   if (data.carrierHz!=null) document.getElementById('carrierSlider').value = data.carrierHz;
   if (data.beatHz!=null) document.getElementById('beatSlider').value = data.beatHz;
   if (data.entrainMix!=null) document.getElementById('entrainMixSlider').value = data.entrainMix;
@@ -3909,7 +3910,7 @@ let currentLang = 'en';
 function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) || key; }
 function applyI18n(){
   document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.getAttribute('data-i18n')); });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){ el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){ el.placeholder = t(el.getAttribute('data-i18n-placeholder')); if (el.id==='genreSearchInput') el.setAttribute('aria-label', el.placeholder); });
   document.documentElement.lang = currentLang;
   document.title = t('title') + ' — ' + t('titleTagline');
   renderGenreCards(); renderChips();
@@ -4380,7 +4381,15 @@ function importGenrePack(data){
   let count = 0;
   Object.keys(data).forEach(function(key){
     const g = data[key];
-    if (g && g.scale && SCALES[g.scale] && g.progression && PROGRESSIONS[g.progression] && g.lead && g.pad && g.bass){
+    if (g && typeof g==='object' && g.scale && SCALES[g.scale] && g.progression && PROGRESSIONS[g.progression] && g.lead && g.pad && g.bass
+        && typeof g.lead==='object' && typeof g.pad==='object' && typeof g.bass==='object'
+        && (typeof g.name==='string' || (g.name && typeof g.name==='object'))
+        && Array.isArray(g.tempoRange) && isFinite(g.tempoRange[0]) && isFinite(g.tempoRange[1])
+        && isFinite(g.filterCutoff) && g.filterCutoff >= 100 && isFinite(g.reverbMix)
+        && isFinite(g.lead.density) && g.lead.density >= 0 && g.lead.density <= 1){
+      if (!g.desc || (typeof g.desc!=='string' && typeof g.desc!=='object')) g.desc = '';
+      if (!g.glyph || typeof g.glyph!=='object') g.glyph = {freq:2, amp:8, jitter:2, wave:'sine'};
+      if (key === '__proto__' || key === 'constructor' || key === '__previewTest__') return;
       const safeKey = (key.indexOf('custom_')===0) ? key : slugifyGenreName(genreName(g)||key);
       g.category = 'custom';
       customGenres[safeKey] = g;
@@ -5182,7 +5191,7 @@ document.addEventListener('DOMContentLoaded', function(){
   document.querySelectorAll('[data-lang-btn]').forEach(function(b){
     b.addEventListener('click', function(){
       currentLang = b.getAttribute('data-lang-btn');
-      document.querySelectorAll('[data-lang-btn]').forEach(function(x){ x.classList.toggle('active', x===b); });
+      document.querySelectorAll('[data-lang-btn]').forEach(function(x){ x.classList.toggle('active', x===b); x.setAttribute('aria-pressed', x===b ? 'true' : 'false'); });
       applyI18n(); updateModeButtons(); updateTransportUI();
     });
   });
