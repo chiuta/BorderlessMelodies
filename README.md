@@ -38,6 +38,10 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 - Aplicația nu folosește `localStorage`, `sessionStorage` sau IndexedDB: nimic nu este reținut între sesiuni; salvezi doar prin fișierele exportate.
 - Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe). Conține doar link-uri, deschise la click, către trom.tf, Patreon și Buy Me a Coffee.
 
+## Avertisment
+
+Conținut informativ/experiențial. Stratul „Beneficial waves" (tonuri pure, binaurale, izocronice) este oferit doar pentru relaxare, nu este tratament medical și nu înlocuiește sfatul medical; dovezile științifice privind efectele ritmurilor binaurale/izocronice sunt limitate. Nu este recomandat în caz de epilepsie, altă afecțiune neurologică sau sarcină fără acordul medicului; nu asculta în timpul condusului; oprește dacă simți disconfort; folosește volum redus. Avertismentul apare în aplicație (panoul „Beneficial waves") și în subsolul paginii.
+
 ## Rulare locală / offline
 
 Descarcă `index.html` și deschide-l în browser; funcționează complet fără internet.
@@ -45,6 +49,10 @@ Descarcă `index.html` și deschide-l în browser; funcționează complet fără
 ## Licență
 
 CC0 1.0 Universal (domeniu public) — vezi fișierul LICENSE
+
+## Audit
+
+2026-10-10: verificat că în cod nu există `fetch`, XHR, WebSocket sau resurse externe (0 cereri de rețea în browser) și că nu se folosește stocare locală. Pagina nu are politică CSP (meta). Corectate: nume accesibile pentru comutatoare/selectoare, contrast, notă de avertisment în subsol.
 
 ## Autor
 

@@ -12,8 +12,8 @@
   --border:rgba(255,255,255,0.07);
   --border-2:rgba(255,255,255,0.12);
   --text:#EDEAE3;
-  --text-dim:#8B8FA3;
-  --text-dimmer:#585C6B;
+  --text-dim:#A3A7B9;
+  --text-dimmer:#8A8EA0;
   --wave:#5FD8C4;
   --wave-soft:rgba(95,216,196,0.14);
   --ember:#E3B15E;
@@ -380,9 +380,9 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         </select>
       </div>
       <div class="field-row">
-        <label for="editorTempoMin" data-i18n="tempoRangeLabel">Tempo (min–max)</label>
+        <label id="lblEdTempo" for="editorTempoMin" data-i18n="tempoRangeLabel">Tempo (min–max)</label>
         <input type="number" id="editorTempoMin" min="30" max="140" value="60">
-        <input type="number" id="editorTempoMax" min="30" max="140" value="72">
+        <input type="number" id="editorTempoMax" aria-labelledby="lblEdTempo editorTempoMax" aria-label="max" min="30" max="140" value="72">
       </div>
       <div class="field-row">
         <label for="editorBarsPerChord" data-i18n="barsPerChordLabel">Bars per chord</label>
@@ -409,15 +409,15 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         </select>
       </div>
       <div class="field-row">
-        <label class="switch"><input type="checkbox" id="editorLeadSwing"><span class="slider-toggle"></span></label>
-        <label data-i18n="swingLabel" style="min-width:auto;">Swing</label>
+        <label class="switch"><input type="checkbox" id="editorLeadSwing" aria-labelledby="lbl-editorLeadSwing"><span class="slider-toggle"></span></label>
+        <label id="lbl-editorLeadSwing" data-i18n="swingLabel" style="min-width:auto;">Swing</label>
       </div>
 
       <h3 class="editor-section-title" data-i18n="padSectionLabel">Pad / chords</h3>
       <div class="field-row">
-        <label for="editorPadAttack" data-i18n="attackReleaseLabel">Attack / Release</label>
+        <label id="lblEdAR" for="editorPadAttack" data-i18n="attackReleaseLabel">Attack / Release</label>
         <input type="number" id="editorPadAttack" min="0" max="5" step="0.05" value="1.0">
-        <input type="number" id="editorPadRelease" min="0" max="8" step="0.1" value="2.0">
+        <input type="number" id="editorPadRelease" aria-labelledby="lblEdAR editorPadRelease" aria-label="release" min="0" max="8" step="0.1" value="2.0">
       </div>
       <div class="field-row">
         <label for="editorPadOctave" data-i18n="octaveLabel">Octave</label>
@@ -433,8 +433,8 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
         </select>
       </div>
       <div class="field-row">
-        <label class="switch"><input type="checkbox" id="editorPadSeventh"><span class="slider-toggle"></span></label>
-        <label data-i18n="seventhLabel" style="min-width:auto;">Seventh chords</label>
+        <label class="switch"><input type="checkbox" id="editorPadSeventh" aria-labelledby="lbl-editorPadSeventh"><span class="slider-toggle"></span></label>
+        <label id="lbl-editorPadSeventh" data-i18n="seventhLabel" style="min-width:auto;">Seventh chords</label>
       </div>
 
       <h3 class="editor-section-title" data-i18n="bassSectionLabel">Bass</h3>
@@ -454,8 +454,8 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 
       <h3 class="editor-section-title" data-i18n="arpSectionLabel">Arpeggio</h3>
       <div class="field-row">
-        <label class="switch"><input type="checkbox" id="editorArpEnabled"><span class="slider-toggle"></span></label>
-        <label data-i18n="enabledLabel" style="min-width:auto;">Enabled</label>
+        <label class="switch"><input type="checkbox" id="editorArpEnabled" aria-labelledby="lbl-editorArpEnabled"><span class="slider-toggle"></span></label>
+        <label id="lbl-editorArpEnabled" data-i18n="enabledLabel" style="min-width:auto;">Enabled</label>
       </div>
       <div class="field-row">
         <label for="editorArpPattern" data-i18n="patternLabel">Pattern</label>
@@ -506,18 +506,18 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
       <button type="button" id="toggleAdvancedBtn" class="btn-small" data-i18n="advancedToggleLabel">Advanced ▾</button>
       <div id="editorAdvanced" style="display:none; margin-top:14px;">
         <div class="field-row">
-          <label for="editorLeadDetune" data-i18n="detuneLabel">Detune (cents) lead / pad</label>
+          <label id="lblEdDetune" for="editorLeadDetune" data-i18n="detuneLabel">Detune (cents) lead / pad</label>
           <input type="number" id="editorLeadDetune" min="0" max="20" value="0">
-          <input type="number" id="editorPadDetune" min="0" max="20" value="0">
+          <input type="number" id="editorPadDetune" aria-labelledby="lblEdDetune editorPadDetune" aria-label="pad" min="0" max="20" value="0">
         </div>
         <div class="field-row">
           <label for="editorPortamento" data-i18n="portamentoLabel">Portamento (sec)</label>
           <input type="number" id="editorPortamento" min="0" max="1" step="0.02" value="0">
         </div>
         <div class="field-row">
-          <label for="editorVibratoRate" data-i18n="vibratoLabel">Vibrato (Hz / cents)</label>
+          <label id="lblEdVib" for="editorVibratoRate" data-i18n="vibratoLabel">Vibrato (Hz / cents)</label>
           <input type="number" id="editorVibratoRate" min="0" max="10" step="0.5" value="0">
-          <input type="number" id="editorVibratoDepth" min="0" max="30" value="0">
+          <input type="number" id="editorVibratoDepth" aria-labelledby="lblEdVib editorVibratoDepth" aria-label="cents" min="0" max="30" value="0">
         </div>
         <div class="field-row">
           <label for="editorGlitch" data-i18n="glitchLabel">Glitch (probability)</label>
@@ -525,12 +525,12 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           <span class="readout mono" id="editorGlitchReadout">0%</span>
         </div>
         <div class="field-row">
-          <label class="switch"><input type="checkbox" id="editorCallResponse"><span class="slider-toggle"></span></label>
-          <label data-i18n="callResponseLabel" style="min-width:auto;">Call &amp; response</label>
+          <label class="switch"><input type="checkbox" id="editorCallResponse" aria-labelledby="lbl-editorCallResponse"><span class="slider-toggle"></span></label>
+          <label id="lbl-editorCallResponse" data-i18n="callResponseLabel" style="min-width:auto;">Call &amp; response</label>
         </div>
         <div class="field-row">
-          <label class="switch"><input type="checkbox" id="editorDelayEnabled"><span class="slider-toggle"></span></label>
-          <label data-i18n="delayLabel" style="min-width:auto;">Echo / delay</label>
+          <label class="switch"><input type="checkbox" id="editorDelayEnabled" aria-labelledby="lbl-editorDelayEnabled"><span class="slider-toggle"></span></label>
+          <label id="lbl-editorDelayEnabled" data-i18n="delayLabel" style="min-width:auto;">Echo / delay</label>
         </div>
       </div>
 
@@ -581,8 +581,8 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 
         <section class="panel" id="entrainmentPanel">
           <div class="panel-header-row">
-            <h2 data-i18n="entrainHeading">Beneficial waves</h2>
-            <label class="switch"><input type="checkbox" id="entrainToggle" checked><span class="slider-toggle"></span></label>
+            <h2 id="entrainHeadingEl" data-i18n="entrainHeading">Beneficial waves</h2>
+            <label class="switch"><input type="checkbox" id="entrainToggle" aria-labelledby="entrainHeadingEl" checked><span class="slider-toggle"></span></label>
           </div>
           <p class="hint" data-i18n="entrainHint">Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.</p>
           <div class="field-row">
@@ -615,8 +615,8 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 
         <section class="panel" id="voicePanel">
           <div class="panel-header-row">
-            <h2 data-i18n="voiceHeading">Human voice</h2>
-            <label class="switch"><input type="checkbox" id="voiceToggle"><span class="slider-toggle"></span></label>
+            <h2 id="voiceHeadingEl" data-i18n="voiceHeading">Human voice</h2>
+            <label class="switch"><input type="checkbox" id="voiceToggle" aria-labelledby="voiceHeadingEl"><span class="slider-toggle"></span></label>
           </div>
           <p class="hint" data-i18n="voiceHint">A procedurally synthesized wordless vocal layer (formant synthesis) — soft syllables like "ah", "oh", "mmm" that change each time, woven over any genre. No recordings, no samples.</p>
           <div class="field-row">
@@ -655,12 +655,12 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             <button type="button" id="blowConchBtn" data-i18n="blowConchBtn">🐚 Blow the conch</button>
           </div>
           <div class="field-row">
-            <label class="switch"><input type="checkbox" id="autoGongToggle"><span class="slider-toggle"></span></label>
-            <label data-i18n="autoGongLabel">Automatic gong at start</label>
+            <label class="switch"><input type="checkbox" id="autoGongToggle" aria-labelledby="autoGongLabelEl"><span class="slider-toggle"></span></label>
+            <label id="autoGongLabelEl" data-i18n="autoGongLabel">Automatic gong at start</label>
           </div>
           <div class="field-row">
-            <label class="switch"><input type="checkbox" id="autoConchToggle"><span class="slider-toggle"></span></label>
-            <label data-i18n="autoConchLabel">Automatic conch at end</label>
+            <label class="switch"><input type="checkbox" id="autoConchToggle" aria-labelledby="autoConchLabelEl"><span class="slider-toggle"></span></label>
+            <label id="autoConchLabelEl" data-i18n="autoConchLabel">Automatic conch at end</label>
           </div>
         </section>
       </div>
@@ -723,7 +723,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
           <div class="btn-row">
             <button id="generateCoverBtn" class="btn-accent" data-i18n="generateCoverBtn">🎨 Generate cover</button>
             <button id="coverModeBtn" class="fractal-mode-btn cover-mode-btn" data-mode="2d">2D</button>
-            <select id="coverFormatSelect">
+            <select id="coverFormatSelect" aria-label="Cover format">
               <option value="png">PNG</option>
               <option value="webp">WebP</option>
               <option value="jpeg">JPEG</option>
@@ -760,7 +760,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
               <option value="1200">20 min</option>
             </select>
             <button id="videoModeBtn" class="fractal-mode-btn cover-mode-btn" data-mode="2d">2D</button>
-            <select id="videoFormatSelect"></select>
+            <select id="videoFormatSelect" aria-label="Video format"></select>
           </div>
           <div class="btn-row">
             <button id="recordVideoBtn" class="btn-accent" data-i18n="recordVideoBtn">🎬 Record video</button>
@@ -775,6 +775,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
   <footer>
     <p data-i18n="footerLicense">CC0 license · no telemetry · no external dependencies · 100% offline</p>
     <p data-i18n="footerNote">All music is generated algorithmically, in real time — original, with no samples and no copyrighted material.</p>
+    <p style="font-size:.8em;opacity:.9">Conținut informativ/experiențial; nu este tratament medical și nu înlocuiește sfatul medical. Undele binaurale/izocronice au dovezi științifice limitate. / Informational content; not medical treatment or advice; binaural/isochronic effects have limited scientific evidence.</p>
     <p><span data-i18n="footerTradeFreePre">Trade-free philosophy ·</span> <a href="https://trom.tf" target="_blank" rel="noopener">TROM</a> <span data-i18n="footerTradeFreePost">· no ads, no tracking, no account</span></p>
   </footer>
 
