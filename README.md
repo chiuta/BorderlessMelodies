@@ -2,7 +2,7 @@
 
 Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de tonuri pentru relaxare („Relaxation waves").
 
-**Ultima actualizare:** 11 octombrie 2026 (versiune 1.0.2)
+**Ultima actualizare:** 11 octombrie 2026 (versiune 1.0.3)
 
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
@@ -66,6 +66,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 7 UI languages. It stores nothing and makes no network requests.
 
 ## Istoric / Changelog
+- **1.0.3 — 11 octombrie 2026:** temă deschisă automată (`prefers-color-scheme: light`; tema întunecată rămâne implicită) și foaie de stil pentru tipărire; verificat în Chromium cu schemă luminoasă și întunecată (axe 0 violări la 1280×800 și 360×740) și cu redare efectivă (după Play starea devine „Playing”, contextul audio pornește la gestul utilizatorului).
 - **1.0.2 — 11 octombrie 2026:** oprire automată (somn) cu estompare de 15 s, inclusă în setările exportate/importate (valorile necunoscute sunt ignorate la import); etichetele frecvențelor Solfeggio sunt acum afișate în limba interfeței (înainte apăreau în engleză în FR/IT/ES/PT/DE); CSP cu hash `sha256` pentru script (fără `'unsafe-inline'` la `script-src`); textele noi sunt în cele 7 limbi; testat cu CSP activ (0 erori) și axe-core 0 violări la 1280×800 și 360×740.
 
 - **1.0.1 — 11 octombrie 2026:** exportul audio este mai reproductibil: zgomotul, reverb-ul, gongul și scoica folosesc la export un generator pseudo-aleator derivat din seed (înainte foloseau `Math.random`). Limită rămasă: două exporturi cu aceleași setări diferă încă cu ±1 LSB în ~0,05% din eșantioane (măsurat la 1 min de audio), deci nu sunt bit-cu-bit identice, din cauza aritmeticii în virgulă mobilă a motorului audio al browserului.

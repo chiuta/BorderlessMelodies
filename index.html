@@ -286,6 +286,25 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
   .btn-row button{flex:1; min-width:120px;}
   header p.subtitle{font-size:0.94rem;}
 }
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]){
+    --bg:#F5F2EA; --panel:#FFFFFF; --panel-2:#EFEBE1;
+    --border:rgba(20,24,40,0.14); --border-2:rgba(20,24,40,0.24);
+    --text:#1B1F2C; --text-dim:#454A5E; --text-dimmer:#555A6E;
+    --wave:#0A6B5C; --wave-soft:rgba(10,107,92,0.12);
+    --ember:#835407; --ember-soft:rgba(131,84,7,0.12); --dusty:#9C4338;
+  }
+  :root:not([data-theme="dark"]) body{background:var(--bg);}
+  :root:not([data-theme="dark"]) .genre-card-delete{background:rgba(255,255,255,0.8);}
+  :root:not([data-theme="dark"]) .support-popup{box-shadow:0 8px 24px rgba(20,24,40,0.18);}
+  :root:not([data-theme="dark"]) .mini-player{background:rgba(255,255,255,0.97);}
+}
+@media print{
+  :root{--bg:#fff;--panel:#fff;--panel-2:#fff;--text:#000;--text-dim:#222;--text-dimmer:#333;--wave:#000;--border:#999;--border-2:#666;}
+  body{background:#fff !important;color:#000;}
+  .topbar,.btn-row,button,.mini-player,.support-heart,.support-popup,canvas#visualizer,.fractal-overlay,audio{display:none !important;}
+  .app{max-width:none;padding:0;}
+}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
 }
@@ -306,7 +325,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 <div class="app">
 
   <div class="topbar" role="region" aria-label="Versiune și limbă / Version and language">
-    <span class="badge">v1.0.2 · offline · CC0</span>
+    <span class="badge">v1.0.3 · offline · CC0</span>
     <div class="lang-toggle">
       <button data-lang-btn="en" class="active" aria-pressed="true">EN</button>
       <button data-lang-btn="ro">RO</button>
