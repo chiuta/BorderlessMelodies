@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src blob: data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-SVeHSIGteuVFyQMSTU1h0DmhGF7Xk8lCXiM+KhNvPjI='; style-src 'unsafe-inline'; img-src data: blob:; media-src blob: data:; base-uri 'none'; form-action 'none'">
 <title>Borderless Melodies — Original Music Generator</title>
 <style>
 :root{
@@ -306,7 +306,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 <div class="app">
 
   <div class="topbar" role="region" aria-label="Versiune și limbă / Version and language">
-    <span class="badge">v1.0.1 · offline · CC0</span>
+    <span class="badge">v1.0.2 · offline · CC0</span>
     <div class="lang-toggle">
       <button data-lang-btn="en" class="active" aria-pressed="true">EN</button>
       <button data-lang-btn="ro">RO</button>
@@ -575,6 +575,18 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
               <option value="continuous" data-i18n="continuousOpt">Continuous loop</option>
             </select>
           </div>
+          <div class="field-row">
+            <label for="sleepSelect" data-i18n="sleepLabel">Sleep timer</label>
+            <select id="sleepSelect">
+              <option value="0" data-i18n="sleepOff">Off</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+              <option value="45">45 min</option>
+              <option value="60">60 min</option>
+              <option value="90">90 min</option>
+            </select>
+          </div>
+          <p class="hint" data-i18n="sleepHint">Fades the volume out over 15 seconds and then stops. The countdown starts at Play and keeps running while paused.</p>
           <div class="btn-row">
             <button id="regenerateBtn" class="btn-accent" data-i18n="regenBtn">↻ Regenerate</button>
           </div>
@@ -2578,7 +2590,31 @@ function getCurrentSettings(){
   };
 }
 
+let sleepTimerId = null, sleepStopId = null;
+function clearSleepTimer(){
+  if (sleepTimerId){ clearTimeout(sleepTimerId); sleepTimerId=null; }
+  if (sleepStopId){ clearTimeout(sleepStopId); sleepStopId=null; }
+}
+// Oprire automată (somn): după N minute de la Play, volumul coboară în 15 s, apoi redarea se oprește.
+function armSleepTimer(){
+  clearSleepTimer();
+  const min = parseInt(document.getElementById('sleepSelect').value,10) || 0;
+  if (!min) return;
+  const FADE = 15;
+  sleepTimerId = setTimeout(function(){
+    sleepTimerId = null;
+    if (!isPlaying || !audioCtx || !masterGain){ stopAll(false); return; }
+    const now = audioCtx.currentTime;
+    try{
+      masterGain.gain.cancelScheduledValues(now);
+      masterGain.gain.setValueAtTime(masterGain.gain.value, now);
+      masterGain.gain.linearRampToValueAtTime(0.0001, now+FADE);
+    }catch(e){}
+    sleepStopId = setTimeout(function(){ sleepStopId = null; stopAll(false); }, FADE*1000+300);
+  }, Math.max(1, min*60-FADE)*1000);
+}
 function stopAll(triggerClosingSound){
+  clearSleepTimer();
   if (continuousTimer){ clearInterval(continuousTimer); continuousTimer=null; }
   if (stopTimeoutId){ clearTimeout(stopTimeoutId); stopTimeoutId=null; }
   const wasPlaying = isPlaying;
@@ -2714,6 +2750,7 @@ function startPlayback(){
   }
 
   isPlaying = true; isPaused = false;
+  armSleepTimer();
   updateTransportUI();
 }
 
@@ -3112,7 +3149,8 @@ function exportSettingsJson(){
   const s = getCurrentSettings();
   const data = { version:'1.0', seed:s.seed, genreKey:s.genreKey, tempo:s.tempo, duration:s.duration,
     entrainEnabled:s.entrainEnabled, entrainMode:s.entrainMode, carrierHz:s.carrierHz, beatHz:s.beatHz,
-    entrainMix: Math.round(s.entrainMix*100) };
+    entrainMix: Math.round(s.entrainMix*100),
+    sleepMin: parseInt(document.getElementById('sleepSelect').value,10) || 0 };
   const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -3127,6 +3165,7 @@ function applyImportedSettings(data){
   if (data.seed!=null) document.getElementById('seedInput').value = data.seed;
   if (data.tempo!=null) document.getElementById('tempoSlider').value = data.tempo;
   if (data.duration!=null && Array.prototype.some.call(document.getElementById('durationSelect').options, function(o){ return o.value===String(data.duration); })) document.getElementById('durationSelect').value = data.duration;
+  if (data.sleepMin!=null && [0,15,30,45,60,90].indexOf(Number(data.sleepMin)) !== -1) document.getElementById('sleepSelect').value = String(Number(data.sleepMin));
   if (data.entrainEnabled!=null) document.getElementById('entrainToggle').checked = data.entrainEnabled;
   if (data.entrainMode && ['pure','binaural','isochronic'].indexOf(data.entrainMode) !== -1){ state.entrainMode = data.entrainMode; updateModeButtons(); }
   if (data.carrierHz!=null) document.getElementById('carrierSlider').value = data.carrierHz;
@@ -3208,6 +3247,8 @@ const I18N = {
     modeLabel:'Mod', modePure:'Ton pur', modeBinaural:'Binaural', modeIso:'Izocronic',
     carrierLabel:'Frecvență purtătoare', beatLabel:'Frecvență bătaie', mixLabel:'Amestec',
     solfNote:'Etichetele frecvențelor „Solfeggio” (eliberare, regenerare, armonie etc.) sunt atribuiri tradiționale/ezoterice, fără dovezi științifice că ar produce efectele indicate; ele rămân simple repere de înălțime a tonului, iar frecvențele „brainwave” (Delta…Gamma) sunt descrieri orientative.',
+    sleepLabel:'Oprire automată (somn)', sleepOff:'Oprit',
+    sleepHint:'Estompează volumul în 15 secunde, apoi oprește redarea. Numărătoarea începe la Play și continuă și în pauză.',
     disclaimer:'Notă: aceste tonuri sunt oferite exclusiv în scop relaxant și experiențial, nu ca tratament medical — dovezile științifice rămân limitate. Dacă suferiți de epilepsie, altă afecțiune neurologică sau sunteți însărcinată, cereți sfatul unui medic înainte de utilizare. Nu ascultați în timp ce conduceți. Opriți dacă simțiți disconfort. Efectul binaural necesită căști stereo.',
     playBtn:'Redă', pauseBtn:'Pauză', stopBtn:'Stop', masterVolLabel:'Volum',
     statusIdle:'Pregătit', statusPlaying:'Se redă', statusPaused:'Pauzat',
@@ -3296,6 +3337,8 @@ const I18N = {
     modeLabel:'Mode', modePure:'Pure tone', modeBinaural:'Binaural', modeIso:'Isochronic',
     carrierLabel:'Carrier frequency', beatLabel:'Beat frequency', mixLabel:'Mix',
     solfNote:'The “Solfeggio” frequency labels (release, restoration, harmony, etc.) are traditional/esoteric attributions with no scientific evidence that they produce the stated effects; treat them as plain pitch references. The brainwave names (Delta…Gamma) are rough descriptions only.',
+    sleepLabel:'Sleep timer', sleepOff:'Off',
+    sleepHint:'Fades the volume out over 15 seconds and then stops. The countdown starts at Play and keeps running while paused.',
     disclaimer:'Note: these tones are offered purely for relaxation and experiential purposes, not as medical treatment — scientific evidence remains limited. If you have epilepsy, another neurological condition, or are pregnant, consult a doctor before use. Do not listen while driving. Stop if you feel discomfort. The binaural effect requires stereo headphones.',
     playBtn:'Play', pauseBtn:'Pause', stopBtn:'Stop', masterVolLabel:'Volume',
     statusIdle:'Ready', statusPlaying:'Playing', statusPaused:'Paused',
@@ -3396,6 +3439,8 @@ const I18N = {
     beatLabel:'Fréquence de battement',
     mixLabel:'Mélange',
     solfNote:'Les étiquettes des fréquences « Solfeggio » (libération, régénération, harmonie, etc.) sont des attributions traditionnelles/ésotériques, sans preuve scientifique des effets indiqués ; ce sont de simples repères de hauteur. Les noms des ondes cérébrales (Delta…Gamma) ne sont que des descriptions indicatives.',
+    sleepLabel:'Minuteur de sommeil', sleepOff:'Désactivé',
+    sleepHint:'Réduit le volume en 15 secondes puis arrête la lecture. Le décompte commence à Lecture et continue en pause.',
     disclaimer:'Remarque : ces tonalités sont proposées uniquement à des fins de relaxation et d\'expérience, et non comme traitement médical — les preuves scientifiques restent limitées. Si vous souffrez d\'épilepsie, d\'une autre affection neurologique, ou si vous êtes enceinte, consultez un médecin avant utilisation. N\'écoutez pas en conduisant. Arrêtez si vous ressentez un inconfort. L\'effet binaural nécessite un casque stéréo.',
     playBtn:'Lecture',
     pauseBtn:'Pause',
@@ -3507,6 +3552,8 @@ const I18N = {
     beatLabel:'Frequenza di battimento',
     mixLabel:'Mix',
     solfNote:'Le etichette delle frequenze «Solfeggio» (liberazione, rigenerazione, armonia, ecc.) sono attribuzioni tradizionali/esoteriche, senza prove scientifiche degli effetti indicati; sono semplici riferimenti di altezza. I nomi delle onde cerebrali (Delta…Gamma) sono solo descrizioni orientative.',
+    sleepLabel:'Timer di spegnimento', sleepOff:'Disattivato',
+    sleepHint:'Abbassa il volume in 15 secondi e poi ferma la riproduzione. Il conto alla rovescia parte con Play e prosegue anche in pausa.',
     disclaimer:'Nota: questi toni sono offerti esclusivamente a scopo rilassante ed esperienziale, non come trattamento medico — le prove scientifiche restano limitate. Se soffri di epilessia, un\'altra condizione neurologica, o sei incinta, consulta un medico prima dell\'uso. Non ascoltare mentre guidi. Interrompi se avverti disagio. L\'effetto binaurale richiede cuffie stereo.',
     playBtn:'Riproduci',
     pauseBtn:'Pausa',
@@ -3618,6 +3665,8 @@ const I18N = {
     beatLabel:'Frecuencia de batido',
     mixLabel:'Mezcla',
     solfNote:'Las etiquetas de las frecuencias «Solfeggio» (liberación, regeneración, armonía, etc.) son atribuciones tradicionales/esotéricas, sin evidencia científica de los efectos indicados; son solo referencias de altura. Los nombres de las ondas cerebrales (Delta…Gamma) son descripciones orientativas.',
+    sleepLabel:'Temporizador de sueño', sleepOff:'Desactivado',
+    sleepHint:'Baja el volumen durante 15 segundos y luego detiene la reproducción. La cuenta atrás empieza con Play y sigue en pausa.',
     disclaimer:'Nota: estos tonos se ofrecen exclusivamente con fines relajantes y experienciales, no como tratamiento médico — la evidencia científica sigue siendo limitada. Si tiene epilepsia, otra afección neurológica, o está embarazada, consulte a un médico antes de usarlo. No escuche mientras conduce. Deténgase si siente malestar. El efecto binaural requiere auriculares estéreo.',
     playBtn:'Reproducir',
     pauseBtn:'Pausa',
@@ -3729,6 +3778,8 @@ const I18N = {
     beatLabel:'Frequência de batimento',
     mixLabel:'Mistura',
     solfNote:'Os rótulos das frequências «Solfeggio» (libertação, regeneração, harmonia etc.) são atribuições tradicionais/esotéricas, sem evidência científica dos efeitos indicados; são apenas referências de altura. Os nomes das ondas cerebrais (Delta…Gamma) são descrições orientativas.',
+    sleepLabel:'Temporizador de sono', sleepOff:'Desativado',
+    sleepHint:'Reduz o volume ao longo de 15 segundos e depois para a reprodução. A contagem começa no Play e continua em pausa.',
     disclaimer:'Nota: estes tons são oferecidos exclusivamente para fins relaxantes e experienciais, não como tratamento médico — as evidências científicas continuam limitadas. Se sofre de epilepsia, outra condição neurológica, ou está grávida, consulte um médico antes de usar. Não ouça enquanto conduz. Pare se sentir desconforto. O efeito binaural requer fones de ouvido estéreo.',
     playBtn:'Reproduzir',
     pauseBtn:'Pausa',
@@ -3840,6 +3891,8 @@ const I18N = {
     beatLabel:'Schwebungsfrequenz',
     mixLabel:'Mischung',
     solfNote:'Die Bezeichnungen der „Solfeggio“-Frequenzen (Loslassen, Regeneration, Harmonie usw.) sind traditionelle/esoterische Zuschreibungen ohne wissenschaftlichen Beleg für die genannten Wirkungen; sie dienen nur als Tonhöhenreferenz. Die Namen der Gehirnwellen (Delta…Gamma) sind lediglich grobe Beschreibungen.',
+    sleepLabel:'Einschlaf-Timer', sleepOff:'Aus',
+    sleepHint:'Blendet die Lautstärke über 15 Sekunden aus und stoppt dann die Wiedergabe. Der Countdown startet mit Play und läuft auch in der Pause weiter.',
     disclaimer:'Hinweis: Diese Töne dienen ausschließlich Entspannungs- und Erfahrungszwecken, nicht als medizinische Behandlung — die wissenschaftliche Evidenz bleibt begrenzt. Bei Epilepsie, einer anderen neurologischen Erkrankung oder Schwangerschaft vor der Nutzung ärztlichen Rat einholen. Nicht beim Autofahren hören. Bei Unwohlsein abbrechen. Der binaurale Effekt erfordert Stereo-Kopfhörer.',
     playBtn:'Wiedergabe',
     pauseBtn:'Pause',
@@ -4068,7 +4121,7 @@ function renderChips(){
   SOLFEGGIO_PRESETS.forEach(function(p){
     const chip = document.createElement('button');
     chip.className = 'chip'; chip.type='button';
-    chip.textContent = (currentLang==='ro' ? p.ro : p.en);
+    chip.textContent = (p[currentLang] || p.en);
     chip.addEventListener('click', function(){
       document.getElementById('carrierSlider').value = p.hz;
       refreshReadouts();
@@ -5133,6 +5186,7 @@ document.addEventListener('DOMContentLoaded', function(){
     playRitualSoundManually(function(c, d, t){ triggerConch(c, d, freq, t, 5, 0.22); });
   });
   document.getElementById('regenerateBtn').addEventListener('click', function(){ startPlayback(); });
+  document.getElementById('sleepSelect').addEventListener('change', function(){ if (isPlaying || isPaused) armSleepTimer(); });
   document.getElementById('randomSeedBtn').addEventListener('click', function(){
     document.getElementById('seedInput').value = Math.floor(Math.random()*1000000);
   });

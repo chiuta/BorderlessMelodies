@@ -2,7 +2,7 @@
 
 Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de tonuri pentru relaxare („Relaxation waves").
 
-**Ultima actualizare:** 11 octombrie 2026 (versiune 1.0.1)
+**Ultima actualizare:** 11 octombrie 2026 (versiune 1.0.2)
 
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
@@ -19,6 +19,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 - „Relaxation waves": strat auxiliar în modurile Pure tone, Binaural sau Isochronic, cu frecvență purtătoare, frecvență de bătaie și mixaj. Aplicația precizează că sunt oferite doar pentru relaxare, nu ca tratament medical, și conține avertismente (epilepsie, sarcină, condus).
 - „Human voice": strat vocal fără cuvinte, sintetizat prin formanți, cu mai multe caractere (copil, adolescent, adult, senior, robotic melodios).
 - „Gong & conch": gong și scoică sintetizate, apelabile manual sau automat la început/sfârșit.
+- **Oprire automată (somn):** după 15, 30, 45, 60 sau 90 de minute de la Play, volumul coboară în 15 secunde și redarea se oprește (numărătoarea continuă și în pauză; Stop o anulează); valoarea intră în exportul/importul setărilor JSON (`sleepMin`).
 - Redare cu Play/Stop, volum și vizualizator fractal pe ecran complet (2D/3D).
 - Export audio WAV sau FLAC (1-20 min), export/import setări (JSON), copertă generativă (PNG/WebP/JPEG) legată de seed, export video WebM al vizualizatorului.
 - Interfață în 7 limbi: EN, RO, FR, IT, ES, PT, DE.
@@ -38,7 +39,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 ## Confidențialitate și rețea
 
 - Aplicația nu folosește `localStorage`, `sessionStorage` sau IndexedDB: nimic nu este reținut între sesiuni; salvezi doar prin fișierele exportate.
-- Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe); pagina are o politică CSP restrictivă (`default-src 'none'`, script/stil inline, imagini și audio doar `data:`/`blob:`). Conține doar link-uri, deschise la click, către trom.tf, Patreon și Buy Me a Coffee.
+- Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe); pagina are o politică CSP restrictivă (`default-src 'none'`, script permis doar prin hash `sha256`, fără `'unsafe-inline'` la scripturi; stil inline, imagini și audio doar `data:`/`blob:`). Conține doar link-uri, deschise la click, către trom.tf, Patreon și Buy Me a Coffee.
 
 ## Avertisment
 
@@ -65,6 +66,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 7 UI languages. It stores nothing and makes no network requests.
 
 ## Istoric / Changelog
+- **1.0.2 — 11 octombrie 2026:** oprire automată (somn) cu estompare de 15 s, inclusă în setările exportate/importate (valorile necunoscute sunt ignorate la import); etichetele frecvențelor Solfeggio sunt acum afișate în limba interfeței (înainte apăreau în engleză în FR/IT/ES/PT/DE); CSP cu hash `sha256` pentru script (fără `'unsafe-inline'` la `script-src`); textele noi sunt în cele 7 limbi; testat cu CSP activ (0 erori) și axe-core 0 violări la 1280×800 și 360×740.
 
 - **1.0.1 — 11 octombrie 2026:** exportul audio este mai reproductibil: zgomotul, reverb-ul, gongul și scoica folosesc la export un generator pseudo-aleator derivat din seed (înainte foloseau `Math.random`). Limită rămasă: două exporturi cu aceleași setări diferă încă cu ±1 LSB în ~0,05% din eșantioane (măsurat la 1 min de audio), deci nu sunt bit-cu-bit identice, din cauza aritmeticii în virgulă mobilă a motorului audio al browserului.
 - Sub frecvențele „Solfeggio” a apărut o notă în 7 limbi: etichetele (eliberare, regenerare, armonie…) sunt atribuiri tradiționale/ezoterice, fără dovezi științifice; la fel numele undelor cerebrale sunt orientative.
