@@ -319,7 +319,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 
   <header>
     <h1 data-i18n="title">Melodies without borders</h1>
-    <p class="subtitle" data-i18n="subtitle">A fully offline generator of original music — with beneficial-wave layers for positive listening.</p>
+    <p class="subtitle" data-i18n="subtitle">A fully offline generator of original music — with optional tone layers for relaxation (not medical treatment).</p>
     <div class="header-wave" aria-hidden="true">
       <svg viewBox="0 0 400 16" preserveAspectRatio="none">
         <defs><linearGradient id="hwg" x1="0" x2="1"><stop offset="0" stop-color="#5FD8C4"/><stop offset="1" stop-color="#E3B15E"/></linearGradient></defs>
@@ -581,7 +581,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 
         <section class="panel" id="entrainmentPanel">
           <div class="panel-header-row">
-            <h2 id="entrainHeadingEl" data-i18n="entrainHeading">Beneficial waves</h2>
+            <h2 id="entrainHeadingEl" data-i18n="entrainHeading">Relaxation waves</h2>
             <label class="switch"><input type="checkbox" id="entrainToggle" aria-labelledby="entrainHeadingEl" checked><span class="slider-toggle"></span></label>
           </div>
           <p class="hint" data-i18n="entrainHint">Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.</p>
@@ -3184,7 +3184,7 @@ function initVisualizerLoop(){
 const I18N = {
   ro:{
     title:'Melodii fără frontiere',
-    subtitle:'Generator de muzică originală, complet offline — cu straturi de unde binefăcătoare pentru ascultare pozitivă.',
+    subtitle:'Generator de muzică originală, complet offline — cu straturi opționale de tonuri pentru relaxare (nu tratament medical).',
     titleTagline:'Generator muzical original',
     genreHeading:'Alege un gen muzical', compHeading:'Compoziție', toggleAllBtn:'⇕ Extinde / restrânge tot',
     genreSearchPlaceholder:'Caută un gen (ex: „flamenco", „drone", „vals"…)', genreNoResults:'Niciun gen găsit.',
@@ -3192,7 +3192,7 @@ const I18N = {
     voiceHeading:'Voce umană', voiceHint:'Un strat vocal sintetizat procedural (sinteză de formanți) — silabe fără cuvinte, „ah", „oh", „mmm", care se schimbă de fiecare dată, țesute peste orice gen. Fără înregistrări, fără mostre.',
     voiceDensityLabel:'Prezență', voiceMixLabel:'Volum', voiceCharacterLabel:'Caracter', voice_childFemale:'Copil (fată)', voice_childMale:'Copil (băiat)', voice_teenFemale:'Adolescentă', voice_teenMale:'Adolescent', voice_youngFemale:'Tânără', voice_youngMale:'Tânăr', voice_matureFemale:'Matură', voice_matureMale:'Matur', voice_seniorFemale:'Senioră', voice_seniorMale:'Senior', voice_robotic:'Robotică melodioasă', ritualHeading:'Gong & scoică', ritualHint:'Două sunete ceremoniale, sintetizate procedural — un gong inarmonic (parțiale ca la clopote) și o chemare de scoică, cu suflu. Sună-le manual oricând, sau lasă-le să marcheze automat începutul/finalul unei sesiuni.', ringGongBtn:'🔔 Sună gongul', blowConchBtn:'🐚 Suflă în scoică', autoGongLabel:'Gong automat la început', autoConchLabel:'Scoică automată la final',
     durationLabel:'Durată', continuousOpt:'Buclă continuă', regenBtn:'↻ Regenerează',
-    entrainHeading:'Unde binefăcătoare',
+    entrainHeading:'Unde de relaxare',
     entrainHint:'Straturi audio auxiliare (binaurale, izocronice sau ton pur), asociate popular cu stări de relaxare, concentrare sau meditație. Benzile de mai jos corespund convențiilor EEG standard; eficacitatea subiectivă variază de la o persoană la alta.',
     modeLabel:'Mod', modePure:'Ton pur', modeBinaural:'Binaural', modeIso:'Izocronic',
     carrierLabel:'Frecvență purtătoare', beatLabel:'Frecvență bătaie', mixLabel:'Amestec',
@@ -3271,7 +3271,7 @@ const I18N = {
   },
   en:{
     title:'Borderless Melodies',
-    subtitle:'A fully offline generator of original music — with beneficial-wave layers for positive listening.',
+    subtitle:'A fully offline generator of original music — with optional tone layers for relaxation (not medical treatment).',
     titleTagline:'Original Music Generator',
     genreHeading:'Choose a genre', compHeading:'Composition', toggleAllBtn:'⇕ Expand / collapse all',
     genreSearchPlaceholder:'Search genres (e.g. "flamenco", "drone", "waltz"…)', genreNoResults:'No genres found.',
@@ -3279,7 +3279,7 @@ const I18N = {
     voiceHeading:'Human voice', voiceHint:'A procedurally synthesized wordless vocal layer (formant synthesis) — soft syllables like "ah", "oh", "mmm" that change each time, woven over any genre. No recordings, no samples.',
     voiceDensityLabel:'Presence', voiceMixLabel:'Volume', voiceCharacterLabel:'Character', voice_childFemale:'Child (girl)', voice_childMale:'Child (boy)', voice_teenFemale:'Teen girl', voice_teenMale:'Teen boy', voice_youngFemale:'Young woman', voice_youngMale:'Young man', voice_matureFemale:'Mature woman', voice_matureMale:'Mature man', voice_seniorFemale:'Senior woman', voice_seniorMale:'Senior man', voice_robotic:'Melodious robotic', ritualHeading:'Gong & conch', ritualHint:'Two ceremonial sounds, synthesized procedurally — an inharmonic gong (bell-like partials) and a breathy conch call. Ring them manually anytime, or let them mark the start/end of a session automatically.', ringGongBtn:'🔔 Ring the gong', blowConchBtn:'🐚 Blow the conch', autoGongLabel:'Automatic gong at start', autoConchLabel:'Automatic conch at end',
     durationLabel:'Duration', continuousOpt:'Continuous loop', regenBtn:'↻ Regenerate',
-    entrainHeading:'Beneficial waves',
+    entrainHeading:'Relaxation waves',
     entrainHint:'Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.',
     modeLabel:'Mode', modePure:'Pure tone', modeBinaural:'Binaural', modeIso:'Isochronic',
     carrierLabel:'Carrier frequency', beatLabel:'Beat frequency', mixLabel:'Mix',
@@ -3358,7 +3358,7 @@ const I18N = {
   },
   fr:{
     title:'Mélodies sans frontières',
-    subtitle:'Un générateur de musique originale, entièrement hors ligne — avec des couches d\'ondes bénéfiques pour une écoute positive.',
+    subtitle:'Un générateur de musique originale, entièrement hors ligne — avec des couches de tonalités optionnelles pour la détente (pas un traitement médical).',
     titleTagline:'Générateur musical original',
     genreHeading:'Choisissez un genre',
     compHeading:'Composition',
@@ -3373,7 +3373,7 @@ const I18N = {
     durationLabel:'Durée',
     continuousOpt:'Boucle continue',
     regenBtn:'↻ Régénérer',
-    entrainHeading:'Ondes bénéfiques',
+    entrainHeading:'Ondes de relaxation',
     entrainHint:'Couches audio auxiliaires (binaurales, isochrones ou ton pur), populairement associées à la relaxation, la concentration ou la méditation. Les bandes ci-dessous suivent les conventions EEG standard ; l\'efficacité subjective varie selon les personnes.',
     modeLabel:'Mode',
     modePure:'Ton pur',
@@ -3468,7 +3468,7 @@ const I18N = {
   },
   it:{
     title:'Melodie senza frontiere',
-    subtitle:'Un generatore di musica originale, completamente offline — con strati di onde benefiche per un ascolto positivo.',
+    subtitle:'Un generatore di musica originale, completamente offline — con strati opzionali di toni per il rilassamento (non un trattamento medico).',
     titleTagline:'Generatore musicale originale',
     genreHeading:'Scegli un genere',
     compHeading:'Composizione',
@@ -3483,7 +3483,7 @@ const I18N = {
     durationLabel:'Durata',
     continuousOpt:'Loop continuo',
     regenBtn:'↻ Rigenera',
-    entrainHeading:'Onde benefiche',
+    entrainHeading:'Onde di rilassamento',
     entrainHint:'Strati audio ausiliari (binaurali, isocroni o tono puro), popolarmente associati a stati di rilassamento, concentrazione o meditazione. Le bande qui sotto seguono le convenzioni EEG standard; l\'efficacia soggettiva varia da persona a persona.',
     modeLabel:'Modalità',
     modePure:'Tono puro',
@@ -3578,7 +3578,7 @@ const I18N = {
   },
   es:{
     title:'Melodías sin fronteras',
-    subtitle:'Un generador de música original, totalmente sin conexión — con capas de ondas beneficiosas para una escucha positiva.',
+    subtitle:'Un generador de música original, totalmente sin conexión — con capas opcionales de tonos para la relajación (no un tratamiento médico).',
     titleTagline:'Generador musical original',
     genreHeading:'Elige un género',
     compHeading:'Composición',
@@ -3593,7 +3593,7 @@ const I18N = {
     durationLabel:'Duración',
     continuousOpt:'Bucle continuo',
     regenBtn:'↻ Regenerar',
-    entrainHeading:'Ondas beneficiosas',
+    entrainHeading:'Ondas de relajación',
     entrainHint:'Capas de audio auxiliares (binaurales, isocrónicas o de tono puro), popularmente asociadas con la relajación, la concentración o la meditación. Las bandas de abajo siguen las convenciones EEG estándar; la eficacia subjetiva varía según la persona.',
     modeLabel:'Modo',
     modePure:'Tono puro',
@@ -3688,7 +3688,7 @@ const I18N = {
   },
   pt:{
     title:'Melodias sem fronteiras',
-    subtitle:'Um gerador de música original, totalmente offline — com camadas de ondas benéficas para uma escuta positiva.',
+    subtitle:'Um gerador de música original, totalmente offline — com camadas opcionais de tons para relaxamento (não é tratamento médico).',
     titleTagline:'Gerador musical original',
     genreHeading:'Escolha um gênero',
     compHeading:'Composição',
@@ -3703,7 +3703,7 @@ const I18N = {
     durationLabel:'Duração',
     continuousOpt:'Loop contínuo',
     regenBtn:'↻ Regenerar',
-    entrainHeading:'Ondas benéficas',
+    entrainHeading:'Ondas de relaxamento',
     entrainHint:'Camadas de áudio auxiliares (binaurais, isocrônicas ou de tom puro), popularmente associadas a estados de relaxamento, concentração ou meditação. As bandas abaixo seguem as convenções padrão de EEG; a eficácia subjetiva varia de pessoa para pessoa.',
     modeLabel:'Modo',
     modePure:'Tom puro',
@@ -3798,7 +3798,7 @@ const I18N = {
   },
   de:{
     title:'Melodien ohne Grenzen',
-    subtitle:'Ein vollständig offline arbeitender Generator für Originalmusik — mit wohltuenden Wellenschichten für positives Hören.',
+    subtitle:'Ein vollständig offline arbeitender Generator für Originalmusik — mit optionalen Tonschichten zur Entspannung (keine medizinische Behandlung).',
     titleTagline:'Originaler Musikgenerator',
     genreHeading:'Genre wählen',
     compHeading:'Komposition',
@@ -3813,7 +3813,7 @@ const I18N = {
     durationLabel:'Dauer',
     continuousOpt:'Endlosschleife',
     regenBtn:'↻ Neu generieren',
-    entrainHeading:'Wohltuende Wellen',
+    entrainHeading:'Entspannungswellen',
     entrainHint:'Zusätzliche Audioebenen (binaural, isochron oder reiner Ton), die populär mit Entspannung, Konzentration oder Meditation assoziiert werden. Die untenstehenden Bänder folgen den üblichen EEG-Konventionen; die subjektive Wirksamkeit ist von Person zu Person unterschiedlich.',
     modeLabel:'Modus',
     modePure:'Reiner Ton',

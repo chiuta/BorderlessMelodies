@@ -1,6 +1,6 @@
 # Borderless Melodies
 
-Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de unde „benefice".
+Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de tonuri pentru relaxare („Relaxation waves").
 
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
@@ -14,7 +14,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 
 - Alegere de gen dintr-o listă și editor de genuri proprii („Create custom genre": scară, progresie, metrică 4/4, 3/4, 5/4, 7/4, tempo, melodie lead, pad/acorduri, bas, textură, filtru, reverb, opțiuni avansate); genurile se salvează în „My Genres" și se pot exporta/importa (JSON).
 - Compoziție: Seed (cu „Randomize"), Tempo, „Variety & arc", Duration (2, 5, 10, 20 min sau buclă continuă), „Regenerate".
-- „Beneficial waves": strat auxiliar în modurile Pure tone, Binaural sau Isochronic, cu frecvență purtătoare, frecvență de bătaie și mixaj. Aplicația precizează că sunt oferite doar pentru relaxare, nu ca tratament medical, și conține avertismente (epilepsie, sarcină, condus).
+- „Relaxation waves": strat auxiliar în modurile Pure tone, Binaural sau Isochronic, cu frecvență purtătoare, frecvență de bătaie și mixaj. Aplicația precizează că sunt oferite doar pentru relaxare, nu ca tratament medical, și conține avertismente (epilepsie, sarcină, condus).
 - „Human voice": strat vocal fără cuvinte, sintetizat prin formanți, cu mai multe caractere (copil, adolescent, adult, senior, robotic melodios).
 - „Gong & conch": gong și scoică sintetizate, apelabile manual sau automat la început/sfârșit.
 - Redare cu Play/Stop, volum și vizualizator fractal pe ecran complet (2D/3D).
@@ -26,7 +26,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 1. Alege limba din butoanele EN / RO / FR / IT / ES / PT / DE.
 2. Alege un gen (sau „Create custom genre", configurezi și apeși „Save").
 3. Setează Seed (sau 🎲 Randomize), Tempo și Duration.
-4. Opțional: activează „Beneficial waves", „Human voice" sau gongul/scoica.
+4. Opțional: activează „Relaxation waves", „Human voice" sau gongul/scoica.
 5. Apasă ▶ Play; Space pornește/oprește redarea (când focusul nu e pe un câmp sau buton).
 6. În vizualizatorul fractal: `+` / `=` apropie, `-` / `_` depărtează, `0` resetează, Esc închide.
 7. La „Export" alege durata și formatul (WAV sau FLAC) și apasă „Export audio".
@@ -40,7 +40,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 
 ## Avertisment
 
-Conținut informativ/experiențial. Stratul „Beneficial waves" (tonuri pure, binaurale, izocronice) este oferit doar pentru relaxare, nu este tratament medical și nu înlocuiește sfatul medical; dovezile științifice privind efectele ritmurilor binaurale/izocronice sunt limitate. Nu este recomandat în caz de epilepsie, altă afecțiune neurologică sau sarcină fără acordul medicului; nu asculta în timpul condusului; oprește dacă simți disconfort; folosește volum redus. Avertismentul apare în aplicație (panoul „Beneficial waves") și în subsolul paginii.
+Conținut informativ/experiențial. Stratul „Relaxation waves" (tonuri pure, binaurale, izocronice) este oferit doar pentru relaxare, nu este tratament medical și nu înlocuiește sfatul medical; dovezile științifice privind efectele ritmurilor binaurale/izocronice sunt limitate. Nu este recomandat în caz de epilepsie, altă afecțiune neurologică sau sarcină fără acordul medicului; nu asculta în timpul condusului; oprește dacă simți disconfort; folosește volum redus. Avertismentul apare în aplicație (panoul „Relaxation waves") și în subsolul paginii.
 
 ## Rulare locală / offline
 
