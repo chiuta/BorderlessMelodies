@@ -2,6 +2,8 @@
 
 Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de tonuri pentru relaxare („Relaxation waves").
 
+**Ultima actualizare:** 11 octombrie 2026 (versiune 1.0.1)
+
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
 ![Captura de ecran](screenshot.png)
@@ -36,7 +38,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 ## Confidențialitate și rețea
 
 - Aplicația nu folosește `localStorage`, `sessionStorage` sau IndexedDB: nimic nu este reținut între sesiuni; salvezi doar prin fișierele exportate.
-- Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe). Conține doar link-uri, deschise la click, către trom.tf, Patreon și Buy Me a Coffee.
+- Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe); pagina are o politică CSP restrictivă (`default-src 'none'`, script/stil inline, imagini și audio doar `data:`/`blob:`). Conține doar link-uri, deschise la click, către trom.tf, Patreon și Buy Me a Coffee.
 
 ## Avertisment
 
@@ -61,3 +63,9 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 ## English summary
 
 Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 7 UI languages. It stores nothing and makes no network requests.
+
+## Istoric / Changelog
+
+- **1.0.1 — 11 octombrie 2026:** exportul audio este mai reproductibil: zgomotul, reverb-ul, gongul și scoica folosesc la export un generator pseudo-aleator derivat din seed (înainte foloseau `Math.random`). Limită rămasă: două exporturi cu aceleași setări diferă încă cu ±1 LSB în ~0,05% din eșantioane (măsurat la 1 min de audio), deci nu sunt bit-cu-bit identice, din cauza aritmeticii în virgulă mobilă a motorului audio al browserului.
+- Sub frecvențele „Solfeggio” a apărut o notă în 7 limbi: etichetele (eliberare, regenerare, armonie…) sunt atribuiri tradiționale/ezoterice, fără dovezi științifice; la fel numele undelor cerebrale sunt orientative.
+- Securitate/accesibilitate: meta CSP adăugat (`default-src 'none'`), repere `region` pentru bara de sus și mini-playerul; axe-core 0 violări la 1280×800 și 360×740. Formatul fișierului de setări (JSON) rămâne `version: 1.0` pentru compatibilitate la import.

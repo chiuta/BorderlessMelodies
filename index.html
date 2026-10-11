@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src blob: data:; base-uri 'none'; form-action 'none'">
 <title>Borderless Melodies — Original Music Generator</title>
 <style>
 :root{
@@ -304,8 +305,8 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
 <body>
 <div class="app">
 
-  <div class="topbar">
-    <span class="badge">v1.0 · offline · CC0</span>
+  <div class="topbar" role="region" aria-label="Versiune și limbă / Version and language">
+    <span class="badge">v1.0.1 · offline · CC0</span>
     <div class="lang-toggle">
       <button data-lang-btn="en" class="active" aria-pressed="true">EN</button>
       <button data-lang-btn="ro">RO</button>
@@ -610,6 +611,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
             <input type="range" id="entrainMixSlider" min="0" max="100" value="35">
             <span class="readout mono" id="entrainMixReadout">35%</span>
           </div>
+          <p class="disclaimer" data-i18n="solfNote">The “Solfeggio” frequency labels (release, restoration, harmony, etc.) are traditional/esoteric attributions with no scientific evidence that they produce the stated effects; treat them as plain pitch references. The brainwave names (Delta…Gamma) are rough descriptions only.</p>
           <p class="disclaimer" data-i18n="disclaimer">Note: these tones are offered purely for relaxation and experiential purposes, not as medical treatment — scientific evidence remains limited. If you have epilepsy, another neurological condition, or are pregnant, consult a doctor before use. Do not listen while driving. Stop if you feel discomfort. The binaural effect requires stereo headphones.</p>
         </section>
 
@@ -803,7 +805,7 @@ footer{text-align:center;color:var(--text-dimmer);font-size:0.79rem;margin-top:2
   <div class="fractal-hint" id="fractalHint" data-i18n="fractalHint">Click anywhere or press Esc to exit</div>
 </div>
 
-<div class="mini-player" id="miniPlayer">
+<div class="mini-player" id="miniPlayer" role="region" aria-label="Mini player">
   <span class="mini-player-genre" id="miniPlayerGenre">—</span>
   <div class="mini-player-controls">
     <button id="miniPlayPauseBtn" class="btn-accent" aria-label="Play/Pause">▶</button>
@@ -2138,16 +2140,19 @@ function triggerVoiceNote(ctx, dest, freq, startTime, duration, vowelKey, peakGa
 // Gong: spectru INARMONIC (partiale la rapoarte ne-intregi fata de
 // fundamentala, nu armonice muzicale obisnuite) - tehnica standard de
 // sinteza de clopote/gonguri, fiecare partiala cu propriul declin lung.
+// Generator pseudo-aleator folosit de sinteza audio (gong, scoică, zgomot, reverb). La redare live rămâne Math.random;
+// la exportul audio este înlocuit temporar cu un generator cu seed, pentru ca același seed + aceleași setări să dea același fișier.
+let audioRand = Math.random;
 const GONG_PARTIALS = [1.0, 1.41, 2.0, 2.37, 3.06, 3.83, 4.42];
 function triggerGong(ctx, dest, baseFreq, startTime, duration, gain){
   const nodes = [];
   // Variație: niciun gong nu sună identic cu altul - mică dezacordare a
   // frecvenței de bază, jitter propriu pe fiecare parțială, durată ușor variabilă.
-  const baseJitter = 1 + (Math.random()-0.5)*0.05;
+  const baseJitter = 1 + (audioRand()-0.5)*0.05;
   const actualBaseFreq = baseFreq * baseJitter;
-  const durationJitter = duration * (0.85 + Math.random()*0.3);
+  const durationJitter = duration * (0.85 + audioRand()*0.3);
   GONG_PARTIALS.forEach(function(ratio, i){
-    const ratioJitter = ratio * (1 + (Math.random()-0.5)*0.025);
+    const ratioJitter = ratio * (1 + (audioRand()-0.5)*0.025);
     const osc = ctx.createOscillator();
     osc.type = 'sine';
     osc.frequency.setValueAtTime(actualBaseFreq*ratioJitter, startTime);
@@ -2170,11 +2175,11 @@ function triggerConch(ctx, dest, baseFreq, startTime, duration, gain){
   const nodes = [];
   // Variație: mică dezacordare a frecvenței de bază, viteză proprie de
   // "tremurat" (wobble), durată și cantitate de suflu ușor variabile.
-  const freqJitter = 1 + (Math.random()-0.5)*0.07;
+  const freqJitter = 1 + (audioRand()-0.5)*0.07;
   const actualBaseFreq = baseFreq * freqJitter;
-  const durationJitter = duration * (0.85 + Math.random()*0.3);
-  const wobbleRate = 0.55 + Math.random()*0.5;
-  const breathAmount = 0.6 + Math.random()*0.8;
+  const durationJitter = duration * (0.85 + audioRand()*0.3);
+  const wobbleRate = 0.55 + audioRand()*0.5;
+  const breathAmount = 0.6 + audioRand()*0.8;
 
   const osc = ctx.createOscillator();
   osc.type = 'sine';
@@ -2230,7 +2235,7 @@ function createImpulseResponse(ctx, duration, decay){
     let smoothed = 0;
     let env = 1;
     for (let i = 0; i < length; i++){
-      const raw = Math.random()*2-1;
+      const raw = audioRand()*2-1;
       const progress = i/length;
       // Filtru IIR simplu (un pol), tot mai inchis spre finalul cozii - imita
       // amortizarea naturala a frecventelor inalte din spatii acustice reale.
@@ -2249,7 +2254,7 @@ function createNoiseBuffer(ctx, seconds){
   const bufferSize = Math.max(1, Math.floor(ctx.sampleRate*(seconds||2)));
   const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
   const data = buffer.getChannelData(0);
-  for (let i = 0; i < bufferSize; i++) data[i] = Math.random()*2-1;
+  for (let i = 0; i < bufferSize; i++) data[i] = audioRand()*2-1;
   return buffer;
 }
 
@@ -3061,7 +3066,10 @@ async function exportWav(){
   const format = document.getElementById('audioFormatSelect').value;
   const settings = getCurrentSettings();
   const sampleRate = 44100;
-  const offlineCtx = new OfflineAudioContext(2, Math.ceil(sampleRate*(durSec+1)), sampleRate);
+  audioRand = mulberry32(((settings.seed >>> 0) ^ 0x9E3779B9) >>> 0);
+  let offlineCtx;
+  try {
+  offlineCtx = new OfflineAudioContext(2, Math.ceil(sampleRate*(durSec+1)), sampleRate);
   const oMasterGain = offlineCtx.createGain(); oMasterGain.gain.value = settings.masterVol;
   const oLimiter = createLimiter(offlineCtx);
   const oToneShaping = createMasterToneShaping(offlineCtx, false);
@@ -3088,6 +3096,9 @@ async function exportWav(){
     triggerConch(offlineCtx, oMasterGain, midiToFreq(exportState.rootMidi - 12), conchStart, 5, 0.22);
   }
 
+  } finally {
+    audioRand = Math.random; // graful offline e construit sincron; redarea live (și orice eroare) revine la Math.random
+  }
   const rendered = await offlineCtx.startRendering();
   const blob = format==='flac' ? encodeFlacFromBuffer(rendered) : encodeWavFromBuffer(rendered);
   const url = URL.createObjectURL(blob);
@@ -3196,6 +3207,7 @@ const I18N = {
     entrainHint:'Straturi audio auxiliare (binaurale, izocronice sau ton pur), asociate popular cu stări de relaxare, concentrare sau meditație. Benzile de mai jos corespund convențiilor EEG standard; eficacitatea subiectivă variază de la o persoană la alta.',
     modeLabel:'Mod', modePure:'Ton pur', modeBinaural:'Binaural', modeIso:'Izocronic',
     carrierLabel:'Frecvență purtătoare', beatLabel:'Frecvență bătaie', mixLabel:'Amestec',
+    solfNote:'Etichetele frecvențelor „Solfeggio” (eliberare, regenerare, armonie etc.) sunt atribuiri tradiționale/ezoterice, fără dovezi științifice că ar produce efectele indicate; ele rămân simple repere de înălțime a tonului, iar frecvențele „brainwave” (Delta…Gamma) sunt descrieri orientative.',
     disclaimer:'Notă: aceste tonuri sunt oferite exclusiv în scop relaxant și experiențial, nu ca tratament medical — dovezile științifice rămân limitate. Dacă suferiți de epilepsie, altă afecțiune neurologică sau sunteți însărcinată, cereți sfatul unui medic înainte de utilizare. Nu ascultați în timp ce conduceți. Opriți dacă simțiți disconfort. Efectul binaural necesită căști stereo.',
     playBtn:'Redă', pauseBtn:'Pauză', stopBtn:'Stop', masterVolLabel:'Volum',
     statusIdle:'Pregătit', statusPlaying:'Se redă', statusPaused:'Pauzat',
@@ -3283,6 +3295,7 @@ const I18N = {
     entrainHint:'Auxiliary audio layers (binaural, isochronic, or pure tone), popularly associated with relaxation, focus, or meditation. The bands below follow standard EEG conventions; subjective effectiveness varies by person.',
     modeLabel:'Mode', modePure:'Pure tone', modeBinaural:'Binaural', modeIso:'Isochronic',
     carrierLabel:'Carrier frequency', beatLabel:'Beat frequency', mixLabel:'Mix',
+    solfNote:'The “Solfeggio” frequency labels (release, restoration, harmony, etc.) are traditional/esoteric attributions with no scientific evidence that they produce the stated effects; treat them as plain pitch references. The brainwave names (Delta…Gamma) are rough descriptions only.',
     disclaimer:'Note: these tones are offered purely for relaxation and experiential purposes, not as medical treatment — scientific evidence remains limited. If you have epilepsy, another neurological condition, or are pregnant, consult a doctor before use. Do not listen while driving. Stop if you feel discomfort. The binaural effect requires stereo headphones.',
     playBtn:'Play', pauseBtn:'Pause', stopBtn:'Stop', masterVolLabel:'Volume',
     statusIdle:'Ready', statusPlaying:'Playing', statusPaused:'Paused',
@@ -3382,6 +3395,7 @@ const I18N = {
     carrierLabel:'Fréquence porteuse',
     beatLabel:'Fréquence de battement',
     mixLabel:'Mélange',
+    solfNote:'Les étiquettes des fréquences « Solfeggio » (libération, régénération, harmonie, etc.) sont des attributions traditionnelles/ésotériques, sans preuve scientifique des effets indiqués ; ce sont de simples repères de hauteur. Les noms des ondes cérébrales (Delta…Gamma) ne sont que des descriptions indicatives.',
     disclaimer:'Remarque : ces tonalités sont proposées uniquement à des fins de relaxation et d\'expérience, et non comme traitement médical — les preuves scientifiques restent limitées. Si vous souffrez d\'épilepsie, d\'une autre affection neurologique, ou si vous êtes enceinte, consultez un médecin avant utilisation. N\'écoutez pas en conduisant. Arrêtez si vous ressentez un inconfort. L\'effet binaural nécessite un casque stéréo.',
     playBtn:'Lecture',
     pauseBtn:'Pause',
@@ -3492,6 +3506,7 @@ const I18N = {
     carrierLabel:'Frequenza portante',
     beatLabel:'Frequenza di battimento',
     mixLabel:'Mix',
+    solfNote:'Le etichette delle frequenze «Solfeggio» (liberazione, rigenerazione, armonia, ecc.) sono attribuzioni tradizionali/esoteriche, senza prove scientifiche degli effetti indicati; sono semplici riferimenti di altezza. I nomi delle onde cerebrali (Delta…Gamma) sono solo descrizioni orientative.',
     disclaimer:'Nota: questi toni sono offerti esclusivamente a scopo rilassante ed esperienziale, non come trattamento medico — le prove scientifiche restano limitate. Se soffri di epilessia, un\'altra condizione neurologica, o sei incinta, consulta un medico prima dell\'uso. Non ascoltare mentre guidi. Interrompi se avverti disagio. L\'effetto binaurale richiede cuffie stereo.',
     playBtn:'Riproduci',
     pauseBtn:'Pausa',
@@ -3602,6 +3617,7 @@ const I18N = {
     carrierLabel:'Frecuencia portadora',
     beatLabel:'Frecuencia de batido',
     mixLabel:'Mezcla',
+    solfNote:'Las etiquetas de las frecuencias «Solfeggio» (liberación, regeneración, armonía, etc.) son atribuciones tradicionales/esotéricas, sin evidencia científica de los efectos indicados; son solo referencias de altura. Los nombres de las ondas cerebrales (Delta…Gamma) son descripciones orientativas.',
     disclaimer:'Nota: estos tonos se ofrecen exclusivamente con fines relajantes y experienciales, no como tratamiento médico — la evidencia científica sigue siendo limitada. Si tiene epilepsia, otra afección neurológica, o está embarazada, consulte a un médico antes de usarlo. No escuche mientras conduce. Deténgase si siente malestar. El efecto binaural requiere auriculares estéreo.',
     playBtn:'Reproducir',
     pauseBtn:'Pausa',
@@ -3712,6 +3728,7 @@ const I18N = {
     carrierLabel:'Frequência portadora',
     beatLabel:'Frequência de batimento',
     mixLabel:'Mistura',
+    solfNote:'Os rótulos das frequências «Solfeggio» (libertação, regeneração, harmonia etc.) são atribuições tradicionais/esotéricas, sem evidência científica dos efeitos indicados; são apenas referências de altura. Os nomes das ondas cerebrais (Delta…Gamma) são descrições orientativas.',
     disclaimer:'Nota: estes tons são oferecidos exclusivamente para fins relaxantes e experienciais, não como tratamento médico — as evidências científicas continuam limitadas. Se sofre de epilepsia, outra condição neurológica, ou está grávida, consulte um médico antes de usar. Não ouça enquanto conduz. Pare se sentir desconforto. O efeito binaural requer fones de ouvido estéreo.',
     playBtn:'Reproduzir',
     pauseBtn:'Pausa',
@@ -3822,6 +3839,7 @@ const I18N = {
     carrierLabel:'Trägerfrequenz',
     beatLabel:'Schwebungsfrequenz',
     mixLabel:'Mischung',
+    solfNote:'Die Bezeichnungen der „Solfeggio“-Frequenzen (Loslassen, Regeneration, Harmonie usw.) sind traditionelle/esoterische Zuschreibungen ohne wissenschaftlichen Beleg für die genannten Wirkungen; sie dienen nur als Tonhöhenreferenz. Die Namen der Gehirnwellen (Delta…Gamma) sind lediglich grobe Beschreibungen.',
     disclaimer:'Hinweis: Diese Töne dienen ausschließlich Entspannungs- und Erfahrungszwecken, nicht als medizinische Behandlung — die wissenschaftliche Evidenz bleibt begrenzt. Bei Epilepsie, einer anderen neurologischen Erkrankung oder Schwangerschaft vor der Nutzung ärztlichen Rat einholen. Nicht beim Autofahren hören. Bei Unwohlsein abbrechen. Der binaurale Effekt erfordert Stereo-Kopfhörer.',
     playBtn:'Wiedergabe',
     pauseBtn:'Pause',
