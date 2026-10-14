@@ -2,7 +2,7 @@
 
 Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de tonuri pentru relaxare („Relaxation waves").
 
-**Versiune:** 1.0.4 · **Ultima actualizare:** 12 octombrie 2026
+**Versiune:** 1.1.0 · **Ultima actualizare:** 14 octombrie 2026
 
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
@@ -24,6 +24,14 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 - Export audio WAV sau FLAC (1-20 min), export/import setări (JSON), copertă generativă (PNG/WebP/JPEG) legată de seed, export video WebM al vizualizatorului.
 - Interfață în 7 limbi: EN, RO, FR, IT, ES, PT, DE.
 
+## Funcții noi (v1.1.0)
+
+- **Sesiuni salvate**: se păstrează sub un nume genul, sămânța, tempoul, durata, temporizatorul și durata estompării (maximum 30; același nume, fără diferență de litere, suprascrie). Încărcare și ștergere din listă; stocate local și incluse în copia `.fff.json`. Date corupte în `localStorage` dau listă goală, fără erori.
+- **Cod QR / link**: sesiunea curentă devine un cod QR (și link cu `#…`) pe care îl poate citi altă instanță din imagine, text lipit sau link. Un link deschis **nu pornește sunetul** automat. Valorile din afara limitelor sunt limitate, genurile necunoscute respinse; genurile personalizate nu se partajează.
+- **Estompare configurabilă la oprirea automată** (15 s implicit, 1 min, 5 min, 10 min): volumul scade progresiv în ultimele secunde ale temporizatorului, verificat în timp real în teste.
+- **Kit**: Transparență și copie `.fff.json` (`core, label, bundle, qr`).
+- **Limbi și traduceri**: Textele noi sunt în cele 7 limbi ale aplicației (RO, EN, FR, IT, ES, PT, DE); aplicația nu are maghiară în selector, deci textele noi nu au variantă maghiară. Traducerile FR/IT/ES/PT/DE sunt automate și **neverificate de vorbitori nativi**; dialogul kitului are 8 limbi.
+
 ## Manual de utilizare
 
 1. Alege limba din butoanele EN / RO / FR / IT / ES / PT / DE.
@@ -37,6 +45,8 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 9. „Generate cover" creează coperta, apoi „Export PNG" (sau WebP/JPEG). „Record video" înregistrează în timp real (un clip de 20 min durează 20 min).
 
 ## Confidențialitate și rețea
+
+- Kitul „fără frontiere” (`fff-kit`, modulele `core, label, bundle, qr`) este lipit în `index.html`: nu face cereri de rețea. Dialogul „Transparență” (clic pe versiune) arată rețeaua declarată (0 cereri externe), cheile din `localStorage`, SHA-256 al fișierului și oferă copie de siguranță `.fff.json` (opțional criptată cu parolă, AES-GCM). Codurile QR se generează și se citesc local; citirea se face doar dintr-o imagine aleasă de utilizator, fără cameră.
 
 - Aplicația nu folosește `localStorage`, `sessionStorage` sau IndexedDB: nimic nu este reținut între sesiuni; salvezi doar prin fișierele exportate.
 - Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe); pagina are o politică CSP restrictivă (`default-src 'none'`, script permis doar prin hash `sha256`, fără `'unsafe-inline'` la scripturi; stil inline, imagini și audio doar `data:`/`blob:`). Conține doar link-uri, deschise la click, către trom.tf, Patreon și Buy Me a Coffee.
@@ -66,6 +76,8 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 7 UI languages. It stores nothing and makes no network requests.
 
 ## Istoric / Changelog
+
+- 1.1.0 — 2026-10-14: sesiuni salvate, QR/link pentru sesiune, estompare configurabilă, kit „fără frontiere”. Teste: `tests/fff-r8.test.mjs`.
 - **1.0.4 — 2026-10-12:** versiunea și data ultimei actualizări sunt afișate în aplicație
 - **1.0.3 — 11 octombrie 2026:** temă deschisă automată (`prefers-color-scheme: light`; tema întunecată rămâne implicită) și foaie de stil pentru tipărire; verificat în Chromium cu schemă luminoasă și întunecată (axe 0 violări la 1280×800 și 360×740) și cu redare efectivă (după Play starea devine „Playing”, contextul audio pornește la gestul utilizatorului).
 - **1.0.2 — 11 octombrie 2026:** oprire automată (somn) cu estompare de 15 s, inclusă în setările exportate/importate (valorile necunoscute sunt ignorate la import); etichetele frecvențelor Solfeggio sunt acum afișate în limba interfeței (înainte apăreau în engleză în FR/IT/ES/PT/DE); CSP cu hash `sha256` pentru script (fără `'unsafe-inline'` la `script-src`); textele noi sunt în cele 7 limbi; testat cu CSP activ (0 erori) și axe-core 0 violări la 1280×800 și 360×740.
