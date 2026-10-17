@@ -49,7 +49,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 - Kitul „fără frontiere” (`fff-kit`, modulele `core, label, bundle, qr`) este lipit în `index.html`: nu face cereri de rețea. Dialogul „Transparență” (clic pe versiune) arată rețeaua declarată (0 cereri externe), cheile din `localStorage`, SHA-256 al fișierului și oferă copie de siguranță `.fff.json` (opțional criptată cu parolă, AES-GCM). Codurile QR se generează și se citesc local; citirea se face doar dintr-o imagine aleasă de utilizator, fără cameră.
 
 - Aplicația nu folosește `localStorage`, `sessionStorage` sau IndexedDB: nimic nu este reținut între sesiuni; salvezi doar prin fișierele exportate.
-- Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe); pagina are o politică CSP restrictivă (`default-src 'none'`, script permis doar prin hash `sha256`, fără `'unsafe-inline'` la scripturi; stil inline, imagini și audio doar `data:`/`blob:`). Conține doar link-uri, deschise la click, către trom.tf, Patreon și Buy Me a Coffee.
+- Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe); pagina are o politică CSP restrictivă (`default-src 'none'`, script permis doar prin hash `sha256`, fără `'unsafe-inline'` la scripturi; stil inline, imagini și audio doar `data:`/`blob:`). Conține doar link-uri, deschise la click, către trom.tf, Buy Me a Coffee.
 
 ## Avertisment
 
