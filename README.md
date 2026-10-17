@@ -61,7 +61,7 @@ Descarcă `index.html` și deschide-l în browser; funcționează complet fără
 
 ## Licență
 
-CC0 1.0 Universal (domeniu public) — vezi fișierul LICENSE
+MIT — vezi fișierul LICENSE
 
 ## Audit
 
