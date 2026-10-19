@@ -10,9 +10,11 @@
     "serviceWorker",
     "localStorage"
   ],
-  "storageKeys": [],
-  "sizeBytes": 507261,
-  "sha256": "0fd8ea16ca9bbd9e5ab56ea45a20c433aac0e3248a8839352e40c53d3a1cf258",
+  "storageKeys": [
+    "bm_sessions"
+  ],
+  "sizeBytes": 507910,
+  "sha256": "6c5946cd585b40df1e897a38a14a14930b5fce4b7511da5468d514edd66cdd8e",
   "csp": {
     "present": true,
     "directives": {
@@ -53,7 +55,7 @@
     ]
   },
   "kit": {
-    "version": "1.0.0",
+    "version": "1.1.1",
     "modules": [
       "core",
       "label",
