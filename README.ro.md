@@ -2,7 +2,9 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.1.0 · **Ultima actualizare:** 2026-10-14
+**Versiune:** 1.2.0 · **Ultima actualizare:** 2026-10-19
+
+Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de tonuri pentru relaxare („Relaxation waves").
 
@@ -24,7 +26,7 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 - **Oprire automată (somn):** după 15, 30, 45, 60 sau 90 de minute de la Play, volumul coboară în 15 secunde și redarea se oprește (numărătoarea continuă și în pauză; Stop o anulează); valoarea intră în exportul/importul setărilor JSON (`sleepMin`).
 - Redare cu Play/Stop, volum și vizualizator fractal pe ecran complet (2D/3D).
 - Export audio WAV sau FLAC (1-20 min), export/import setări (JSON), copertă generativă (PNG/WebP/JPEG) legată de seed, export video WebM al vizualizatorului.
-- Interfață în 7 limbi: EN, RO, FR, IT, ES, PT, DE.
+- Interfață în 8 limbi: EN, RO, FR, IT, ES, PT, DE, HU.
 
 ## Funcții noi (v1.1.0)
 
@@ -32,11 +34,11 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 - **Cod QR / link**: sesiunea curentă devine un cod QR (și link cu `#…`) pe care îl poate citi altă instanță din imagine, text lipit sau link. Un link deschis **nu pornește sunetul** automat. Valorile din afara limitelor sunt limitate, genurile necunoscute respinse; genurile personalizate nu se partajează.
 - **Estompare configurabilă la oprirea automată** (15 s implicit, 1 min, 5 min, 10 min): volumul scade progresiv în ultimele secunde ale temporizatorului, verificat în timp real în teste.
 - **Kit**: Transparență și copie `.fff.json` (`core, label, bundle, qr`).
-- **Limbi și traduceri**: Textele noi sunt în cele 7 limbi ale aplicației (RO, EN, FR, IT, ES, PT, DE); aplicația nu are maghiară în selector, deci textele noi nu au variantă maghiară. Traducerile FR/IT/ES/PT/DE sunt automate și **neverificate de vorbitori nativi**; dialogul kitului are 8 limbi.
+- **Limbi și traduceri**: Textele noi sunt în cele 8 limbi ale aplicației (RO, EN, FR, IT, ES, PT, DE, HU). Traducerile FR/IT/ES/PT/DE/HU sunt automate și **neverificate de vorbitori nativi**; dialogul kitului are 8 limbi.
 
 ## Manual de utilizare
 
-1. Alege limba din butoanele EN / RO / FR / IT / ES / PT / DE.
+1. Alege limba din butoanele EN / RO / FR / IT / ES / PT / DE / HU.
 2. Alege un gen (sau „Create custom genre", configurezi și apeși „Save").
 3. Setează Seed (sau 🎲 Randomize), Tempo și Duration.
 4. Opțional: activează „Relaxation waves", „Human voice" sau gongul/scoica.
@@ -75,7 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
 ## English summary
 
-Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 7 UI languages. It stores nothing and makes no network requests.
+Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 8 UI languages. It stores nothing and makes no network requests.
 
 ## Istoric / Changelog
 

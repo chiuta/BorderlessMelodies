@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.1.0 · **Zuletzt aktualisiert:** 2026-10-14
+**Version:** 1.2.0 · **Zuletzt aktualisiert:** 2026-10-19
+
+Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Generator originaler Musik, die algorithmisch im Browser erzeugt wird, mit optionalen Tonschichten zur Entspannung („Relaxation waves“).
 
@@ -24,7 +26,7 @@ Borderless Melodies („Melodien ohne Grenzen“) ist eine einzige HTML-Datei, d
 - **Automatische Abschaltung (Schlaf):** Nach 15, 30, 45, 60 oder 90 Minuten ab Play sinkt die Lautstärke innerhalb von 15 Sekunden, und die Wiedergabe stoppt (der Countdown läuft auch in der Pause weiter; Stop bricht ihn ab); der Wert ist im JSON-Export/-Import der Einstellungen enthalten (`sleepMin`).
 - Wiedergabe mit Play/Stop, Lautstärke und Vollbild-Fraktalvisualisierung (2D/3D).
 - Audio-Export als WAV oder FLAC (1–20 Min.), Export/Import der Einstellungen (JSON), generatives Cover (PNG/WebP/JPEG), an den Seed gebunden, WebM-Videoexport der Visualisierung.
-- Oberfläche in 7 Sprachen: EN, RO, FR, IT, ES, PT, DE.
+- Oberfläche in 8 Sprachen: EN, RO, FR, IT, ES, PT, DE, HU.
 
 ## Neue Funktionen (v1.1.0)
 
@@ -32,11 +34,11 @@ Borderless Melodies („Melodien ohne Grenzen“) ist eine einzige HTML-Datei, d
 - **QR-Code / Link**: Die aktuelle Sitzung wird zu einem QR-Code (und einem Link mit `#…`), den eine andere Instanz aus einem Bild, eingefügtem Text oder einem Link lesen kann. Ein geöffneter Link **startet den Ton nicht** automatisch. Werte außerhalb der Grenzen werden begrenzt, unbekannte Genres abgelehnt; eigene Genres werden nicht geteilt.
 - **Konfigurierbare Ausblendung bei der automatischen Abschaltung** (standardmäßig 15 s, 1 Min., 5 Min., 10 Min.): Die Lautstärke nimmt in den letzten Sekunden des Timers schrittweise ab, in den Tests in Echtzeit überprüft.
 - **Kit**: Transparenz und `.fff.json`-Kopie (`core, label, bundle, qr`).
-- **Sprachen und Übersetzungen**: Die neuen Texte liegen in den 7 Sprachen der Anwendung vor (RO, EN, FR, IT, ES, PT, DE); die Anwendung hat kein Ungarisch in der Auswahl, daher haben die neuen Texte keine ungarische Fassung. Die Übersetzungen FR/IT/ES/PT/DE sind automatisch und **nicht von Muttersprachlern überprüft**; der Kit-Dialog hat 8 Sprachen.
+- **Sprachen und Übersetzungen**: Die neuen Texte liegen in den 8 Sprachen der Anwendung vor (RO, EN, FR, IT, ES, PT, DE, HU). Die Übersetzungen FR/IT/ES/PT/DE/HU sind automatisch und **nicht von Muttersprachlern überprüft**; der Kit-Dialog hat 8 Sprachen.
 
 ## Bedienungsanleitung
 
-1. Wähle die Sprache mit den Schaltflächen EN / RO / FR / IT / ES / PT / DE.
+1. Wähle die Sprache mit den Schaltflächen EN / RO / FR / IT / ES / PT / DE / HU.
 2. Wähle ein Genre (oder „Create custom genre“, konfiguriere es und drücke „Save“).
 3. Stelle Seed (oder 🎲 Randomize), Tempo und Duration ein.
 4. Optional: Aktiviere „Relaxation waves“, „Human voice“ oder den Gong/das Muschelhorn.

@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Español** · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versión:** 1.1.0 · **Última actualización:** 2026-10-14
+**Versión:** 1.2.0 · **Última actualización:** 2026-10-19
+
+Idiomas de la interfaz: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Generador de música original, creada algorítmicamente en el navegador, con capas opcionales de tonos para la relajación («Relaxation waves»).
 
@@ -24,7 +26,7 @@ Borderless Melodies («Melodías sin fronteras») es un único archivo HTML que 
 - **Parada automática (sueño):** a los 15, 30, 45, 60 o 90 minutos de pulsar Play, el volumen baja en 15 segundos y la reproducción se detiene (la cuenta atrás continúa en pausa; Stop la cancela); el valor se incluye en la exportación/importación de ajustes JSON (`sleepMin`).
 - Reproducción con Play/Stop, volumen y visualizador fractal a pantalla completa (2D/3D).
 - Exportación de audio WAV o FLAC (1-20 min), exportación/importación de ajustes (JSON), portada generativa (PNG/WebP/JPEG) ligada a la semilla, exportación de vídeo WebM del visualizador.
-- Interfaz en 7 idiomas: EN, RO, FR, IT, ES, PT, DE.
+- Interfaz en 8 idiomas: EN, RO, FR, IT, ES, PT, DE, HU.
 
 ## Nuevas funciones (v1.1.0)
 
@@ -32,11 +34,11 @@ Borderless Melodies («Melodías sin fronteras») es un único archivo HTML que 
 - **Código QR / enlace**: la sesión actual se convierte en un código QR (y un enlace con `#…`) que otra instancia puede leer desde una imagen, texto pegado o un enlace. Un enlace abierto **no inicia el sonido** automáticamente. Los valores fuera de rango se limitan, los géneros desconocidos se rechazan; los géneros personalizados no se comparten.
 - **Fundido configurable en la parada automática** (15 s por defecto, 1 min, 5 min, 10 min): el volumen disminuye progresivamente en los últimos segundos del temporizador, verificado en tiempo real en las pruebas.
 - **Kit**: Transparencia y copia `.fff.json` (`core, label, bundle, qr`).
-- **Idiomas y traducciones**: los textos nuevos están en los 7 idiomas de la aplicación (RO, EN, FR, IT, ES, PT, DE); la aplicación no tiene húngaro en el selector, por lo que los textos nuevos no tienen versión en húngaro. Las traducciones FR/IT/ES/PT/DE son automáticas y **no han sido verificadas por hablantes nativos**; el diálogo del kit tiene 8 idiomas.
+- **Idiomas y traducciones**: los textos nuevos están en los 8 idiomas de la aplicación (RO, EN, FR, IT, ES, PT, DE, HU). Las traducciones FR/IT/ES/PT/DE/HU son automáticas y **no han sido verificadas por hablantes nativos**; el diálogo del kit tiene 8 idiomas.
 
 ## Manual de uso
 
-1. Elige el idioma con los botones EN / RO / FR / IT / ES / PT / DE.
+1. Elige el idioma con los botones EN / RO / FR / IT / ES / PT / DE / HU.
 2. Elige un género (o «Create custom genre», configúralo y pulsa «Save»).
 3. Ajusta Seed (o 🎲 Randomize), Tempo y Duration.
 4. Opcional: activa «Relaxation waves», «Human voice» o el gong/la caracola.

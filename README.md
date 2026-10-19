@@ -2,7 +2,9 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.1.0 · **Last updated:** 2026-10-14
+**Version:** 1.2.0 · **Last updated:** 2026-10-19
+
+Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 A generator of original music, created algorithmically in the browser, with optional tone layers for relaxation ("Relaxation waves").
 
@@ -24,7 +26,7 @@ Borderless Melodies is a single HTML file that synthesises music in real time th
 - **Automatic stop (sleep):** after 15, 30, 45, 60 or 90 minutes from Play, the volume goes down over 15 seconds and playback stops (the countdown continues while paused; Stop cancels it); the value is included in the JSON settings export/import (`sleepMin`).
 - Playback with Play/Stop, volume and a full-screen fractal visualiser (2D/3D).
 - WAV or FLAC audio export (1-20 min), settings export/import (JSON), a generative cover (PNG/WebP/JPEG) tied to the seed, WebM video export of the visualiser.
-- Interface in 7 languages: EN, RO, FR, IT, ES, PT, DE.
+- Interface in 8 languages: EN, RO, FR, IT, ES, PT, DE, HU.
 
 ## New features (v1.1.0)
 
@@ -32,11 +34,11 @@ Borderless Melodies is a single HTML file that synthesises music in real time th
 - **QR code / link**: the current session becomes a QR code (and a link with `#…`) that another instance can read from an image, pasted text or a link. An opened link **does not start the sound** automatically. Out-of-range values are clamped, unknown genres are rejected; custom genres are not shared.
 - **Configurable fade at automatic stop** (15 s by default, 1 min, 5 min, 10 min): the volume decreases progressively in the last seconds of the timer, verified in real time in the tests.
 - **Kit**: Transparency and `.fff.json` copy (`core, label, bundle, qr`).
-- **Languages and translations**: The new texts are in the application's 7 languages (RO, EN, FR, IT, ES, PT, DE); the application has no Hungarian in its selector, so the new texts have no Hungarian version. The FR/IT/ES/PT/DE translations are automatic and **not verified by native speakers**; the kit dialog has 8 languages.
+- **Languages and translations**: The new texts are in the application's 8 languages (RO, EN, FR, IT, ES, PT, DE, HU). The FR/IT/ES/PT/DE/HU translations are automatic and **not verified by native speakers**; the kit dialog has 8 languages.
 
 ## User guide
 
-1. Choose the language with the EN / RO / FR / IT / ES / PT / DE buttons.
+1. Choose the language with the EN / RO / FR / IT / ES / PT / DE / HU buttons.
 2. Choose a genre (or "Create custom genre", configure it and press "Save").
 3. Set Seed (or 🎲 Randomize), Tempo and Duration.
 4. Optionally: enable "Relaxation waves", "Human voice" or the gong/conch.

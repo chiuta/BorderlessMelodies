@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.1.0 · **Utolsó frissítés:** 2026-10-14
+**Verzió:** 1.2.0 · **Utolsó frissítés:** 2026-10-19
+
+A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
 Eredeti zenét algoritmikusan, a böngészőben létrehozó generátor, opcionális hangrétegekkel a relaxációhoz („Relaxation waves”).
 
@@ -24,7 +26,7 @@ A Borderless Melodies („Határtalan dallamok”) egyetlen HTML-fájl, amely va
 - **Automatikus leállítás (alvás):** a Play megnyomásától számított 15, 30, 45, 60 vagy 90 perc elteltével a hangerő 15 másodperc alatt lecsökken, és a lejátszás leáll (a visszaszámlálás szüneteltetés közben is folytatódik; a Stop megszakítja); az érték része a beállítások JSON-exportjának/-importjának (`sleepMin`).
 - Lejátszás Play/Stop gombbal, hangerővel és teljes képernyős fraktálvizualizálóval (2D/3D).
 - WAV vagy FLAC hangexport (1–20 perc), a beállítások exportja/importja (JSON), a seedhez kötött generatív borító (PNG/WebP/JPEG), a vizualizáló WebM-videóexportja.
-- 7 nyelvű felület: EN, RO, FR, IT, ES, PT, DE.
+- 8 nyelvű felület: EN, RO, FR, IT, ES, PT, DE, HU.
 
 ## Új funkciók (v1.1.0)
 
@@ -32,11 +34,11 @@ A Borderless Melodies („Határtalan dallamok”) egyetlen HTML-fájl, amely va
 - **QR-kód / hivatkozás**: az aktuális munkamenet QR-kóddá (és `#…` részt tartalmazó hivatkozássá) alakul, amelyet egy másik példány képből, beillesztett szövegből vagy hivatkozásból be tud olvasni. A megnyitott hivatkozás **nem indítja el automatikusan a hangot**. A határokon kívüli értékek korlátozásra kerülnek, az ismeretlen műfajok elutasításra; az egyéni műfajok nem osztódnak meg.
 - **Beállítható elhalkulás az automatikus leállításkor** (alapértelmezés szerint 15 mp, 1 perc, 5 perc, 10 perc): a hangerő fokozatosan csökken az időzítő utolsó másodperceiben, a tesztekben valós időben ellenőrizve.
 - **Kit**: Átláthatóság és `.fff.json` másolat (`core, label, bundle, qr`).
-- **Nyelvek és fordítások**: az új szövegek az alkalmazás 7 nyelvén érhetők el (RO, EN, FR, IT, ES, PT, DE); az alkalmazás nyelvválasztójában nincs magyar, ezért az új szövegeknek nincs magyar változata. Az FR/IT/ES/PT/DE fordítások automatikusak, és **anyanyelvi beszélők nem ellenőrizték őket**; a kit párbeszédablaka 8 nyelvű.
+- **Nyelvek és fordítások**: az új szövegek az alkalmazás 8 nyelvén érhetők el (RO, EN, FR, IT, ES, PT, DE, HU). Az FR/IT/ES/PT/DE/HU fordítások automatikusak, és **anyanyelvi beszélők nem ellenőrizték őket**; a kit párbeszédablaka 8 nyelvű.
 
 ## Használati útmutató
 
-1. Válaszd ki a nyelvet az EN / RO / FR / IT / ES / PT / DE gombokkal.
+1. Válaszd ki a nyelvet az EN / RO / FR / IT / ES / PT / DE / HU gombokkal.
 2. Válassz műfajt (vagy „Create custom genre”, állítsd be, és nyomd meg a „Save” gombot).
 3. Állítsd be a Seedet (vagy 🎲 Randomize), a Tempót és a Duration értéket.
 4. Opcionálisan: kapcsold be a „Relaxation waves”, a „Human voice” vagy a gong/kagylókürt funkciót.
