@@ -75,9 +75,9 @@ MIT — vezi fișierul LICENSE
 
 Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
-## English summary
+## Rezumat
 
-Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 8 UI languages. It stores nothing and makes no network requests.
+Borderless Melodies este un generator într-un singur fișier HTML de muzică originală sintetizată procedural în browser (Web Audio), cu genuri personalizate, straturi binaurale/izocronice opționale, o voce sintetizată fără cuvinte, gong și cochilie, un vizualizator fractal și export în WAV/FLAC, copertă și video WebM. 8 limbi de interfață. Nu stochează nimic și nu face cereri de rețea.
 
 ## Istoric / Changelog
 
