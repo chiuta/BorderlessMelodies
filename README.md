@@ -1,87 +1,85 @@
 # Borderless Melodies
 
-Generator de muzică originală, creată algoritmic în browser, cu straturi opționale de tonuri pentru relaxare („Relaxation waves").
+**English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.1.0 · **Ultima actualizare:** 14 octombrie 2026
+**Version:** 1.1.0 · **Last updated:** 2026-10-14
+
+A generator of original music, created algorithmically in the browser, with optional tone layers for relaxation ("Relaxation waves").
 
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
-![Captura de ecran](screenshot.png)
+![Screenshot](screenshot.png)
 
-## Ce este
+## What it is
 
-Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic care sintetizează muzică în timp real prin Web Audio: fără mostre sau înregistrări, doar sinteză procedurală. Alegi un gen, un seed și o durată, iar aplicația compune melodia, acompaniamentul și basul, pe care le poți asculta sau exporta.
+Borderless Melodies is a single HTML file that synthesises music in real time through Web Audio: no samples or recordings, only procedural synthesis. You choose a genre, a seed and a duration, and the application composes the melody, the accompaniment and the bass, which you can listen to or export.
 
-## Funcții
+## Features
 
-- Alegere de gen dintr-o listă și editor de genuri proprii („Create custom genre": scară, progresie, metrică 4/4, 3/4, 5/4, 7/4, tempo, melodie lead, pad/acorduri, bas, textură, filtru, reverb, opțiuni avansate); genurile se salvează în „My Genres" și se pot exporta/importa (JSON).
-- Compoziție: Seed (cu „Randomize"), Tempo, „Variety & arc", Duration (2, 5, 10, 20 min sau buclă continuă), „Regenerate".
-- „Relaxation waves": strat auxiliar în modurile Pure tone, Binaural sau Isochronic, cu frecvență purtătoare, frecvență de bătaie și mixaj. Aplicația precizează că sunt oferite doar pentru relaxare, nu ca tratament medical, și conține avertismente (epilepsie, sarcină, condus).
-- „Human voice": strat vocal fără cuvinte, sintetizat prin formanți, cu mai multe caractere (copil, adolescent, adult, senior, robotic melodios).
-- „Gong & conch": gong și scoică sintetizate, apelabile manual sau automat la început/sfârșit.
-- **Oprire automată (somn):** după 15, 30, 45, 60 sau 90 de minute de la Play, volumul coboară în 15 secunde și redarea se oprește (numărătoarea continuă și în pauză; Stop o anulează); valoarea intră în exportul/importul setărilor JSON (`sleepMin`).
-- Redare cu Play/Stop, volum și vizualizator fractal pe ecran complet (2D/3D).
-- Export audio WAV sau FLAC (1-20 min), export/import setări (JSON), copertă generativă (PNG/WebP/JPEG) legată de seed, export video WebM al vizualizatorului.
-- Interfață în 7 limbi: EN, RO, FR, IT, ES, PT, DE.
+- Choice of genre from a list and an editor for your own genres ("Create custom genre": scale, progression, metre 4/4, 3/4, 5/4, 7/4, tempo, lead melody, pad/chords, bass, texture, filter, reverb, advanced options); genres are saved in "My Genres" and can be exported/imported (JSON).
+- Composition: Seed (with "Randomize"), Tempo, "Variety & arc", Duration (2, 5, 10, 20 min or continuous loop), "Regenerate".
+- "Relaxation waves": an auxiliary layer in Pure tone, Binaural or Isochronic modes, with carrier frequency, beat frequency and mix. The application states that they are offered only for relaxation, not as medical treatment, and contains warnings (epilepsy, pregnancy, driving).
+- "Human voice": a wordless vocal layer, synthesised through formants, with several characters (child, teenager, adult, senior, melodious robotic).
+- "Gong & conch": a synthesised gong and conch, which can be triggered manually or automatically at the start/end.
+- **Automatic stop (sleep):** after 15, 30, 45, 60 or 90 minutes from Play, the volume goes down over 15 seconds and playback stops (the countdown continues while paused; Stop cancels it); the value is included in the JSON settings export/import (`sleepMin`).
+- Playback with Play/Stop, volume and a full-screen fractal visualiser (2D/3D).
+- WAV or FLAC audio export (1-20 min), settings export/import (JSON), a generative cover (PNG/WebP/JPEG) tied to the seed, WebM video export of the visualiser.
+- Interface in 7 languages: EN, RO, FR, IT, ES, PT, DE.
 
-## Funcții noi (v1.1.0)
+## New features (v1.1.0)
 
-- **Sesiuni salvate**: se păstrează sub un nume genul, sămânța, tempoul, durata, temporizatorul și durata estompării (maximum 30; același nume, fără diferență de litere, suprascrie). Încărcare și ștergere din listă; stocate local și incluse în copia `.fff.json`. Date corupte în `localStorage` dau listă goală, fără erori.
-- **Cod QR / link**: sesiunea curentă devine un cod QR (și link cu `#…`) pe care îl poate citi altă instanță din imagine, text lipit sau link. Un link deschis **nu pornește sunetul** automat. Valorile din afara limitelor sunt limitate, genurile necunoscute respinse; genurile personalizate nu se partajează.
-- **Estompare configurabilă la oprirea automată** (15 s implicit, 1 min, 5 min, 10 min): volumul scade progresiv în ultimele secunde ale temporizatorului, verificat în timp real în teste.
-- **Kit**: Transparență și copie `.fff.json` (`core, label, bundle, qr`).
-- **Limbi și traduceri**: Textele noi sunt în cele 7 limbi ale aplicației (RO, EN, FR, IT, ES, PT, DE); aplicația nu are maghiară în selector, deci textele noi nu au variantă maghiară. Traducerile FR/IT/ES/PT/DE sunt automate și **neverificate de vorbitori nativi**; dialogul kitului are 8 limbi.
+- **Saved sessions**: the genre, seed, tempo, duration, timer and fade duration are kept under a name (maximum 30; the same name, case-insensitively, overwrites). Load and delete from the list; stored locally and included in the `.fff.json` copy. Corrupted data in `localStorage` yields an empty list, with no errors.
+- **QR code / link**: the current session becomes a QR code (and a link with `#…`) that another instance can read from an image, pasted text or a link. An opened link **does not start the sound** automatically. Out-of-range values are clamped, unknown genres are rejected; custom genres are not shared.
+- **Configurable fade at automatic stop** (15 s by default, 1 min, 5 min, 10 min): the volume decreases progressively in the last seconds of the timer, verified in real time in the tests.
+- **Kit**: Transparency and `.fff.json` copy (`core, label, bundle, qr`).
+- **Languages and translations**: The new texts are in the application's 7 languages (RO, EN, FR, IT, ES, PT, DE); the application has no Hungarian in its selector, so the new texts have no Hungarian version. The FR/IT/ES/PT/DE translations are automatic and **not verified by native speakers**; the kit dialog has 8 languages.
 
-## Manual de utilizare
+## User guide
 
-1. Alege limba din butoanele EN / RO / FR / IT / ES / PT / DE.
-2. Alege un gen (sau „Create custom genre", configurezi și apeși „Save").
-3. Setează Seed (sau 🎲 Randomize), Tempo și Duration.
-4. Opțional: activează „Relaxation waves", „Human voice" sau gongul/scoica.
-5. Apasă ▶ Play; Space pornește/oprește redarea (când focusul nu e pe un câmp sau buton).
-6. În vizualizatorul fractal: `+` / `=` apropie, `-` / `_` depărtează, `0` resetează, Esc închide.
-7. La „Export" alege durata și formatul (WAV sau FLAC) și apasă „Export audio".
-8. Pentru a păstra configurația: „Export settings (JSON)" și, ulterior, „Import settings"; la fel „Export my genres" / „Import genres".
-9. „Generate cover" creează coperta, apoi „Export PNG" (sau WebP/JPEG). „Record video" înregistrează în timp real (un clip de 20 min durează 20 min).
+1. Choose the language with the EN / RO / FR / IT / ES / PT / DE buttons.
+2. Choose a genre (or "Create custom genre", configure it and press "Save").
+3. Set Seed (or 🎲 Randomize), Tempo and Duration.
+4. Optionally: enable "Relaxation waves", "Human voice" or the gong/conch.
+5. Press ▶ Play; Space starts/stops playback (when the focus is not on a field or button).
+6. In the fractal visualiser: `+` / `=` zooms in, `-` / `_` zooms out, `0` resets, Esc closes.
+7. Under "Export" choose the duration and the format (WAV or FLAC) and press "Export audio".
+8. To keep the configuration: "Export settings (JSON)" and, later, "Import settings"; likewise "Export my genres" / "Import genres".
+9. "Generate cover" creates the cover, then "Export PNG" (or WebP/JPEG). "Record video" records in real time (a 20-minute clip takes 20 minutes).
 
-## Confidențialitate și rețea
+## Privacy and network
 
-- Kitul „fără frontiere” (`fff-kit`, modulele `core, label, bundle, qr`) este lipit în `index.html`: nu face cereri de rețea. Dialogul „Transparență” (clic pe versiune) arată rețeaua declarată (0 cereri externe), cheile din `localStorage`, SHA-256 al fișierului și oferă copie de siguranță `.fff.json` (opțional criptată cu parolă, AES-GCM). Codurile QR se generează și se citesc local; citirea se face doar dintr-o imagine aleasă de utilizator, fără cameră.
+- The "borderless" kit (`fff-kit`, modules `core, label, bundle, qr`) is pasted into `index.html`: it makes no network requests. The "Transparency" dialog (click on the version) shows the declared network (0 external requests), the `localStorage` keys, the SHA-256 of the file and offers a `.fff.json` backup copy (optionally encrypted with a password, AES-GCM). QR codes are generated and read locally; reading is done only from an image chosen by the user, without a camera.
 
-- Aplicația nu folosește `localStorage`, `sessionStorage` sau IndexedDB: nimic nu este reținut între sesiuni; salvezi doar prin fișierele exportate.
-- Nu efectuează cereri de rețea (nu are `fetch`, CDN-uri sau scripturi externe); pagina are o politică CSP restrictivă (`default-src 'none'`, script permis doar prin hash `sha256`, fără `'unsafe-inline'` la scripturi; stil inline, imagini și audio doar `data:`/`blob:`). Conține doar link-uri, deschise la click, către trom.tf, Buy Me a Coffee.
+- The application does not use `localStorage`, `sessionStorage` or IndexedDB: nothing is retained between sessions; you save only through the exported files.
+- It makes no network requests (it has no `fetch`, CDNs or external scripts); the page has a restrictive CSP policy (`default-src 'none'`, script allowed only through a `sha256` hash, without `'unsafe-inline'` for scripts; inline style, images and audio only `data:`/`blob:`). It contains only links, opened on click, to trom.tf, Buy Me a Coffee.
 
-## Avertisment
+## Warning
 
-Conținut informativ/experiențial. Stratul „Relaxation waves" (tonuri pure, binaurale, izocronice) este oferit doar pentru relaxare, nu este tratament medical și nu înlocuiește sfatul medical; dovezile științifice privind efectele ritmurilor binaurale/izocronice sunt limitate. Nu este recomandat în caz de epilepsie, altă afecțiune neurologică sau sarcină fără acordul medicului; nu asculta în timpul condusului; oprește dacă simți disconfort; folosește volum redus. Avertismentul apare în aplicație (panoul „Relaxation waves") și în subsolul paginii.
+Informational/experiential content. The "Relaxation waves" layer (pure, binaural, isochronic tones) is offered only for relaxation, is not medical treatment and does not replace medical advice; the scientific evidence on the effects of binaural/isochronic rhythms is limited. Not recommended in case of epilepsy, another neurological condition or pregnancy without a doctor's approval; do not listen while driving; stop if you feel discomfort; use a low volume. The warning appears in the application (the "Relaxation waves" panel) and in the page footer.
 
-## Rulare locală / offline
+## Running locally / offline
 
-Descarcă `index.html` și deschide-l în browser; funcționează complet fără internet.
+Download `index.html` and open it in the browser; it works completely without internet.
 
-## Licență
+## Licence
 
-MIT — vezi fișierul LICENSE
+MIT — see the LICENSE file
 
 ## Audit
 
-2026-10-10: verificat că în cod nu există `fetch`, XHR, WebSocket sau resurse externe (0 cereri de rețea în browser) și că nu se folosește stocare locală. Pagina nu are politică CSP (meta). Corectate: nume accesibile pentru comutatoare/selectoare, contrast, notă de avertisment în subsol.
+2026-10-10: verified that the code contains no `fetch`, XHR, WebSocket or external resources (0 network requests in the browser) and that no local storage is used. The page has no CSP policy (meta). Fixed: accessible names for toggles/selectors, contrast, a warning note in the footer.
 
-## Autor
+## Author
 
 Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
-## English summary
+## History / Changelog
 
-Borderless Melodies is a single-file HTML generator of original music synthesised procedurally in the browser (Web Audio), with custom genres, optional binaural/isochronic layers, a wordless synthesised voice, gong and conch, a fractal visualizer, and export to WAV/FLAC, cover art and WebM video. 7 UI languages. It stores nothing and makes no network requests.
+- 1.1.0 — 2026-10-14: saved sessions, QR/link for the session, configurable fade, "borderless" kit. Tests: `tests/fff-r8.test.mjs`.
+- **1.0.4 — 2026-10-12:** the version and the last-updated date are shown in the application
+- **1.0.3 — 11 October 2026:** automatic light theme (`prefers-color-scheme: light`; the dark theme remains the default) and a print style sheet; verified in Chromium with light and dark schemes (axe 0 violations at 1280×800 and 360×740) and with actual playback (after Play the state becomes "Playing", the audio context starts on the user gesture).
+- **1.0.2 — 11 October 2026:** automatic stop (sleep) with a 15 s fade, included in the exported/imported settings (unknown values are ignored on import); the Solfeggio frequency labels are now shown in the interface language (previously they appeared in English in FR/IT/ES/PT/DE); CSP with a `sha256` hash for the script (without `'unsafe-inline'` in `script-src`); the new texts are in the 7 languages; tested with CSP active (0 errors) and axe-core 0 violations at 1280×800 and 360×740.
 
-## Istoric / Changelog
-
-- 1.1.0 — 2026-10-14: sesiuni salvate, QR/link pentru sesiune, estompare configurabilă, kit „fără frontiere”. Teste: `tests/fff-r8.test.mjs`.
-- **1.0.4 — 2026-10-12:** versiunea și data ultimei actualizări sunt afișate în aplicație
-- **1.0.3 — 11 octombrie 2026:** temă deschisă automată (`prefers-color-scheme: light`; tema întunecată rămâne implicită) și foaie de stil pentru tipărire; verificat în Chromium cu schemă luminoasă și întunecată (axe 0 violări la 1280×800 și 360×740) și cu redare efectivă (după Play starea devine „Playing”, contextul audio pornește la gestul utilizatorului).
-- **1.0.2 — 11 octombrie 2026:** oprire automată (somn) cu estompare de 15 s, inclusă în setările exportate/importate (valorile necunoscute sunt ignorate la import); etichetele frecvențelor Solfeggio sunt acum afișate în limba interfeței (înainte apăreau în engleză în FR/IT/ES/PT/DE); CSP cu hash `sha256` pentru script (fără `'unsafe-inline'` la `script-src`); textele noi sunt în cele 7 limbi; testat cu CSP activ (0 erori) și axe-core 0 violări la 1280×800 și 360×740.
-
-- **1.0.1 — 11 octombrie 2026:** exportul audio este mai reproductibil: zgomotul, reverb-ul, gongul și scoica folosesc la export un generator pseudo-aleator derivat din seed (înainte foloseau `Math.random`). Limită rămasă: două exporturi cu aceleași setări diferă încă cu ±1 LSB în ~0,05% din eșantioane (măsurat la 1 min de audio), deci nu sunt bit-cu-bit identice, din cauza aritmeticii în virgulă mobilă a motorului audio al browserului.
-- Sub frecvențele „Solfeggio” a apărut o notă în 7 limbi: etichetele (eliberare, regenerare, armonie…) sunt atribuiri tradiționale/ezoterice, fără dovezi științifice; la fel numele undelor cerebrale sunt orientative.
-- Securitate/accesibilitate: meta CSP adăugat (`default-src 'none'`), repere `region` pentru bara de sus și mini-playerul; axe-core 0 violări la 1280×800 și 360×740. Formatul fișierului de setări (JSON) rămâne `version: 1.0` pentru compatibilitate la import.
+- **1.0.1 — 11 October 2026:** audio export is more reproducible: noise, reverb, gong and conch use, at export, a pseudo-random generator derived from the seed (previously they used `Math.random`). Remaining limit: two exports with the same settings still differ by ±1 LSB in ~0.05% of samples (measured over 1 min of audio), so they are not bit-for-bit identical, because of the floating-point arithmetic of the browser's audio engine.
+- A note in 7 languages appeared under the "Solfeggio" frequencies: the labels (release, regeneration, harmony…) are traditional/esoteric attributions, with no scientific evidence; likewise the names of the brain waves are indicative.
+- Security/accessibility: a CSP meta was added (`default-src 'none'`), `region` landmarks for the top bar and the mini-player; axe-core 0 violations at 1280×800 and 360×740. The format of the settings file (JSON) remains `version: 1.0` for import compatibility.
