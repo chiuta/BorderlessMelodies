@@ -10,7 +10,7 @@ A generator of original music, created algorithmically in the browser, with opti
 
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.en.png)
 
 ## What it is
 

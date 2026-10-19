@@ -10,7 +10,7 @@ Generatore di musica originale, creata algoritmicamente nel browser, con strati 
 
 **Online:** https://chiuta.github.io/BorderlessMelodies/
 
-![Schermata](screenshot.png)
+![Schermata](screenshot.it.png)
 
 ## Che cos'è
 

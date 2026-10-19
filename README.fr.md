@@ -10,7 +10,7 @@ Générateur de musique originale, créée algorithmiquement dans le navigateur,
 
 **En ligne :** https://chiuta.github.io/BorderlessMelodies/
 
-![Capture d'écran](screenshot.png)
+![Capture d'écran](screenshot.fr.png)
 
 ## Qu'est-ce que c'est
 

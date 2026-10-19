@@ -10,7 +10,7 @@ Eredeti zenét algoritmikusan, a böngészőben létrehozó generátor, opcioná
 
 **Online:** https://chiuta.github.io/BorderlessMelodies/
 
-![Képernyőkép](screenshot.png)
+![Képernyőkép](screenshot.hu.png)
 
 ## Mi ez
 

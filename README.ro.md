@@ -10,7 +10,7 @@ Generator de muzică originală, creată algoritmic în browser, cu straturi op�
 
 **Live:** https://chiuta.github.io/BorderlessMelodies/
 
-![Captura de ecran](screenshot.png)
+![Captura de ecran](screenshot.ro.png)
 
 ## Ce este
 
