@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · **Português** · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versão:** 1.2.1 · **Última atualização:** 2026-10-22
+**Versão:** 1.2.2 · **Última atualização:** 2026-10-22
 
 Idiomas da interface: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contacto: alexio@trom.tf
 
 ## Histórico / Changelog
 
+- 1.2.2 — 2026-10-22: As etiquetas para leitores de ecrã (fechar, sair, reproduzir/pausar, mini-player, zoom, sessões guardadas, formato da capa e de vídeo, parar, apoiar, 2D/3D) estão agora traduzidas e atualizam-se ao mudar de idioma.
 - 1.2.1 — 2026-10-22: **correção**: o aviso médico, a dica do visualizador de ecrã inteiro e o rótulo ARIA da barra superior já estão traduzidos nos oito idiomas.
 - 1.1.0 — 2026-10-14: sessões guardadas, QR/ligação para a sessão, esbatimento configurável, kit «sem fronteiras». Testes: `tests/fff-r8.test.mjs`.
 - **1.0.4 — 2026-10-12:** a versão e a data da última atualização são apresentadas na aplicação

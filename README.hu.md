@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.2.1 · **Utolsó frissítés:** 2026-10-22
+**Verzió:** 1.2.2 · **Utolsó frissítés:** 2026-10-22
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, kapcsolat: alexio@trom.tf
 
 ## Előzmények / Changelog
 
+- 1.2.2 — 2026-10-22: A képernyőolvasós címkék (bezárás, kilépés, lejátszás/szünet, mini lejátszó, nagyítás, mentett munkamenetek, borító- és videóformátum, leállítás, támogatás, 2D/3D) mostantól le vannak fordítva, és nyelvváltáskor frissülnek.
 - 1.2.1 — 2026-10-22: **javítás**: az orvosi figyelmeztetés, a teljes képernyős vizualizáló súgószövege és a felső sáv ARIA-címkéje mostantól mind a nyolc nyelven le van fordítva.
 - 1.1.0 — 2026-10-14: mentett munkamenetek, QR/hivatkozás a munkamenethez, beállítható elhalkulás, „határtalan” kit. Tesztek: `tests/fff-r8.test.mjs`.
 - **1.0.4 — 2026-10-12:** a verzió és az utolsó frissítés dátuma megjelenik az alkalmazásban

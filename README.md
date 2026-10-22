@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 1.2.1 · **Last updated:** 2026-10-22
+**Version:** 1.2.2 · **Last updated:** 2026-10-22
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
 ## History / Changelog
 
+- 1.2.2 — 2026-10-22: Screen-reader labels (close, exit, play/pause, mini player, zoom, saved sessions, cover and video format, stop, support, 2D/3D) are now translated and update when the language changes.
 - 1.2.1 — 2026-10-22: **fix**: the medical disclaimer, the full-screen visualizer tooltip and the top-bar ARIA label are now translated into all eight languages.
 - 1.1.0 — 2026-10-14: saved sessions, QR/link for the session, configurable fade, "borderless" kit. Tests: `tests/fff-r8.test.mjs`.
 - **1.0.4 — 2026-10-12:** the version and the last-updated date are shown in the application
