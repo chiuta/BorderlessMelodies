@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.2.4 · **Ultimo aggiornamento:** 2026-10-22
+**Versione:** 1.2.5 · **Ultimo aggiornamento:** 2026-10-22
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contatto: alexio@trom.tf
 
 ## Cronologia / Changelog
 
+- 1.2.5 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600.000 iterazioni, protezione anti-clickjacking
 - 1.2.4 — 2026-10-22: le finestre bloccanti `alert()`/`confirm()` (eliminazione di un genere, errori di importazione di impostazioni e pacchetti di generi, avviso «video in corso») sono sostituite da avvisi in linea tradotti e da una conferma in linea; testo minimo di 12 px e aree tattili ≥ 24 px su mobile.
 - 1.2.3 — 2026-10-22: Le etichette delle opzioni nell’editor dei generi e nell’esportazione (forme d’onda, pattern di basso e arpeggio, texture, scale, progressioni, formato audio) sono ora tradotte nelle 8 lingue e si aggiornano al cambio di lingua.
 - 1.2.2 — 2026-10-22: Le etichette per i lettori di schermo (chiudi, esci, riproduci/pausa, mini-player, zoom, sessioni salvate, formato copertina e video, stop, sostieni, 2D/3D) sono ora tradotte e si aggiornano al cambio di lingua.

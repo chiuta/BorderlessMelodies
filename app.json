@@ -2,7 +2,7 @@
   "schema": 1,
   "slug": "borderlessmelodies",
   "name": "Borderless Melodies — Original Music Generator",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "updated": "2026-10-22",
   "description": "Original music generated algorithmically in your browser, with optional relaxation-wave tone layers. A single HTML file, no account, no tracking.",
   "egress": [],
@@ -13,8 +13,8 @@
   "storageKeys": [
     "bm_sessions"
   ],
-  "sizeBytes": 544241,
-  "sha256": "70e674ee3714ab3ca65aabc8943ec30934953c06b17c7d3d14aab1822dbaeae1",
+  "sizeBytes": 544709,
+  "sha256": "3c5b5cbdcd7d6b9fb60fe869a75f1f40b904dd34eab10c1ff371eb877313903e",
   "csp": {
     "present": true,
     "directives": {
@@ -56,7 +56,7 @@
     ]
   },
   "kit": {
-    "version": "1.1.1",
+    "version": "1.1.2",
     "modules": [
       "core",
       "label",
