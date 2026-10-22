@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.2.0 · **Ultimo aggiornamento:** 2026-10-19
+**Versione:** 1.2.1 · **Ultimo aggiornamento:** 2026-10-22
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contatto: alexio@trom.tf
 
 ## Cronologia / Changelog
 
+- 1.2.1 — 2026-10-22: **correzione**: l’avviso medico, il tooltip del visualizzatore a schermo intero e l’etichetta ARIA della barra superiore sono ora tradotti in tutte e otto le lingue.
 - 1.1.0 — 2026-10-14: sessioni salvate, QR/link per la sessione, dissolvenza configurabile, kit «senza frontiere». Test: `tests/fff-r8.test.mjs`.
 - **1.0.4 — 2026-10-12:** la versione e la data dell'ultimo aggiornamento sono mostrate nell'applicazione
 - **1.0.3 — 11 ottobre 2026:** tema chiaro automatico (`prefers-color-scheme: light`; il tema scuro resta quello predefinito) e foglio di stile per la stampa; verificato in Chromium con schema chiaro e scuro (axe 0 violazioni a 1280×800 e 360×740) e con riproduzione effettiva (dopo Play lo stato diventa «Playing», il contesto audio parte al gesto dell'utente).

@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.2.0 · **Zuletzt aktualisiert:** 2026-10-19
+**Version:** 1.2.1 · **Zuletzt aktualisiert:** 2026-10-22
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, Kontakt: alexio@trom.tf
 
 ## Verlauf / Changelog
 
+- 1.2.1 — 2026-10-22: **Korrektur**: der medizinische Hinweis, der Tooltip des Vollbild-Visualisierers und die ARIA-Beschriftung der oberen Leiste sind jetzt in alle acht Sprachen übersetzt.
 - 1.1.0 — 2026-10-14: gespeicherte Sitzungen, QR/Link für die Sitzung, konfigurierbare Ausblendung, „Grenzenlos“-Kit. Tests: `tests/fff-r8.test.mjs`.
 - **1.0.4 — 2026-10-12:** Die Version und das Datum der letzten Aktualisierung werden in der Anwendung angezeigt
 - **1.0.3 — 11. Oktober 2026:** automatisches helles Design (`prefers-color-scheme: light`; das dunkle Design bleibt Standard) und Druckstylesheet; in Chromium mit hellem und dunklem Schema überprüft (axe 0 Verstöße bei 1280×800 und 360×740) und mit tatsächlicher Wiedergabe (nach Play wechselt der Status auf „Playing“, der Audiokontext startet bei der Nutzergeste).

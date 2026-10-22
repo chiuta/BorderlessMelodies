@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.0 · **Ultima actualizare:** 2026-10-19
+**Versiune:** 1.2.1 · **Ultima actualizare:** 2026-10-22
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -81,6 +81,7 @@ Borderless Melodies este un generator într-un singur fișier HTML de muzică or
 
 ## Istoric / Changelog
 
+- 1.2.1 — 2026-10-22: **remediere**: avertismentul medical, tooltip-ul vizualizatorului pe tot ecranul și eticheta ARIA a barei de sus sunt acum traduse în toate cele opt limbi.
 - 1.1.0 — 2026-10-14: sesiuni salvate, QR/link pentru sesiune, estompare configurabilă, kit „fără frontiere”. Teste: `tests/fff-r8.test.mjs`.
 - **1.0.4 — 2026-10-12:** versiunea și data ultimei actualizări sunt afișate în aplicație
 - **1.0.3 — 11 octombrie 2026:** temă deschisă automată (`prefers-color-scheme: light`; tema întunecată rămâne implicită) și foaie de stil pentru tipărire; verificat în Chromium cu schemă luminoasă și întunecată (axe 0 violări la 1280×800 și 360×740) și cu redare efectivă (după Play starea devine „Playing”, contextul audio pornește la gestul utilizatorului).
