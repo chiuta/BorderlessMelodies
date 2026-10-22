@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.2.2 · **Dernière mise à jour :** 2026-10-22
+**Version :** 1.2.3 · **Dernière mise à jour :** 2026-10-22
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact : alexio@trom.tf
 
 ## Historique / Changelog
 
+- 1.2.3 — 2026-10-22: Les libellés d’options de l’éditeur de genres et de l’export (formes d’onde, motifs de basse et d’arpège, textures, gammes, progressions, format audio) sont désormais traduits dans les 8 langues et suivent la langue choisie.
 - 1.2.2 — 2026-10-22: Les libellés pour lecteurs d’écran (fermer, quitter, lecture/pause, mini-lecteur, zoom, sessions enregistrées, formats de pochette et de vidéo, arrêt, soutien, 2D/3D) sont désormais traduits et suivent la langue choisie.
 - 1.2.1 — 2026-10-22: **correctif** : l’avertissement médical, l’info-bulle du visualiseur plein écran et le libellé ARIA de la barre supérieure sont désormais traduits dans les huit langues.
 - 1.1.0 — 2026-10-14 : sessions enregistrées, QR/lien pour la session, fondu configurable, kit « sans frontières ». Tests : `tests/fff-r8.test.mjs`.

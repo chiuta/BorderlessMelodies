@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 1.2.2 · **Ultimo aggiornamento:** 2026-10-22
+**Versione:** 1.2.3 · **Ultimo aggiornamento:** 2026-10-22
 
 Lingue dell'interfaccia: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contatto: alexio@trom.tf
 
 ## Cronologia / Changelog
 
+- 1.2.3 — 2026-10-22: Le etichette delle opzioni nell’editor dei generi e nell’esportazione (forme d’onda, pattern di basso e arpeggio, texture, scale, progressioni, formato audio) sono ora tradotte nelle 8 lingue e si aggiornano al cambio di lingua.
 - 1.2.2 — 2026-10-22: Le etichette per i lettori di schermo (chiudi, esci, riproduci/pausa, mini-player, zoom, sessioni salvate, formato copertina e video, stop, sostieni, 2D/3D) sono ora tradotte e si aggiornano al cambio di lingua.
 - 1.2.1 — 2026-10-22: **correzione**: l’avviso medico, il tooltip del visualizzatore a schermo intero e l’etichetta ARIA della barra superiore sono ora tradotti in tutte e otto le lingue.
 - 1.1.0 — 2026-10-14: sessioni salvate, QR/link per la sessione, dissolvenza configurabile, kit «senza frontiere». Test: `tests/fff-r8.test.mjs`.
