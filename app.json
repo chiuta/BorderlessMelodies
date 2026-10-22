@@ -13,8 +13,8 @@
   "storageKeys": [
     "bm_sessions"
   ],
-  "sizeBytes": 544105,
-  "sha256": "ad177177bccc544ee16c4e4d838615068e719435b0f7c26197159c7e43ea9581",
+  "sizeBytes": 544241,
+  "sha256": "70e674ee3714ab3ca65aabc8943ec30934953c06b17c7d3d14aab1822dbaeae1",
   "csp": {
     "present": true,
     "directives": {
