@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · **Deutsch** · [Magyar](README.hu.md)
 
-**Version:** 1.2.3 · **Zuletzt aktualisiert:** 2026-10-22
+**Version:** 1.2.4 · **Zuletzt aktualisiert:** 2026-10-22
 
 Oberflächensprachen: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, Kontakt: alexio@trom.tf
 
 ## Verlauf / Changelog
 
+- 1.2.4 — 2026-10-22: die blockierenden `alert()`-/`confirm()`-Dialoge (Genre löschen, Fehler beim Import von Einstellungen und Genre-Paketen, Hinweis „Video läuft“) wurden durch übersetzte Inline-Hinweise und eine Inline-Bestätigung ersetzt; Mindestschriftgröße 12 px und Touch-Ziele ≥ 24 px auf Mobilgeräten.
 - 1.2.3 — 2026-10-22: Die Optionsbeschriftungen im Genre-Editor und beim Export (Wellenformen, Bass- und Arpeggio-Muster, Texturen, Tonleitern, Progressionen, Audioformat) sind jetzt in allen 8 Sprachen übersetzt und folgen dem Sprachwechsel.
 - 1.2.2 — 2026-10-22: Die Beschriftungen für Screenreader (Schließen, Beenden, Wiedergabe/Pause, Mini-Player, Zoom, gespeicherte Sitzungen, Cover- und Videoformat, Stopp, Unterstützen, 2D/3D) sind jetzt übersetzt und folgen dem Sprachwechsel.
 - 1.2.1 — 2026-10-22: **Korrektur**: der medizinische Hinweis, der Tooltip des Vollbild-Visualisierers und die ARIA-Beschriftung der oberen Leiste sind jetzt in alle acht Sprachen übersetzt.

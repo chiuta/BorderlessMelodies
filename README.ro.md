@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.3 · **Ultima actualizare:** 2026-10-22
+**Versiune:** 1.2.4 · **Ultima actualizare:** 2026-10-22
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -81,6 +81,7 @@ Borderless Melodies este un generator într-un singur fișier HTML de muzică or
 
 ## Istoric / Changelog
 
+- 1.2.4 — 2026-10-22: dialogurile blocante `alert()`/`confirm()` (ștergerea unui gen, erori la importul de setări și de pachete de genuri, avertismentul „video în curs”) sunt înlocuite cu notificări inline traduse și o confirmare inline; text minim 12 px și ținte tactile ≥ 24 px pe mobil.
 - 1.2.3 — 2026-10-22: Etichetele opțiunilor din editorul de genuri și din export (forme de undă, tipare de bas și arpegiu, texturi, game, progresii, format audio) sunt acum traduse în toate cele 8 limbi și se actualizează la schimbarea limbii.
 - 1.2.2 — 2026-10-22: Etichetele pentru cititoarele de ecran (închide, ieșire, redare/pauză, mini-player, zoom, sesiuni salvate, format copertă și video, oprește, susține, 2D/3D) sunt acum traduse și se actualizează la schimbarea limbii.
 - 1.2.1 — 2026-10-22: **remediere**: avertismentul medical, tooltip-ul vizualizatorului pe tot ecranul și eticheta ARIA a barei de sus sunt acum traduse în toate cele opt limbi.

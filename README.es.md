@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Español** · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versión:** 1.2.3 · **Última actualización:** 2026-10-22
+**Versión:** 1.2.4 · **Última actualización:** 2026-10-22
 
 Idiomas de la interfaz: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contacto: alexio@trom.tf
 
 ## Historial / Changelog
 
+- 1.2.4 — 2026-10-22: los cuadros bloqueantes `alert()`/`confirm()` (eliminar un género, errores al importar ajustes y paquetes de géneros, aviso de «vídeo en curso») se sustituyen por avisos en línea traducidos y una confirmación en línea; texto mínimo de 12 px y áreas táctiles ≥ 24 px en móvil.
 - 1.2.3 — 2026-10-22: Las etiquetas de las opciones del editor de géneros y de la exportación (formas de onda, patrones de bajo y arpegio, texturas, escalas, progresiones, formato de audio) ya están traducidas a los 8 idiomas y se actualizan al cambiar de idioma.
 - 1.2.2 — 2026-10-22: Las etiquetas para lectores de pantalla (cerrar, salir, reproducir/pausa, minirreproductor, zoom, sesiones guardadas, formato de portada y de vídeo, detener, apoyar, 2D/3D) ya están traducidas y se actualizan al cambiar de idioma.
 - 1.2.1 — 2026-10-22: **corrección**: el aviso médico, la descripción emergente del visualizador de pantalla completa y la etiqueta ARIA de la barra superior ya están traducidos a los ocho idiomas.
