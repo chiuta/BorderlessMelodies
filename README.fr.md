@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.2.7 · **Dernière mise à jour :** 2026-10-23
+**Version :** 1.2.8 · **Dernière mise à jour :** 2026-10-23
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact : alexio@trom.tf
 
 ## Historique / Changelog
 
+- 1.2.8 — 2026-10-23 : Les clés de stockage portent désormais le préfixe de l'application (`borderlessmelodies.sessions`) ; les données existantes (sessions enregistrées) sont migrées automatiquement au démarrage, et les anciennes copies `.fff.json` restent importables. fff-kit 1.2.0 : stockage sans préfixe corrigé
 - 1.2.6 — 2026-10-22 : fff-kit 1.1.4 : cibles tactiles et taille de texte minimale
 - 1.2.5 — 2026-10-22 : fff-kit 1.1.2 : PBKDF2 600 000 itérations, protection anti-clickjacking
 - 1.2.4 — 2026-10-22: les boîtes bloquantes `alert()`/`confirm()` (suppression d’un genre, erreurs d’import de réglages et de packs de genres, avertissement « vidéo en cours ») sont remplacées par des avis en ligne traduits et une confirmation en ligne ; texte minimal de 12 px et cibles tactiles ≥ 24 px sur mobile.

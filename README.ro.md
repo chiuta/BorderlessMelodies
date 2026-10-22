@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.7 · **Ultima actualizare:** 2026-10-23
+**Versiune:** 1.2.8 · **Ultima actualizare:** 2026-10-23
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -81,6 +81,7 @@ Borderless Melodies este un generator într-un singur fișier HTML de muzică or
 
 ## Istoric / Changelog
 
+- 1.2.8 — 2026-10-23: Cheile de stocare au acum prefixul aplicației (`borderlessmelodies.sessions`); datele existente (sesiunile salvate) se migrează automat la pornire, iar copiile vechi `.fff.json` se pot importa în continuare. fff-kit 1.2.0: stocare fără prefix remediată
 - 1.2.6 — 2026-10-22: fff-kit 1.1.4: ținte tactile și text minim
 - 1.2.5 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600 000 iterații, protecție anti-clickjacking
 - 1.2.4 — 2026-10-22: dialogurile blocante `alert()`/`confirm()` (ștergerea unui gen, erori la importul de setări și de pachete de genuri, avertismentul „video în curs”) sunt înlocuite cu notificări inline traduse și o confirmare inline; text minim 12 px și ținte tactile ≥ 24 px pe mobil.
