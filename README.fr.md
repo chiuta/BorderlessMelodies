@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.2.5 · **Dernière mise à jour :** 2026-10-22
+**Version :** 1.2.6 · **Dernière mise à jour :** 2026-10-22
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact : alexio@trom.tf
 
 ## Historique / Changelog
 
+- 1.2.6 — 2026-10-22 : fff-kit 1.1.4 : cibles tactiles et taille de texte minimale
 - 1.2.5 — 2026-10-22 : fff-kit 1.1.2 : PBKDF2 600 000 itérations, protection anti-clickjacking
 - 1.2.4 — 2026-10-22: les boîtes bloquantes `alert()`/`confirm()` (suppression d’un genre, erreurs d’import de réglages et de packs de genres, avertissement « vidéo en cours ») sont remplacées par des avis en ligne traduits et une confirmation en ligne ; texte minimal de 12 px et cibles tactiles ≥ 24 px sur mobile.
 - 1.2.3 — 2026-10-22: Les libellés d’options de l’éditeur de genres et de l’export (formes d’onde, motifs de basse et d’arpège, textures, gammes, progressions, format audio) sont désormais traduits dans les 8 langues et suivent la langue choisie.

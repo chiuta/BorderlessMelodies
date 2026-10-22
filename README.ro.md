@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.5 · **Ultima actualizare:** 2026-10-22
+**Versiune:** 1.2.6 · **Ultima actualizare:** 2026-10-22
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -81,6 +81,7 @@ Borderless Melodies este un generator într-un singur fișier HTML de muzică or
 
 ## Istoric / Changelog
 
+- 1.2.6 — 2026-10-22: fff-kit 1.1.4: ținte tactile și text minim
 - 1.2.5 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600 000 iterații, protecție anti-clickjacking
 - 1.2.4 — 2026-10-22: dialogurile blocante `alert()`/`confirm()` (ștergerea unui gen, erori la importul de setări și de pachete de genuri, avertismentul „video în curs”) sunt înlocuite cu notificări inline traduse și o confirmare inline; text minim 12 px și ținte tactile ≥ 24 px pe mobil.
 - 1.2.3 — 2026-10-22: Etichetele opțiunilor din editorul de genuri și din export (forme de undă, tipare de bas și arpegiu, texturi, game, progresii, format audio) sunt acum traduse în toate cele 8 limbi și se actualizează la schimbarea limbii.

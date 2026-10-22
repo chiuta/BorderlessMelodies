@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Español** · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versión:** 1.2.5 · **Última actualización:** 2026-10-22
+**Versión:** 1.2.6 · **Última actualización:** 2026-10-22
 
 Idiomas de la interfaz: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contacto: alexio@trom.tf
 
 ## Historial / Changelog
 
+- 1.2.6 — 2026-10-22: fff-kit 1.1.4: objetivos táctiles y tamaño mínimo de texto
 - 1.2.5 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600 000 iteraciones, protección anti-clickjacking
 - 1.2.4 — 2026-10-22: los cuadros bloqueantes `alert()`/`confirm()` (eliminar un género, errores al importar ajustes y paquetes de géneros, aviso de «vídeo en curso») se sustituyen por avisos en línea traducidos y una confirmación en línea; texto mínimo de 12 px y áreas táctiles ≥ 24 px en móvil.
 - 1.2.3 — 2026-10-22: Las etiquetas de las opciones del editor de géneros y de la exportación (formas de onda, patrones de bajo y arpegio, texturas, escalas, progresiones, formato de audio) ya están traducidas a los 8 idiomas y se actualizan al cambiar de idioma.
