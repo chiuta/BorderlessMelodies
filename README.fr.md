@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · **Français** · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version :** 1.2.8 · **Dernière mise à jour :** 2026-10-23
+**Version :** 1.2.9 · **Dernière mise à jour :** 2026-10-23
 
 Langues de l'interface : **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, contact : alexio@trom.tf
 
 ## Historique / Changelog
 
+- 1.2.9 — 2026-10-23: **fix**: `#bm1;g=constructor` (or `toString`) in the link, a settings file or a genre pack no longer crashes the app or passes validation; only own keys of genres, scales, progressions and presets are accepted
 - 1.2.8 — 2026-10-23 : Les clés de stockage portent désormais le préfixe de l'application (`borderlessmelodies.sessions`) ; les données existantes (sessions enregistrées) sont migrées automatiquement au démarrage, et les anciennes copies `.fff.json` restent importables. fff-kit 1.2.0 : stockage sans préfixe corrigé
 - 1.2.6 — 2026-10-22 : fff-kit 1.1.4 : cibles tactiles et taille de texte minimale
 - 1.2.5 — 2026-10-22 : fff-kit 1.1.2 : PBKDF2 600 000 itérations, protection anti-clickjacking

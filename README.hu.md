@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 1.2.8 · **Utolsó frissítés:** 2026-10-23
+**Verzió:** 1.2.9 · **Utolsó frissítés:** 2026-10-23
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -77,6 +77,7 @@ Alexio — Alexandru-Ionuț Chiuță, kapcsolat: alexio@trom.tf
 
 ## Előzmények / Changelog
 
+- 1.2.9 — 2026-10-23: **fix**: `#bm1;g=constructor` (or `toString`) in the link, a settings file or a genre pack no longer crashes the app or passes validation; only own keys of genres, scales, progressions and presets are accepted
 - 1.2.8 — 2026-10-23: A tárolókulcsok mostantól az alkalmazás előtagját viselik (`borderlessmelodies.sessions`); a meglévő adatok (mentett munkamenetek) indításkor automatikusan átkerülnek, a régi `.fff.json` másolatok továbbra is importálhatók. fff-kit 1.2.0: előtag nélküli tárolás javítva
 - 1.2.6 — 2026-10-22: fff-kit 1.1.4: érintési célpontok és minimális szövegméret
 - 1.2.5 — 2026-10-22: fff-kit 1.1.2: PBKDF2 600 000 iteráció, clickjacking elleni védelem
