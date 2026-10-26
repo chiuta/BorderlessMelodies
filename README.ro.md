@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 1.2.9 · **Ultima actualizare:** 2026-10-26
+**Versiune:** 2.0.0 · **Ultima actualizare:** 2026-10-26
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -27,6 +27,12 @@ Borderless Melodies („Melodii fără frontiere") este un fișier HTML unic car
 - Redare cu Play/Stop, volum și vizualizator fractal pe ecran complet (2D/3D).
 - Export audio WAV sau FLAC (1-20 min), export/import setări (JSON), copertă generativă (PNG/WebP/JPEG) legată de seed, export video WebM al vizualizatorului.
 - Interfață în 8 limbi: EN, RO, FR, IT, ES, PT, DE, HU.
+
+## Funcții noi (v2.0.0)
+
+- **Cod scurt de piesă**: genul, sămânța, tempoul, durata, varietatea și vocea se condensează într-un cod de forma `BM1-XXXX-XXXX-XXXX` (cu sumă de control). Același cod produce aceeași melodie în orice browser; se aplică și dintr-un link `#code=BM1-…`, fără a porni sunetul. Genurile personalizate nu au cod.
+- **Export MIDI**: aceeași partitură generativă (pad, bas, melodie, arpegiu și, dacă e activată, voce) se salvează ca fișier MIDI standard (tip 1, 480 PPQ) cu tempo și măsură, pe baza duratei alese la export. Aceeași sămânță dă același fișier.
+- Neimplementat: scale din muzici ale lumii adăugate separat și acompaniamentul în timp real.
 
 ## Funcții noi (v1.1.0)
 
