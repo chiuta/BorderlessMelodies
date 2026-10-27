@@ -2,7 +2,9 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 2.0.0 · **Ultima actualizare:** 2026-10-26
+**Versiune:** 2.1.0 · **Ultima actualizare:** 2026-10-27
+
+**Stare:** stabil · **Offline:** complet
 
 Limbile interfeței: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -85,7 +87,16 @@ Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
 Borderless Melodies este un generator într-un singur fișier HTML de muzică originală sintetizată procedural în browser (Web Audio), cu genuri personalizate, straturi binaurale/izocronice opționale, o voce sintetizată fără cuvinte, gong și cochilie, un vizualizator fractal și export în WAV/FLAC, copertă și video WebM. 8 limbi de interfață. Nu stochează nimic și nu face cereri de rețea.
 
+## Tonalitate aleasă manual și partajare reproductibilă (2.1.0)
+
+**Tonalitate (tonică):** selector în panoul „Compoziție”: „Automată (din seed)” (implicit, ca până acum) sau una dintre cele 12 tonici (Do … Si). Aceeași piesă (seed, gen, tempo) se **transpune** în tonalitatea aleasă; ritmul, melodia și restul compoziției rămân identice. Controlul **stilului** rămâne alegerea/editarea genului (scală, progresie, metru, tempo, texturi). **Partajare reproductibilă:** seed-ul și codul scurt `BM1-…` (aceeași piesă oriunde) existau deja; tonalitatea manuală intră în linkul `#bm1;…;k=…`, QR, sesiunile salvate și setările JSON (`rootPc`), dar **nu** în codul scurt BM1 (acesta rămâne gol cât timp tonalitatea nu e „Automată”). Exportul audio (WAV/FLAC) și MIDI exista deja și folosește tonalitatea aleasă.
+
+## Vezi și: aplicații apropiate (nefuzionate)
+
+Aceste aplicații se suprapun ca scop (sunet calm pentru relaxare și somn), dar funcționează diferit și **nu au fost fuzionate**. **BorderlessMelodies** este compozitor de muzică originală după gen și seed (cu export WAV/FLAC/MIDI și coduri partajabile), cu straturi opționale de relaxare. Vezi și: [ASMR](https://chiuta.github.io/ASMR/) — mixer de peisaje sonore și declanșatoare tactile (ASMR), cu scene în timp și temporizator de adormire; [CalmWaves](https://chiuta.github.io/CalmWaves/) — compoziție ambientală generativă (intenție, paletă tonală, densitate) cu cod de variantă, voce sintetizată și vizualizări; [Aurora](https://chiuta.github.io/Aurora/) — tonuri ale chakrelor, bătăi binaurale și ghid de respirație pentru meditație. Alege după nevoie: peisaje și declanșatoare = ASMR; piesă ambientală generată = CalmWaves; muzică după gen/seed = BorderlessMelodies; meditație pe chakre = Aurora.
+
 ## Istoric / Changelog
+- **2.1.0 — 2026-10-27:** selector de tonalitate (tonică) manual, în link/QR/sesiuni/setări JSON; notă „vezi și” (ASMR, CalmWaves, Aurora), fără fuziune; linii Stare/Offline; CHANGELOG.md (anterior: v2.0.0).
 
 - 1.2.8 — 2026-10-23: Cheile de stocare au acum prefixul aplicației (`borderlessmelodies.sessions`); datele existente (sesiunile salvate) se migrează automat la pornire, iar copiile vechi `.fff.json` se pot importa în continuare. fff-kit 1.2.0: stocare fără prefix remediată
 - 1.2.6 — 2026-10-22: fff-kit 1.1.4: ținte tactile și text minim

@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · **Magyar**
 
-**Verzió:** 2.0.0 · **Utolsó frissítés:** 2026-10-26
+**Verzió:** 2.1.0 · **Utolsó frissítés:** 2026-10-27
+
+**Állapot:** stabil · **Offline:** teljes
 
 A felület nyelvei: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -75,7 +77,16 @@ MIT — lásd a LICENSE fájlt
 
 Alexio — Alexandru-Ionuț Chiuță, kapcsolat: alexio@trom.tf
 
+## Kézzel választott hangnem és reprodukálható megosztás (2.1.0)
+
+**Hangnem (alaphang):** választó a „Kompozíció” panelen: „Automatikus (a seedből)” (alapértelmezett, mint eddig) vagy a 12 alaphang egyike (C … H). Ugyanaz a darab (seed, műfaj, tempó) a választott hangnembe **transzponálódik**; a ritmus, a dallam és a kompozíció többi része azonos marad. A **stílus** vezérlése továbbra is a műfaj kiválasztása/szerkesztése (skála, harmóniamenet, ütem, tempó, textúrák). **Reprodukálható megosztás:** a seed és a `BM1-…` rövid kód (ugyanaz a darab bárhol) már megvolt; a kézi hangnem bekerül a `#bm1;…;k=…` hivatkozásba, a QR-kódba, a mentett munkamenetekbe és a JSON-beállításokba (`rootPc`), a BM1 rövid kódba viszont **nem** (az üres marad, amíg a hangnem nem „Automatikus”). A hang- (WAV/FLAC) és MIDI-export már megvolt, és a választott hangnemet használja.
+
+## Lásd még: rokon alkalmazások (nem vontuk össze)
+
+Ezek az alkalmazások céljukban átfedik egymást (nyugtató hang pihenéshez és alváshoz), de másként működnek, és **nem vontuk össze őket**. A(z) **BorderlessMelodies** eredeti zene szerzője műfaj és seed alapján (WAV/FLAC/MIDI export, megosztható kódok), opcionális relaxációs rétegekkel. Lásd még: [ASMR](https://chiuta.github.io/ASMR/) — hangtájak és érintéses triggerek keverője (ASMR), időzített jelenetekkel és elalvás-időzítővel; [CalmWaves](https://chiuta.github.io/CalmWaves/) — generatív ambient kompozíció (szándék, hangpaletta, sűrűség) variánskóddal, szintetizált hanggal és vizualizációkkal; [Aurora](https://chiuta.github.io/Aurora/) — csakrahangok, binaurális ütemek és légzésvezetés meditációhoz. Válassz igény szerint: hangtájak és triggerek = ASMR; generált ambient darab = CalmWaves; zene műfaj/seed szerint = BorderlessMelodies; csakra-meditáció = Aurora.
+
 ## Előzmények / Changelog
+- **2.1.0 — 2026-10-27:** kézi hangnem- (alaphang-) választó, a hivatkozásban/QR-ban/munkamenetekben/JSON-beállításokban is; „lásd még” megjegyzés (ASMR, CalmWaves, Aurora), összevonás nélkül; Állapot/Offline sorok; CHANGELOG.md (előző: v2.0.0).
 
 - 1.2.8 — 2026-10-23: A tárolókulcsok mostantól az alkalmazás előtagját viselik (`borderlessmelodies.sessions`); a meglévő adatok (mentett munkamenetek) indításkor automatikusan átkerülnek, a régi `.fff.json` másolatok továbbra is importálhatók. fff-kit 1.2.0: előtag nélküli tárolás javítva
 - 1.2.6 — 2026-10-22: fff-kit 1.1.4: érintési célpontok és minimális szövegméret
