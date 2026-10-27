@@ -2,7 +2,9 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · **Español** · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versión:** 2.0.0 · **Última actualización:** 2026-10-26
+**Versión:** 2.1.0 · **Última actualización:** 2026-10-27
+
+**Estado:** estable · **Sin conexión:** completo
 
 Idiomas de la interfaz: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -75,7 +77,16 @@ MIT — véase el archivo LICENSE
 
 Alexio — Alexandru-Ionuț Chiuță, contacto: alexio@trom.tf
 
+## Tonalidad elegida manualmente y compartir de forma reproducible (2.1.0)
+
+**Tonalidad (tónica):** selector en el panel «Composición»: «Automática (según la semilla)» (por defecto, como antes) o una de las 12 tónicas (Do … Si). La misma pieza (semilla, género, tempo) se **transpone** a la tonalidad elegida; ritmo, melodía y el resto de la composición quedan idénticos. El control del **estilo** sigue siendo la elección/edición del género (escala, progresión, compás, tempo, texturas). **Compartir reproducible:** la semilla y el código corto `BM1-…` (la misma pieza en cualquier lugar) ya existían; una tonalidad manual va en el enlace `#bm1;…;k=…`, el QR, las sesiones guardadas y los ajustes JSON (`rootPc`), pero **no** en el código corto BM1 (que queda vacío mientras la tonalidad no sea «Automática»). La exportación de audio (WAV/FLAC) y MIDI ya existía y usa la tonalidad elegida.
+
+## Véase también: aplicaciones afines (no fusionadas)
+
+Estas aplicaciones se solapan en su propósito (sonido calmante para relajarse y dormir), pero funcionan de forma distinta y **no se han fusionado**. **BorderlessMelodies** es un compositor de música original por género y semilla (exportación WAV/FLAC/MIDI, códigos compartibles), con capas de relajación opcionales. Véase también: [ASMR](https://chiuta.github.io/ASMR/) — un mezclador de paisajes sonoros y disparadores táctiles (ASMR), con escenas temporales y temporizador para dormir; [CalmWaves](https://chiuta.github.io/CalmWaves/) — una composición ambiental generativa (intención, paleta tonal, densidad) con código de variante, voz sintetizada y visualizaciones; [Aurora](https://chiuta.github.io/Aurora/) — tonos de los chakras, latidos binaurales y guía de respiración para meditar. Elige según la necesidad: paisajes y disparadores = ASMR; pieza ambiental generada = CalmWaves; música por género/semilla = BorderlessMelodies; meditación de chakras = Aurora.
+
 ## Historial / Changelog
+- **2.1.0 — 2026-10-27:** selector manual de tonalidad (tónica), incluido en enlace/QR/sesiones/ajustes JSON; nota «véase también» (ASMR, CalmWaves, Aurora), sin fusión; líneas Estado/Sin conexión; CHANGELOG.md (anterior: v2.0.0).
 
 - 1.2.8 — 2026-10-23: Las claves de almacenamiento llevan ahora el prefijo de la aplicación (`borderlessmelodies.sessions`); los datos existentes (sesiones guardadas) se migran automáticamente al iniciar y las copias antiguas `.fff.json` siguen pudiendo importarse. fff-kit 1.2.0: almacenamiento sin prefijo corregido
 - 1.2.6 — 2026-10-22: fff-kit 1.1.4: objetivos táctiles y tamaño mínimo de texto

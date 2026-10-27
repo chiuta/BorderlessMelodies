@@ -1,4 +1,4 @@
-// Teste v2.0.0 pentru Borderless Melodies: cod scurt „BM1” (aceeași piesă oriunde) și export MIDI din partitura generativă.
+// Teste v2.1.0 pentru Borderless Melodies: cod scurt „BM1” (aceeași piesă oriunde) și export MIDI din partitura generativă.
 // Rulare: node tests/seed-midi-v2.test.mjs   (Playwright din /opt/node-tools, rețea blocată). Testează logica, nu sunetul.
 import {createRequire} from 'module';
 import fs from 'fs';

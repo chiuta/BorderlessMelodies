@@ -2,7 +2,9 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 2.0.0 · **Last updated:** 2026-10-26
+**Version:** 2.1.0 · **Last updated:** 2026-10-27
+
+**Status:** stable · **Offline:** complete
 
 Interface languages: **Română, English, Français, Italiano, Español, Português (PT), Deutsch, Magyar**
 
@@ -75,7 +77,16 @@ MIT — see the LICENSE file
 
 Alexio — Alexandru-Ionuț Chiuță, contact: alexio@trom.tf
 
+## Manually chosen key and reproducible sharing (2.1.0)
+
+**Key (tonic):** a selector in the “Composition” panel: “Automatic (from the seed)” (default, as before) or one of the 12 tonics (C … B). The same piece (seed, genre, tempo) is **transposed** to the chosen key; rhythm, melody and the rest of the composition stay identical. **Style** control remains the choice/editing of the genre (scale, progression, metre, tempo, textures). **Reproducible sharing:** the seed and the `BM1-…` short code (the same piece anywhere) already existed; a manual key goes into the `#bm1;…;k=…` link, QR, saved sessions and the JSON settings (`rootPc`), but **not** into the BM1 short code (which stays empty while the key is not “Automatic”). Audio (WAV/FLAC) and MIDI export already existed and use the chosen key.
+
+## See also: related apps (not merged)
+
+These apps overlap in purpose (calm sound for relaxation and sleep) but work differently and have **not been merged**. **BorderlessMelodies** is a composer of original music by genre and seed (with WAV/FLAC/MIDI export and shareable codes), with optional relaxation layers. See also: [ASMR](https://chiuta.github.io/ASMR/) — a mixer of soundscapes and touch triggers (ASMR), with timed scenes and a sleep timer; [CalmWaves](https://chiuta.github.io/CalmWaves/) — a generative ambient composition (intent, tonal palette, density) with a variant code, synthesised voice and visualisations; [Aurora](https://chiuta.github.io/Aurora/) — chakra tones, binaural beats and a breathing guide for meditation. Pick by need: soundscapes and triggers = ASMR; a generated ambient piece = CalmWaves; music by genre/seed = BorderlessMelodies; chakra meditation = Aurora.
+
 ## History / Changelog
+- **2.1.0 — 2026-10-27:** manual key (tonic) selector, carried in the link/QR/sessions/JSON settings; “see also” note (ASMR, CalmWaves, Aurora), no merge; Status/Offline lines; CHANGELOG.md (previous: v2.0.0).
 
 - 1.2.8 — 2026-10-23: Storage keys now carry the app prefix (`borderlessmelodies.sessions`); existing data (saved sessions) is migrated automatically at startup, and old `.fff.json` copies can still be imported. fff-kit 1.2.0: unprefixed-storage fixed
 - 1.2.6 — 2026-10-22: fff-kit 1.1.4: touch targets and minimum text size
