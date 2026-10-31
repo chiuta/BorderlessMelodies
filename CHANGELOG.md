@@ -2,6 +2,10 @@
 
 Format: [SemVer](https://semver.org/lang/ro/) MAJOR.MINOR.PATCH.
 
+## 2.1.1 — 2026-10-31
+
+Doar interfață (accesibilitate pe telefon, 360×740): câmpul „shortCode” (21 px) → minim 24 px. Fără alte schimbări de comportament.
+
 ## 2.1.0 — 2026-10-27 (anterior: v2.0.0)
 
 Stare: stabil · Offline: complet
