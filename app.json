@@ -14,8 +14,8 @@
   "storageKeys": [
     "borderlessmelodies.sessions"
   ],
-  "sizeBytes": 621562,
-  "sha256": "b1b7adb03b7c3bcabff9750ee38eaca9a080f8aed80391ccc46d13d370399da1",
+  "sizeBytes": 718210,
+  "sha256": "ca4aed3fadab07870d4022282346d89a28fed908aa5299f8256326de9e14cac8",
   "csp": {
     "present": true,
     "directives": {
@@ -55,7 +55,10 @@
       "dialog",
       "label",
       "bundle",
-      "qr"
+      "qr",
+      "p2p",
+      "sync",
+      "history"
     ]
   },
   "kit": {
@@ -66,7 +69,10 @@
       "dialog",
       "label",
       "bundle",
-      "qr"
+      "qr",
+      "p2p",
+      "sync",
+      "history"
     ]
   },
   "selfSerializing": false
