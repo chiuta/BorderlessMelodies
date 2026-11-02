@@ -44,10 +44,33 @@ console.log('Pornire și versiune');
   const {ctx, p, errs, net} = await open(1280, 800);
   t('0 pageerror/CSP', errs.length === 0, errs.join('|'));
   t('0 cereri de rețea', net() === 0);
+<<<<<<< ours
   t(`versiune ${__FFF_APP.version}`, await p.evaluate((__FFF_APP)=> document.querySelector('meta[name=application-version]').content === __FFF_APP.version && new RegExp(String.raw`v ${__FFF_APP.versionRe} · ${__FFF_APP.updatedRe}`).test(document.getElementById('app-version').textContent), {...__FFF_APP, versionRe: __fffRe(__FFF_APP.version), updatedRe: __fffRe(__FFF_APP.updated)}));
+=======
+  t('versiune 1.2.9', await p.evaluate(() => document.querySelector('meta[name=application-version]').content === '1.2.9' && /v 1\.2\.9 · 2026-10-23/.test(document.getElementById('app-version').textContent)));
+>>>>>>> theirs
   t('kit prezent', await p.evaluate(() => !!(window.FFF && FFF.label && FFF.bundle && FFF.qr)));
   t('panou sesiuni vizibil', await p.locator('#sessionPanel').isVisible());
   t('fade implicit 15 s', (await val(p, 'sleepFadeSelect')) === '15');
+  await ctx.close();
+}
+
+console.log('Chei de prototip respinse (1.2.9)');
+{
+  for (const g of ['constructor', 'toString', '__proto__']) {
+    const {ctx, p, errs} = await open(1280, 800, FILE + '#bm1;g=' + g + ';s=5');
+    t('hash cu gen „' + g + '” ignorat, fără erori', errs.length === 0, errs.join('|'));
+    t('„' + g + '”: aplicația rămâne funcțională (gen implicit selectat)', await p.evaluate(() => document.querySelectorAll('#genreGrid .genre-card, #genreGrid button').length > 0));
+    await ctx.close();
+  }
+  const {ctx, p, errs} = await open(1280, 800);
+  const bad = {custom_x: {name: 'x', scale: 'constructor', progression: 'toString', lead: {density: 0.5}, pad: {}, bass: {}, tempoRange: [60, 80], filterCutoff: 500, reverbMix: 0.2}};
+  await p.setInputFiles('#importGenrePackFile', {name: 'g.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(bad))});
+  await p.waitForTimeout(500);
+  t('pachet de genuri cu scală „constructor” respins', (await p.locator('#genreGrid').innerText()).indexOf('x') === -1 || !(await p.evaluate(() => /custom|My genres|Genurile mele/i.test(document.getElementById('genreGrid').innerText))));
+  await p.setInputFiles('#importJsonFile', {name: 's.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({genreKey: 'constructor', seed: 7}))});
+  await p.waitForTimeout(500);
+  t('setări cu genreKey „constructor” ignorate, fără erori', errs.length === 0, errs.join('|'));
   await ctx.close();
 }
 
