@@ -2,7 +2,7 @@
 
 [English](README.md) · [Română](README.ro.md) · [Français](README.fr.md) · **Italiano** · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versione:** 2.1.5 · **Ultimo aggiornamento:** 2026-11-08
+**Versione:** 2.1.6 · **Ultimo aggiornamento:** 2026-11-08
 
 **Stato:** stabile · **Offline:** completo
 
@@ -68,6 +68,8 @@ Scarica `index.html` e aprilo nel browser; funziona completamente senza internet
 ## Licenza
 
 MIT — vedi il file LICENSE
+
+I brani esportati (audio, MIDI) sono rilasciati con CC0 1.0: usali liberamente, anche a scopo commerciale, senza attribuzione. La licenza MIT riguarda solo il codice dell’app.
 
 ## Audit
 

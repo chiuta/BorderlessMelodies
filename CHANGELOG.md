@@ -2,6 +2,10 @@
 
 Format: [SemVer](https://semver.org/lang/ro/) MAJOR.MINOR.PATCH.
 
+## 2.1.6 — 2026-11-08
+
+Licența pieselor exportate (audio, MIDI) este spusă clar: CC0 1.0 (licența MIT rămâne pentru codul aplicației) — în panoul Export, în 8 limbi, și în README-uri. Alegerea CC0 aparține autorului și se poate schimba.
+
 ## 2.1.3 — 2026-11-03
 
 Peisaj sonor comun (FFF): mixer Web Audio cu straturi de zgomot/ploaie/valuri/vânt/drone/ton, profile dormit/studiu/preparat (presetări, fără afirmații de efect), oprire automată, export/import sound/profile și randare WAV; local, fără server.

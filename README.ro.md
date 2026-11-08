@@ -2,7 +2,7 @@
 
 [English](README.md) · **Română** · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Versiune:** 2.1.5 · **Ultima actualizare:** 2026-11-08
+**Versiune:** 2.1.6 · **Ultima actualizare:** 2026-11-08
 
 **Stare:** stabil · **Offline:** complet
 
@@ -74,6 +74,8 @@ Descarcă `index.html` și deschide-l în browser; funcționează complet fără
 ## Licență
 
 MIT — vezi fișierul LICENSE
+
+Piesele exportate (audio, MIDI) sunt eliberate sub CC0 1.0: le poți folosi liber, inclusiv comercial, fără atribuire. Licența MIT se aplică doar codului aplicației.
 
 ## Audit
 

@@ -2,7 +2,7 @@
 
 **English** · [Română](README.ro.md) · [Français](README.fr.md) · [Italiano](README.it.md) · [Español](README.es.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Magyar](README.hu.md)
 
-**Version:** 2.1.5 · **Last updated:** 2026-11-08
+**Version:** 2.1.6 · **Last updated:** 2026-11-08
 
 **Status:** stable · **Offline:** complete
 
@@ -68,6 +68,8 @@ Download `index.html` and open it in the browser; it works completely without in
 ## Licence
 
 MIT — see the LICENSE file
+
+Exported pieces (audio, MIDI) are released under CC0 1.0: use them freely, including commercially, with no attribution. The MIT licence covers only the app code.
 
 ## Audit
 
