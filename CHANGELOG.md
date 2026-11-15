@@ -2,6 +2,10 @@
 
 Format: [SemVer](https://semver.org/lang/ro/) MAJOR.MINOR.PATCH.
 
+## 2.1.11 — 2026-11-15
+
+- Nou: texturi fractale hiper-detaliate (fff-texturi 1.1.2) — fundalul și suprafețele mari (carduri, panouri, antete, butoane; filele și dialogurile ascunse la încărcare, când se deschid) primesc un material generat local (WebGL2, fără rețea și fără imagini), care se repetă fără cusătură; culorile aplicației rămân ale ei. Se oprește din dialogul „Transparență” sau cu `?notex=1`.
+
 ## 2.1.6 — 2026-11-08
 
 Licența pieselor exportate (audio, MIDI) este spusă clar: CC0 1.0 (licența MIT rămâne pentru codul aplicației) — în panoul Export, în 8 limbi, și în README-uri. Alegerea CC0 aparține autorului și se poate schimba.
