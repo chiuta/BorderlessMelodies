@@ -11,18 +11,19 @@
     "serviceWorker",
     "localStorage",
     "Web Crypto",
+    "WebGL",
     "BroadcastChannel"
   ],
   "storageKeys": [
     "borderlessmelodies.sessions"
   ],
-  "sizeBytes": 841715,
-  "sha256": "c7e811af1ce21b9209230c91f61003a01687ad459ac89ca1b5878797a5b05d73",
+  "sizeBytes": 893724,
+  "sha256": "41f076f2c435d1e5fb0d81b19e6bef4e3f08cd8d18149f931d614346113c144c",
   "csp": {
     "present": true,
     "directives": {
       "default-src": "'none'",
-      "script-src": "sha256×6",
+      "script-src": "sha256×7",
       "style-src": "'unsafe-inline'",
       "img-src": "'self' data: blob:",
       "media-src": "blob: data:",
